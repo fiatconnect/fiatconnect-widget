@@ -10,7 +10,7 @@ module.exports = {
     '^.+\\.(ts|tsx)$': ['ts-jest', { tsconfig: 'tsconfig.json' }],
     '^.+\\.(js|jsx)$': 'babel-jest',
   },
-  transformIgnorePatterns: ['node_modules/(?!@?wagmi|@rainbow-me|viem)'],
+  transformIgnorePatterns: [],
   collectCoverageFrom: ['./src/**/*.ts'],
   coveragePathIgnorePatterns: ['/node_modules/'],
   coverageThreshold: {

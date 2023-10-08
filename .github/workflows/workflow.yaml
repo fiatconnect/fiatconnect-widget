@@ -49,4 +49,4 @@ jobs:
           check-latest: true
       - run: yarn
       - run: yarn typecheck
-#      - run: yarn test:ci  # TODO enable once jest config errors solved
+      - run: yarn test:ci
