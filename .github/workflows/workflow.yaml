@@ -38,3 +38,15 @@ jobs:
           check-latest: true
       - run: yarn
       - run: yarn depcheck
+  test:
+    name: Test (just typecheck right now)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          check-latest: true
+      - run: yarn
+      - run: yarn typecheck
+#      - run: yarn test:ci  # TODO enable once jest config errors solved
