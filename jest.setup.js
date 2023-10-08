@@ -1,1 +1,1 @@
-import "@inrupt/jest-jsdom-polyfills"
+import '@inrupt/jest-jsdom-polyfills'
