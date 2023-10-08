@@ -2,8 +2,8 @@ import React from 'react'
 import './App.css'
 import '@rainbow-me/rainbowkit/styles.css'
 
-import { publicProvider } from 'wagmi/providers/public'
 import { configureChains, createConfig, WagmiConfig } from 'wagmi'
+import { publicProvider } from 'wagmi/providers/public'
 import { celo } from 'viem/chains'
 import {
   ConnectButton,
