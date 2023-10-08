@@ -2,5 +2,6 @@ ignores: [
   "@types/jest",
   "@types/node",
   "identity-obj-proxy",
-  "jest-environment-jsdom"
+  "jest-environment-jsdom",
+  "lokijs"
 ]
