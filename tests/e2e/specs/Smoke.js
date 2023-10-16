@@ -1,4 +1,3 @@
-
 describe('Smoke Test', () => {
   it('Able to connect via MetaMask', () => {
     cy.visit('')
