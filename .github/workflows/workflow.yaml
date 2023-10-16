@@ -61,4 +61,4 @@ jobs:
           check-latest: true
       - run: yarn
       - run: yarn typecheck
-      - run: yarn test:e2e:ci
+      - run: yarn e2e:ci
