@@ -70,3 +70,8 @@ jobs:
           wait-on: http://localhost:3000
           browser: chrome
           spec: test/e2e/specs/*.js
+      - uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: videos
+          path: tests/e2e/videos
