@@ -61,7 +61,15 @@ jobs:
           check-latest: true
       - run: yarn
       - run: yarn build
-      - run: yarn e2e:ci
+      - name: Synpress
+        uses: cypress-io/github-action@v6
+        timeout-minutes: 60
+        with:
+          command: yarn e2e
+          start: yarn start
+          wait-on: http://localhost:3000
+          browser: chrome
+          spec: test/e2e/specs/*.js
       - uses: actions/upload-artifact@v3
         if: failure()
         with:
