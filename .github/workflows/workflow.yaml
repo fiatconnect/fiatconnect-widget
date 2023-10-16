@@ -60,7 +60,7 @@ jobs:
           node-version: '18'
           check-latest: true
       - run: yarn
-      - run: yarn typecheck
+      - run: yarn build
       - name: Synpress
         uses: cypress-io/github-action@v6
         timeout-minutes: 60
