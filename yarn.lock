@@ -2678,10 +2678,9 @@
     "@svgr/plugin-svgo" "^5.5.0"
     loader-utils "^2.0.0"
 
-"@synthetixio/synpress@^3.7.2-beta.7":
-  version "3.7.2-beta.7"
-  resolved "https://registry.yarnpkg.com/@synthetixio/synpress/-/synpress-3.7.2-beta.7.tgz#80a485c15c28de08f9b9e6219e38493b1122bf9c"
-  integrity sha512-V5Z59fbzMIv3BVjzfMElD+eR+3C1q3mKPR6RJh9C0GpAnsBLtH2c2cPgBV2QgHBdmaJLFxEQBBud6Sb05w2jcw==
+"@synthetixio/synpress@github:synthetixio/synpress#fc9b2aa":
+  version "3.7.2-beta.6"
+  resolved "https://codeload.github.com/synthetixio/synpress/tar.gz/fc9b2aae09b9615286943e255d1a2c8f05daaf7d"
   dependencies:
     "@cypress/code-coverage" "^3.11.0"
     "@cypress/webpack-dev-server" "^3.5.2"
