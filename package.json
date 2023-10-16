@@ -28,7 +28,8 @@
     "build": "react-scripts build",
     "test": "jest",
     "eject": "react-scripts eject",
-    "e2e": "synpress run"
+    "e2e": "synpress run",
+    "e2e:ci": "start-server-and-test start http://localhost:3000 'yarn e2e'"
   },
   "eslintConfig": {
     "extends": [
@@ -72,6 +73,7 @@
     "jest-environment-jsdom": "^29.7.0",
     "lokijs": "^1.5.12",
     "prettier": "^3.0.3",
+    "start-server-and-test": "^2.0.1",
     "ts-jest": "^29.1.1"
   },
   "prettier": "@valora/prettier-config"
