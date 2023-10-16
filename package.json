@@ -27,7 +27,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "jest",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "e2e": "synpress run"
   },
   "eslintConfig": {
     "extends": [
@@ -53,6 +54,7 @@
     "@babel/core": "^7.23.0",
     "@babel/preset-env": "^7.22.20",
     "@inrupt/jest-jsdom-polyfills": "^2.4.1",
+    "@synthetixio/synpress": "^3.7.2-beta.7",
     "@typescript-eslint/eslint-plugin": "^6.7.4",
     "@valora/eslint-config-typescript": "^1.0.2",
     "@valora/prettier-config": "^0.0.1",
