@@ -7,10 +7,15 @@ import {
   createFiatConnectClient,
   chainIdToFiatConnectNetwork,
   providerIdToBaseUrl,
+  getFiatConnectClient,
 } from '../FiatConnectClient'
 import { FiatConnectClient } from '@fiatconnect/fiatconnect-sdk'
 
-function SIWEConnectButton() {
+interface Props {
+  onLoginSuccess: () => any
+}
+
+function SIWEConnectButton({ onLoginSuccess }: Props) {
   const account = useAccount()
   const network = useNetwork()
   // TODO: The "right" way to do this is probably through react-router-dom's "useSearchParams" hook
@@ -40,6 +45,7 @@ function SIWEConnectButton() {
       result.unwrap()
       setSiweSuccess(true)
       setSiweConnecting(false)
+      onLoginSuccess()
     } catch (e) {
       setSiweError(true)
       setSiweConnecting(false)
