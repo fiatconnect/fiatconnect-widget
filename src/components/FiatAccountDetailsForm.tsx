@@ -1,10 +1,9 @@
 import React, { ChangeEvent, FormEvent, useState } from 'react'
-import { getFiatConnectClient } from '../FiatConnectClient'
+import { addFiatAccount, getFiatConnectClient } from '../FiatConnectClient'
 import {
   FiatAccountSchema,
   FiatAccountType,
 } from '@fiatconnect/fiatconnect-types'
-import Button from '@mui/material/Button'
 
 interface Props {
   country: string
@@ -41,8 +40,24 @@ export function FiatAccountDetailsForm({ country }: Props) {
 
     // TODO(M1): input validation
     try {
-      const fiatConnectClient = getFiatConnectClient()
-      const addFiatAccountResult = await fiatConnectClient.addFiatAccount({
+      // const fiatConnectClient = getFiatConnectClient()
+      // const addFiatAccountResult = await fiatConnectClient.addFiatAccount({
+      //   fiatAccountSchema: FiatAccountSchema.MobileMoney,
+      //   data: {
+      //     mobile: phoneNumber,
+      //     operator,
+      //     country,
+      //     accountName,
+      //     institutionName: operator,
+      //     fiatAccountType: FiatAccountType.MobileMoney,
+      //   },
+      // })
+      // if (addFiatAccountResult.isErr) {
+      //   throw addFiatAccountResult.error
+      // }
+      // const json = addFiatAccountResult.unwrap()
+
+      const addFiatAccountResult = await addFiatAccount({
         // FIXME this is failing with 401 error. Also, cookies are not being set on the fiatconnect client (according to fiatConnectClient.getCookies()). why?
         fiatAccountSchema: FiatAccountSchema.MobileMoney,
         data: {
@@ -54,10 +69,9 @@ export function FiatAccountDetailsForm({ country }: Props) {
           institutionName: operator,
         },
       })
-      if (addFiatAccountResult.isErr) {
-        throw addFiatAccountResult.error
-      }
-      setFiatAccountId(addFiatAccountResult.value.fiatAccountId)
+      const json = await addFiatAccountResult.json()
+
+      setFiatAccountId(json.fiatAccountId)
       setSubmitResult(SubmitResult.Success)
     } catch (e) {
       // TODO(M1): parse the error. if it's a machine-readable fiatconnect error, do something smarter (like give the user instructions for fixing their form inputs)
@@ -66,53 +80,63 @@ export function FiatAccountDetailsForm({ country }: Props) {
       setSubmitResult(SubmitResult.Error)
     }
   }
+  const form = (
+    <>
+      <div>
+        <h2>Mobile Money Account Information</h2>
+        <form onSubmit={onSubmit}>
+          <div>
+            <label htmlFor="accountName">Account Name:</label>
+            <input
+              type="text"
+              id="accountName"
+              value={accountName}
+              onChange={handleAccountNameChange}
+              required
+            />
+          </div>
+          <div>
+            <label htmlFor="mobileMoneyOperator">Mobile Money Operator:</label>
+            {/* TODO(M1): use dropdown for mobile money operator if allowedValues is one quote */}
+            <input
+              id="mobileMoneyOperator"
+              type="text"
+              value={operator}
+              onChange={handleOperatorChange}
+            />
+          </div>
+          <div>
+            <label htmlFor="phoneNumber">Phone Number:</label>
+            <input
+              type="tel"
+              id="phoneNumber"
+              value={phoneNumber}
+              onChange={handlePhoneNumberChange}
+              required
+            />
+          </div>
+          <button type="submit">Submit</button>
+        </form>
+      </div>
+    </>
+  )
 
+  let prefix = <></>
   switch (submitResult) {
     case SubmitResult.Success:
-      return <div>Success! Fiat account id: {fiatAccountId}</div>
+      prefix = <div>Success! Fiat account id: {fiatAccountId}</div>
+      break
     case SubmitResult.Error:
-      return <div>Error!</div>
+      prefix = <div>Error!</div>
+      break
     case SubmitResult.NotSubmitted:
     default:
-      return (
-        <div>
-          <h2>Mobile Money Account Information</h2>
-          <form onSubmit={onSubmit}>
-            <div>
-              <label htmlFor="accountName">Account Name:</label>
-              <input
-                type="text"
-                id="accountName"
-                value={accountName}
-                onChange={handleAccountNameChange}
-                required
-              />
-            </div>
-            <div>
-              <label htmlFor="mobileMoneyOperator">
-                Mobile Money Operator:
-              </label>
-              {/* TODO(M1): use dropdown for mobile money operator if allowedValues is one quote */}
-              <input
-                id="mobileMoneyOperator"
-                type="text"
-                value={operator}
-                onChange={handleOperatorChange}
-              />
-            </div>
-            <div>
-              <label htmlFor="phoneNumber">Phone Number:</label>
-              <input
-                type="tel"
-                id="phoneNumber"
-                value={phoneNumber}
-                onChange={handlePhoneNumberChange}
-                required
-              />
-            </div>
-            <button type="submit">Submit</button>
-          </form>
-        </div>
-      )
+      return form
   }
+  return (
+    <>
+      {prefix}
+      {form}
+    </>
+  )
 }
