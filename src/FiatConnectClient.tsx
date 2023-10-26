@@ -16,7 +16,7 @@ let client: FiatConnectClient | null = null
 
 let clientConfig: FiatConnectClientConfig | null = null
 
-let cookies: string | null = null
+// let cookies: string | null = null
 
 export function getFiatConnectClient(): FiatConnectClient {
   if (!client) {
@@ -25,10 +25,6 @@ export function getFiatConnectClient(): FiatConnectClient {
     )
   }
   return client
-}
-
-export function setCookies(newCookies: string) {
-  cookies = newCookies
 }
 
 export function createFiatConnectClient({
@@ -64,10 +60,8 @@ export function addFiatAccount(
     method: 'POST',
     credentials: 'include',
     headers: {
-      // 'FIATCONNECT-PROVIDER-COOKIE': JSON.stringify(cookies),
       'Content-Type': 'application/json',
       Authorization: `Bearer ${clientConfig.apiKey}`,
-      ...JSON.parse(cookies ?? '{}'),
     },
     body: JSON.stringify(params),
   })

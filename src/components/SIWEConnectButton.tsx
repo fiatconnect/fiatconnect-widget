@@ -8,9 +8,8 @@ import {
   chainIdToFiatConnectNetwork,
   providerIdToBaseUrl,
   login,
-  setCookies,
 } from '../FiatConnectClient'
-import { FiatConnectClient } from '@fiatconnect/fiatconnect-sdk/dist/index-node'
+import { FiatConnectClient } from '@fiatconnect/fiatconnect-sdk/dist/index-browser'
 
 interface Props {
   onLoginSuccess: () => any
