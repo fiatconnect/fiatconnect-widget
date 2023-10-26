@@ -42,8 +42,7 @@ export const chainIdToFiatConnectNetwork: Record<number, Network> = {
 }
 
 export const providerIdToBaseUrl: Record<string, string> = {
-  bitmama:
-    'https://quiet-castle-48076-f4c3da6faaae.herokuapp.com/https://cico-staging.bitmama.io', // todo do something smarter than hardcoding this CORS proxy in (like ask Bitmama to allow CORS)
+  bitmama: 'https://cico-staging.bitmama.io', // TODO(M1): get Bitmama to allow CORS
   'test-provider':
     'https://mock-fc-provider-dot-celo-mobile-alfajores.appspot.com',
 }
