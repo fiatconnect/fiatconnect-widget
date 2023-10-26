@@ -6,8 +6,6 @@ import { Network } from '@fiatconnect/fiatconnect-types'
 
 let client: FiatConnectClient | null = null
 
-let clientConfig: FiatConnectClientConfig | null = null
-
 export function getFiatConnectClient(): FiatConnectClient {
   if (!client) {
     throw new Error(
@@ -26,13 +24,15 @@ export function createFiatConnectClient({
 }: FiatConnectClientConfig & {
   signingFunction: (message: string) => Promise<string>
 }): FiatConnectClient {
-  clientConfig = {
-    baseUrl,
-    network,
-    accountAddress,
-    apiKey,
-  }
-  client = new FiatConnectClient(clientConfig, signingFunction)
+  client = new FiatConnectClient(
+    {
+      baseUrl,
+      network,
+      accountAddress,
+      apiKey,
+    },
+    signingFunction,
+  )
   return client
 }
 
