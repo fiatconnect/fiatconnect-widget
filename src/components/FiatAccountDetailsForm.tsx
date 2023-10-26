@@ -107,22 +107,15 @@ export function FiatAccountDetailsForm({ country }: Props) {
     </>
   )
 
-  let prefix = <></>
   switch (submitResult) {
     case SubmitResult.Success:
-      prefix = <div>Success! Fiat account id: {fiatAccountId}</div>
-      break
+      // TODO(M1): proceed to transfer confirmation step
+      return <div>Success! Fiat account id: {fiatAccountId}</div>
     case SubmitResult.Error:
-      prefix = <div>Error!</div>
-      break
+      // TODO(M1): nicer error state
+      return <div>Error!</div>
     case SubmitResult.NotSubmitted:
     default:
       return form
   }
-  return (
-    <>
-      {prefix}
-      {form}
-    </>
-  )
 }
