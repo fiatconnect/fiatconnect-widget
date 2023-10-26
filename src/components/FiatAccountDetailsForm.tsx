@@ -1,5 +1,5 @@
 import React, { ChangeEvent, FormEvent, useState } from 'react'
-import { addFiatAccount, getFiatConnectClient } from '../FiatConnectClient'
+import { getFiatConnectClient } from '../FiatConnectClient'
 import {
   FiatAccountSchema,
   FiatAccountType,
@@ -40,36 +40,22 @@ export function FiatAccountDetailsForm({ country }: Props) {
 
     // TODO(M1): input validation
     try {
-      // const fiatConnectClient = getFiatConnectClient()
-      // const addFiatAccountResult = await fiatConnectClient.addFiatAccount({
-      //   fiatAccountSchema: FiatAccountSchema.MobileMoney,
-      //   data: {
-      //     mobile: phoneNumber,
-      //     operator,
-      //     country,
-      //     accountName,
-      //     institutionName: operator,
-      //     fiatAccountType: FiatAccountType.MobileMoney,
-      //   },
-      // })
-      // if (addFiatAccountResult.isErr) {
-      //   throw addFiatAccountResult.error
-      // }
-      // const json = addFiatAccountResult.unwrap()
-
-      const addFiatAccountResult = await addFiatAccount({
-        // FIXME this is failing with 401 error. Also, cookies are not being set on the fiatconnect client (according to fiatConnectClient.getCookies()). why?
+      const fiatConnectClient = getFiatConnectClient()
+      const addFiatAccountResult = await fiatConnectClient.addFiatAccount({
         fiatAccountSchema: FiatAccountSchema.MobileMoney,
         data: {
           mobile: phoneNumber,
           operator,
           country,
-          fiatAccountType: FiatAccountType.MobileMoney,
           accountName,
           institutionName: operator,
+          fiatAccountType: FiatAccountType.MobileMoney,
         },
       })
-      const json = await addFiatAccountResult.json()
+      if (addFiatAccountResult.isErr) {
+        throw addFiatAccountResult.error
+      }
+      const json = addFiatAccountResult.unwrap()
 
       setFiatAccountId(json.fiatAccountId)
       setSubmitResult(SubmitResult.Success)

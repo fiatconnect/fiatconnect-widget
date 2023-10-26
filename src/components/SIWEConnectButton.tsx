@@ -7,9 +7,8 @@ import {
   createFiatConnectClient,
   chainIdToFiatConnectNetwork,
   providerIdToBaseUrl,
-  login,
 } from '../FiatConnectClient'
-import { FiatConnectClient } from '@fiatconnect/fiatconnect-sdk/dist/index-browser'
+import { FiatConnectClient } from '@fiatconnect/fiatconnect-sdk'
 
 interface Props {
   onLoginSuccess: () => any
@@ -41,13 +40,9 @@ function SIWEConnectButton({ onLoginSuccess }: Props) {
       return
     }
     try {
-      // const result = await client.login()
-      // result.unwrap()
-      const response = await login((message) => signMessage({ message }))
+      const result = await client.login()
+      result.unwrap()
 
-      // eslint-disable-next-line no-console
-      console.log(`login response headers: ${JSON.stringify(response.headers)}`)
-      // cookies && setCookies(cookies)
       setSiweSuccess(true)
       setSiweConnecting(false)
       onLoginSuccess()
