@@ -5,7 +5,7 @@
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
-    "@fiatconnect/fiatconnect-sdk": "^0.5.18",
+    "@fiatconnect/fiatconnect-sdk": "^0.5.19",
     "@mui/material": "^5.14.12",
     "@rainbow-me/rainbowkit": "^1.1.1",
     "@testing-library/react": "^13.0.0",
