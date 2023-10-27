@@ -39,7 +39,10 @@ function App() {
             <ConnectButton />
             <SIWEConnectButton onLoginSuccess={() => setLoginSuccess(true)} />
             {
-              loginSuccess && <FiatAccountDetailsForm country={'Nigeria'} />
+              <FiatAccountDetailsForm
+                country={'Nigeria'}
+                loggedIn={loginSuccess}
+              />
               /* TODO(M1): get country from query parameter */
             }
           </header>

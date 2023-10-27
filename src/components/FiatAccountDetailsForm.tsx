@@ -4,9 +4,11 @@ import {
   FiatAccountSchema,
   FiatAccountType,
 } from '@fiatconnect/fiatconnect-types'
+import { useAsync } from 'react-use'
 
 interface Props {
   country: string
+  loggedIn: boolean
 }
 
 enum SubmitResult {
@@ -15,7 +17,7 @@ enum SubmitResult {
   NotSubmitted = 'NotSubmitted',
 }
 
-export function FiatAccountDetailsForm({ country }: Props) {
+export function FiatAccountDetailsForm({ country, loggedIn }: Props) {
   // TODO(M3): make usable for other fiat account schemas (besides mobile money)
   const [accountName, setAccountName] = useState('')
   const [operator, setOperator] = useState('MTN')
@@ -35,8 +37,25 @@ export function FiatAccountDetailsForm({ country }: Props) {
     setPhoneNumber(event.target.value)
   }
 
+  const existingAccounts = useAsync(async () => {
+    if (!loggedIn) {
+      return
+    }
+    const fiatConnectClient = getFiatConnectClient()
+    const result = await fiatConnectClient.getFiatAccounts()
+    if (result.isErr) {
+      throw result.error
+    }
+    return result.unwrap()
+  }, [loggedIn])
+
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    if (!loggedIn) {
+      throw new Error(
+        'Not logged in, should not be able to submit fiat account details yet',
+      )
+    }
 
     // TODO(M1): input validation
     try {
@@ -70,6 +89,19 @@ export function FiatAccountDetailsForm({ country }: Props) {
     <>
       <div>
         <h2>Mobile Money Account Information</h2>
+        {existingAccounts.value?.MobileMoney && (
+          <div>
+            <p>Accounts on file:</p>
+            {existingAccounts.value.MobileMoney.reduce(
+              (acc, cur) =>
+                acc.concat(
+                  `accountName: ${cur.accountName}, fiatAccountId: ${cur.fiatAccountId}\n`,
+                ),
+              '',
+            )}
+            <br />
+          </div>
+        )}
         <form onSubmit={onSubmit}>
           <div>
             <label htmlFor="accountName">Account Name:</label>
@@ -101,7 +133,9 @@ export function FiatAccountDetailsForm({ country }: Props) {
               required
             />
           </div>
-          <button type="submit">Submit</button>
+          <button type="submit" disabled={!loggedIn}>
+            Submit
+          </button>
         </form>
       </div>
     </>
