@@ -11,6 +11,7 @@ interface Props {
 }
 
 enum SubmitResult {
+  InProgress = 'InProgress',
   Success = 'Success',
   Error = 'Error',
   NotSubmitted = 'NotSubmitted',
@@ -114,7 +115,13 @@ export function FiatAccountDetailsForm({ country }: Props) {
               required
             />
           </div>
-          <button type="submit" disabled={!fiatConnectClientConfig}>
+          <button
+            type="submit"
+            disabled={
+              !fiatConnectClientConfig ||
+              submitResult === SubmitResult.InProgress
+            }
+          >
             Submit
           </button>
         </form>
