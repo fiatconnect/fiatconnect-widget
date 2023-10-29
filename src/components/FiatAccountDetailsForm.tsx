@@ -61,6 +61,13 @@ export function FiatAccountDetailsForm({ country }: Props) {
         },
         fiatConnectClientConfig,
       )
+      if (!addFiatAccountResult.ok) {
+        throw new Error(
+          `Error adding fiat account. Status: ${
+            addFiatAccountResult.status
+          }, json ${await addFiatAccountResult.json()}`,
+        )
+      }
       const json = await addFiatAccountResult.json()
 
       setFiatAccountId(json.fiatAccountId)
