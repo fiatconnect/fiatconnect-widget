@@ -28,10 +28,11 @@ function SIWEConnectButton({ onLoginSuccess }: Props) {
     return response
   }
 
-  const loginAsync = async () => {
+  const onClick = async () => {
     if (!fiatConnectClientConfig) {
       return
     }
+    setSiweConnecting(true)
     try {
       const response = await login(
         (message) => signMessage({ message }),
@@ -48,15 +49,6 @@ function SIWEConnectButton({ onLoginSuccess }: Props) {
       setSiweError(true)
       setSiweConnecting(false)
     }
-  }
-
-  const onClick = () => {
-    if (!fiatConnectClientConfig) {
-      return
-    }
-
-    setSiweConnecting(true)
-    void loginAsync()
   }
 
   const getText = () => {
