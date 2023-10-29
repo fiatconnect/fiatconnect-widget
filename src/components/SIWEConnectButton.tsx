@@ -1,32 +1,24 @@
 import React, { useState } from 'react'
-import { useAsync } from 'react-use'
 import Button from '@mui/material/Button'
 import { signMessage } from '@wagmi/core'
 import { useAccount, useNetwork } from 'wagmi'
-import {
-  createFiatConnectClient,
-  chainIdToFiatConnectNetwork,
-  providerIdToBaseUrl,
-  login,
-} from '../FiatConnectClient'
-import { FiatConnectClient } from '@fiatconnect/fiatconnect-sdk/dist/index-browser'
+import { login } from '../FiatConnectClient'
+import { useFiatConnectConfig } from '../hooks'
 
 interface Props {
   onLoginSuccess: () => any
 }
 
 function SIWEConnectButton({ onLoginSuccess }: Props) {
-  const account = useAccount()
-  const network = useNetwork()
-  // TODO: The "right" way to do this is probably through react-router-dom's "useSearchParams" hook
-  const searchParams = new URLSearchParams(window.location.search)
-  const apiKey = searchParams.get('apiKey')
-  const providerId = searchParams.get('providerId') ?? undefined
-
-  const [client, setClient] = useState<FiatConnectClient | undefined>(undefined)
+  const fiatConnectClientConfig = useFiatConnectConfig()
   const [siweConnecting, setSiweConnecting] = useState(false)
   const [siweSuccess, setSiweSuccess] = useState(false)
   const [siweError, setSiweError] = useState(false)
+
+  const searchParams = new URLSearchParams(window.location.search)
+  const providerId = searchParams.get('providerId') ?? undefined
+
+  const account = useAccount()
 
   // For some reason (not fully understood by me) we need to do this in order
   // to get the fetching to work correctly, despite using the browser SDK.
@@ -36,56 +28,35 @@ function SIWEConnectButton({ onLoginSuccess }: Props) {
     return response
   }
 
-  useAsync(async () => {
-    if (!client) {
+  const loginAsync = async () => {
+    if (!fiatConnectClientConfig) {
       return
     }
     try {
-      // const result = await client.login()
-      // result.unwrap()
-      const response = await login((message) => signMessage({ message }))
-
-      // eslint-disable-next-line no-console
-      console.log(`login response headers: ${JSON.stringify(response.headers)}`)
-      // cookies && setCookies(cookies)
-      setSiweSuccess(true)
-      setSiweConnecting(false)
-      onLoginSuccess()
+      const response = await login(
+        (message) => signMessage({ message }),
+        fiatConnectClientConfig,
+      )
+      if (response.ok) {
+        setSiweSuccess(true)
+        setSiweConnecting(false)
+        onLoginSuccess()
+      } else {
+        throw new Error(`Error logging in: ${await response.json()}`)
+      }
     } catch (e) {
       setSiweError(true)
       setSiweConnecting(false)
     }
-  }, [client])
+  }
 
   const onClick = () => {
-    if (
-      !account.address ||
-      network?.chain?.unsupported ||
-      !network.chain ||
-      !providerId
-    ) {
-      return
-    }
-    const baseUrl = providerIdToBaseUrl[providerId]
-    if (!apiKey || !baseUrl) {
+    if (!fiatConnectClientConfig) {
       return
     }
 
-    const fiatConnectNetwork = chainIdToFiatConnectNetwork[network.chain.id]
-    const signMessageWrapper = async (msg: string): Promise<string> => {
-      const signedMessage = await signMessage({ message: msg })
-      return signedMessage
-    }
-
-    const client = createFiatConnectClient({
-      baseUrl,
-      network: fiatConnectNetwork,
-      accountAddress: account.address,
-      apiKey,
-      signingFunction: signMessageWrapper,
-    })
-    setClient(client)
     setSiweConnecting(true)
+    void loginAsync()
   }
 
   const getText = () => {
@@ -142,4 +113,5 @@ function SIWEConnectButton({ onLoginSuccess }: Props) {
     </div>
   )
 }
+
 export default SIWEConnectButton

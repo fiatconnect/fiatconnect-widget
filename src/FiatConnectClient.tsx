@@ -1,61 +1,20 @@
 import {
-  FiatConnectClient,
-  FiatConnectClientConfig,
-} from '@fiatconnect/fiatconnect-sdk/dist/index-browser'
-import {
   AuthRequestBody,
-  Network,
   PostFiatAccountRequestBody,
 } from '@fiatconnect/fiatconnect-types'
 import { generateNonce, SiweMessage } from 'siwe'
-import { ethers } from 'ethers'
-import { LoginParams } from '@fiatconnect/fiatconnect-sdk/src/types'
+import { getAddress } from 'ethers'
+import {
+  FiatConnectClientConfig,
+  LoginParams,
+} from '@fiatconnect/fiatconnect-sdk'
 import { createSiweConfig } from '@fiatconnect/fiatconnect-sdk/dist/fiat-connect-client'
+import { fiatConnectNetworkToChainId } from './constants'
 
-let client: FiatConnectClient | null = null
-
-let clientConfig: FiatConnectClientConfig | null = null
-
-// let cookies: string | null = null
-
-export function getFiatConnectClient(): FiatConnectClient {
-  if (!client) {
-    throw new Error(
-      'No FiatConnect Client available. Have you created one first?',
-    )
-  }
-  return client
-}
-
-export function createFiatConnectClient({
-  baseUrl,
-  network,
-  accountAddress,
-  apiKey,
-  signingFunction,
-}: FiatConnectClientConfig & {
-  signingFunction: (message: string) => Promise<string>
-}): FiatConnectClient {
-  clientConfig = {
-    baseUrl,
-    network,
-    accountAddress,
-    apiKey,
-  }
-  client = new FiatConnectClient(clientConfig, signingFunction)
-  return client
-}
-
-// trying out sidestepping the sdk to see if cookie error still happens
 export function addFiatAccount(
-  // baseUrl: string,
-  // apiKey: string,
   params: PostFiatAccountRequestBody,
+  clientConfig: FiatConnectClientConfig,
 ) {
-  if (!clientConfig || !client) throw new Error('no client config or client')
-  // const cookies = client.getCookies()
-  // eslint-disable-next-line no-console
-  // console.log(`cookies: ${JSON.stringify(cookies)}`)
   return fetch(`${clientConfig.baseUrl}/accounts`, {
     method: 'POST',
     credentials: 'include',
@@ -69,11 +28,9 @@ export function addFiatAccount(
 
 export async function login(
   signingFunction: (message: string) => Promise<string>,
+  clientConfig: FiatConnectClientConfig,
   params?: LoginParams,
 ) {
-  if (!clientConfig) {
-    throw new Error('initialize clientConfig first')
-  }
   const issuedAt = params?.issuedAt ?? new Date()
 
   const siweConfig = createSiweConfig(clientConfig)
@@ -85,11 +42,11 @@ export async function login(
     // Some SIWE validators compare this against the checksummed signing address,
     // and thus will always fail if this address is not checksummed. This coerces
     // non-checksummed addresses to be checksummed.
-    address: ethers.utils.getAddress(siweConfig.accountAddress),
+    address: getAddress(siweConfig.accountAddress),
     statement: siweConfig.statement,
     uri: siweConfig.loginUrl,
     version: siweConfig.version,
-    chainId: 44787, // todo get from config
+    chainId: fiatConnectNetworkToChainId[clientConfig.network],
     nonce: generateNonce(),
     issuedAt: issuedAt.toISOString(),
     expirationTime: expirationTime.toISOString(),
@@ -109,11 +66,6 @@ export async function login(
     },
     body: JSON.stringify(body),
   })
-}
-
-export const chainIdToFiatConnectNetwork: Record<number, Network> = {
-  [44787]: Network.Alfajores,
-  [42220]: Network.Mainnet,
 }
 
 export const providerIdToBaseUrl: Record<string, string> = {

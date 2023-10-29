@@ -1,9 +1,10 @@
 import React, { ChangeEvent, FormEvent, useState } from 'react'
-import { addFiatAccount, getFiatConnectClient } from '../FiatConnectClient'
+import { addFiatAccount } from '../FiatConnectClient'
 import {
   FiatAccountSchema,
   FiatAccountType,
 } from '@fiatconnect/fiatconnect-types'
+import { useFiatConnectConfig } from '../hooks'
 
 interface Props {
   country: string
@@ -22,6 +23,7 @@ export function FiatAccountDetailsForm({ country }: Props) {
   const [phoneNumber, setPhoneNumber] = useState('1234567')
   const [submitResult, setSubmitResult] = useState(SubmitResult.NotSubmitted)
   const [fiatAccountId, setFiatAccountId] = useState('')
+  const fiatConnectClientConfig = useFiatConnectConfig()
 
   const handleAccountNameChange = (event: ChangeEvent<HTMLInputElement>) => {
     setAccountName(event.target.value)
@@ -37,38 +39,28 @@ export function FiatAccountDetailsForm({ country }: Props) {
 
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    if (!fiatConnectClientConfig) {
+      throw new Error(
+        'FiatConnectClientConfig not set, cannot submit fiat account details',
+      )
+    }
 
     // TODO(M1): input validation
     try {
-      // const fiatConnectClient = getFiatConnectClient()
-      // const addFiatAccountResult = await fiatConnectClient.addFiatAccount({
-      //   fiatAccountSchema: FiatAccountSchema.MobileMoney,
-      //   data: {
-      //     mobile: phoneNumber,
-      //     operator,
-      //     country,
-      //     accountName,
-      //     institutionName: operator,
-      //     fiatAccountType: FiatAccountType.MobileMoney,
-      //   },
-      // })
-      // if (addFiatAccountResult.isErr) {
-      //   throw addFiatAccountResult.error
-      // }
-      // const json = addFiatAccountResult.unwrap()
-
-      const addFiatAccountResult = await addFiatAccount({
-        // FIXME this is failing with 401 error. Also, cookies are not being set on the fiatconnect client (according to fiatConnectClient.getCookies()). why?
-        fiatAccountSchema: FiatAccountSchema.MobileMoney,
-        data: {
-          mobile: phoneNumber,
-          operator,
-          country,
-          fiatAccountType: FiatAccountType.MobileMoney,
-          accountName,
-          institutionName: operator,
+      const addFiatAccountResult = await addFiatAccount(
+        {
+          fiatAccountSchema: FiatAccountSchema.MobileMoney,
+          data: {
+            mobile: phoneNumber,
+            operator,
+            country,
+            fiatAccountType: FiatAccountType.MobileMoney,
+            accountName,
+            institutionName: operator,
+          },
         },
-      })
+        fiatConnectClientConfig,
+      )
       const json = await addFiatAccountResult.json()
 
       setFiatAccountId(json.fiatAccountId)
@@ -115,7 +107,9 @@ export function FiatAccountDetailsForm({ country }: Props) {
               required
             />
           </div>
-          <button type="submit">Submit</button>
+          <button type="submit" disabled={!fiatConnectClientConfig}>
+            Submit
+          </button>
         </form>
       </div>
     </>
