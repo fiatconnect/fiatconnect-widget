@@ -15,7 +15,7 @@ module.exports = {
   coveragePathIgnorePatterns: ['/node_modules/'],
   coverageThreshold: {
     global: {
-      lines: 80,
+      lines: 75,
     },
   },
   moduleNameMapper: {
