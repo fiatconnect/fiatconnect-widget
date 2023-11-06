@@ -8,6 +8,8 @@ import { celoAlfajores } from 'viem/chains'
 import {
   getDefaultWallets,
   RainbowKitProvider,
+  lightTheme,
+  Theme,
 } from '@rainbow-me/rainbowkit'
 import { useActionData, useSearchParams } from 'react-router-dom'
 import '@fontsource/inter'
@@ -15,6 +17,7 @@ import { StepsHeader } from './components/StepsHeader'
 import { ErrorSection } from './components/ErrorSection'
 import { providerIdToProviderName } from './constants'
 import { SignInScreen } from './components/SignInScreen'
+import merge from 'lodash.merge'
 
 const { chains, publicClient } = configureChains(
   [celoAlfajores],
@@ -38,10 +41,10 @@ function useQueryParams() {
 }
 
 const DEFAULT_ERROR_TITLE = 'There was an error processing your request.'
-const DEFAULT_ERROR_MESSAGE = 'This is typically due to a misconfiguration by your wallet provider.'
+const DEFAULT_ERROR_MESSAGE =
+  'This is typically due to a misconfiguration by your wallet provider.'
 
 function App() {
-
   const queryParamsResults = useQueryParams()
   const [step, setStep] = useState(Steps.One)
   const [errorTitle, setErrorTitle] = useState(DEFAULT_ERROR_TITLE)
@@ -60,7 +63,13 @@ function App() {
       return
     }
     if (step === Steps.One) {
-      return <SignInScreen onError={onError} onNext={setStep} params={queryParamsResults.data}/>
+      return (
+        <SignInScreen
+          onError={onError}
+          onNext={setStep}
+          params={queryParamsResults.data}
+        />
+      )
     }
   }
 
@@ -69,19 +78,37 @@ function App() {
       <RainbowKitProvider chains={chains}>
         <div className="App">
           <header className="App-header">
-	    <div className="Container">
-	      {(queryParamsResults.success && !showError) ?
-	      <div className="SectionContainer">
-		<div className='ProviderTitle'>
-		  {providerIdToProviderName[queryParamsResults.data.providerId]}
-		</div>
-		<StepsHeader step={step} />
-		{getSection()}
-	      </div>
-		:
-	      <ErrorSection title={errorTitle} message={errorMessage}/>
-	      }
-	    </div>
+            <div className="Container">
+              {queryParamsResults.success && !showError ? (
+                <div className="SectionContainer">
+                  <div className="ProviderTitle">
+                    {
+                      providerIdToProviderName[
+                        queryParamsResults.data.providerId
+                      ]
+                    }
+                  </div>
+                  <StepsHeader step={step} />
+                  {getSection()}
+                </div>
+              ) : (
+                <div className="ErrorContainer">
+                  {queryParamsResults.success && (
+                    <div>
+                      <div className="ProviderTitle">
+                        {
+                          providerIdToProviderName[
+                            queryParamsResults.data.providerId
+                          ]
+                        }
+                      </div>
+                      <StepsHeader step={step} />
+                    </div>
+                  )}
+                  <ErrorSection title={errorTitle} message={errorMessage} />
+                </div>
+              )}
+            </div>
           </header>
         </div>
       </RainbowKitProvider>

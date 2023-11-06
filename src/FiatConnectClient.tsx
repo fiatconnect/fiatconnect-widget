@@ -10,6 +10,7 @@ import {
 } from '@fiatconnect/fiatconnect-sdk'
 import { createSiweConfig } from '@fiatconnect/fiatconnect-sdk/dist/fiat-connect-client'
 import { fiatConnectNetworkToChainId } from './constants'
+import { ProviderIds } from './types'
 
 export function addFiatAccount(
   params: PostFiatAccountRequestBody,
@@ -57,20 +58,24 @@ export async function login(
     signature: await signingFunction(message),
   }
 
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+  }
+  if (clientConfig.apiKey) {
+    headers['Authorization'] = `Bearer ${clientConfig.apiKey}`
+  }
+
   return await fetch(siweConfig.loginUrl, {
     method: 'POST',
     credentials: 'include',
-    headers: {
-      Authorization: `Bearer ${clientConfig.apiKey}`,
-      'Content-Type': 'application/json',
-    },
+    headers,
     body: JSON.stringify(body),
   })
 }
 
-export const providerIdToBaseUrl: Record<string, string> = {
-  bitmama:
+export const providerIdToBaseUrl: Record<ProviderIds, string> = {
+  [ProviderIds.Bitmama]:
     'https://quiet-castle-48076-f4c3da6faaae.herokuapp.com/https://cico-staging.bitmama.io', // todo do something smarter than hardcoding this CORS proxy in (like ask Bitmama to allow CORS)
-  'test-provider':
+  [ProviderIds.TestProvider]:
     'https://mock-fc-provider-dot-celo-mobile-alfajores.appspot.com',
 }

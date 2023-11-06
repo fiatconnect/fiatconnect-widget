@@ -3,12 +3,13 @@ import {
   fiatTypeSchema,
   cryptoTypeSchema,
   fiatAccountTypeSchema,
-  fiatAccountSchemaSchema
+  fiatAccountSchemaSchema,
 } from '@fiatconnect/fiatconnect-types'
 import { z } from 'zod'
 
 export enum ProviderIds {
-  Bitmama = 'bitmama'
+  Bitmama = 'bitmama',
+  TestProvider = 'test-provider',
 }
 
 export enum Steps {
@@ -31,7 +32,7 @@ export const queryParamsSchema = z.object({
   settlementTimeUpperBound: z.string().optional(),
   fiatAccountType: fiatAccountTypeSchema,
   fiatAccountSchema: fiatAccountSchemaSchema,
-  allowedValues: z.string().optional()
+  allowedValues: z.string().optional(),
 })
 
 export type QueryParams = z.infer<typeof queryParamsSchema>
