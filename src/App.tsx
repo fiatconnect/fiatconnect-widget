@@ -14,6 +14,7 @@ import '@fontsource/inter'
 import { StepsHeader } from './components/StepsHeader'
 import { ErrorSection } from './components/ErrorSection'
 import { providerIdToProviderName } from './constants'
+import { SignInScreen } from './components/SignInScreen'
 
 const { chains, publicClient } = configureChains(
   [celoAlfajores],
@@ -47,6 +48,22 @@ function App() {
   const [errorMessage, setErrorMessage] = useState(DEFAULT_ERROR_MESSAGE)
   const [showError, setShowError] = useState(false)
 
+  const onError = (title: string, message: string) => {
+    setErrorTitle(title)
+    setErrorMessage(message)
+    setShowError(true)
+  }
+
+  const getSection = () => {
+    // TODO: should never happen
+    if (!queryParamsResults.success) {
+      return
+    }
+    if (step === Steps.One) {
+      return <SignInScreen onError={onError} onNext={setStep} params={queryParamsResults.data}/>
+    }
+  }
+
   return (
     <WagmiConfig config={wagmiConfig}>
       <RainbowKitProvider chains={chains}>
@@ -59,6 +76,7 @@ function App() {
 		  {providerIdToProviderName[queryParamsResults.data.providerId]}
 		</div>
 		<StepsHeader step={step} />
+		{getSection()}
 	      </div>
 		:
 	      <ErrorSection title={errorTitle} message={errorMessage}/>

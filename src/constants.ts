@@ -1,4 +1,4 @@
-import { Network } from '@fiatconnect/fiatconnect-types'
+import { Network, FiatAccountSchema } from '@fiatconnect/fiatconnect-types'
 import { celo, celoAlfajores } from 'viem/chains'
 import { ProviderIds } from './types'
 
@@ -18,4 +18,13 @@ export const chainIdToFiatConnectNetwork: Record<number, Network> =
 
 export const providerIdToProviderName: Record<ProviderIds, string> = {
   [ProviderIds.Bitmama]: 'Bitmama'
+}
+
+export const fiatAccountSchemaToPaymentMethod: Record<FiatAccountSchema, string> = {
+  [FiatAccountSchema.AccountNumber]: 'Account Number',
+  [FiatAccountSchema.MobileMoney]: 'Mobile Money',
+  [FiatAccountSchema.DuniaWallet]: 'Dunia Wallet',
+  [FiatAccountSchema.IBANNumber]: 'IBAN Number',
+  [FiatAccountSchema.IFSCAccount]: 'IFSC Account',
+  [FiatAccountSchema.PIXAccount]: 'PIX Account',
 }
