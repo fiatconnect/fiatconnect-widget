@@ -7,6 +7,7 @@
     "@emotion/styled": "^11.11.0",
     "@fiatconnect/fiatconnect-sdk": "^0.5.19",
     "@fiatconnect/fiatconnect-types": "^13.2.2",
+    "@fontsource/inter": "^5.0.15",
     "@mui/material": "^5.14.12",
     "@rainbow-me/rainbowkit": "^1.1.1",
     "@testing-library/react": "^13.0.0",
@@ -18,12 +19,13 @@
     "ethers": "^6.8.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.17.0",
+    "react-router-dom": "^6.18.0",
     "react-scripts": "5.0.1",
     "siwe": "^2.1.4",
     "typescript": "^5.2.2",
     "viem": "^1.15.4",
-    "wagmi": "^1.4.3"
+    "wagmi": "^1.4.3",
+    "zod": "^3.22.4"
   },
   "scripts": {
     "format": "prettier --log-level error --write .",
@@ -33,7 +35,7 @@
     "depcheck": "depcheck",
     "typecheck": "tsc",
     "test:ci": "jest --ci --coverage",
-    "start": "react-scripts start",
+    "start": "DISABLE_ESLINT_PLUGIN=true react-scripts start",
     "build": "react-scripts build",
     "test": "jest",
     "eject": "react-scripts eject"

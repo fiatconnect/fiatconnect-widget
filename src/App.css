@@ -1,5 +1,8 @@
 .App {
-  text-align: center;
+    justify-content: flex-start;
+    display: flex;
+    align-items: flex-start;
+    text-align: center;
 }
 
 .App-logo {
@@ -14,12 +17,13 @@
 }
 
 .App-header {
-  background-color: #282c34;
+    flex: 1;
+    justify-content: flex-start;
+    align-items: center;
+  background-color: #e5e5e5;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
 }
@@ -35,4 +39,58 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.Container {
+    color: black;
+    display: flex;
+    box-sizing: border-box;
+    font-family: "Inter";
+    background-color: white;
+    justify-content: center;
+    padding: 50px;
+    width: min(500px, 100vw);
+    height: min(700px, 100vh);
+    border-radius: 20px;
+}
+
+.SectionContainer {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+}
+
+.ProviderTitle {
+    font-size: 18px;
+
+    font-weight: bold;
+}
+.ErrorSection {
+    align-self: center;
+}
+
+#errorTitle {
+    color: black;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+#errorIcon {
+    padding: 30px;
+}
+
+#errorText {
+    color: black;
+    font-size: 18px;
+    padding-bottom: 20px;
+}
+
+.StepsHeader {
+    width: 100%;
+    padding: 10px;
+    justify-content: space-between;
+}
+
+.StepsLine {
+  border: 1px solid #868686;
 }

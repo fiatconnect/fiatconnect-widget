@@ -1,17 +1,19 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './App.css'
 import '@rainbow-me/rainbowkit/styles.css'
-
+import { Steps, queryParamsSchema } from './types'
 import { publicProvider } from 'wagmi/providers/public'
 import { configureChains, createConfig, WagmiConfig } from 'wagmi'
 import { celoAlfajores } from 'viem/chains'
 import {
-  ConnectButton,
   getDefaultWallets,
   RainbowKitProvider,
 } from '@rainbow-me/rainbowkit'
-import SIWEConnectButton from './components/SIWEConnectButton'
-import { FiatAccountDetailsForm } from './components/FiatAccountDetailsForm'
+import { useActionData, useSearchParams } from 'react-router-dom'
+import '@fontsource/inter'
+import { StepsHeader } from './components/StepsHeader'
+import { ErrorSection } from './components/ErrorSection'
+import { providerIdToProviderName } from './constants'
 
 const { chains, publicClient } = configureChains(
   [celoAlfajores],
@@ -28,20 +30,40 @@ const wagmiConfig = createConfig({
   publicClient,
 })
 
+function useQueryParams() {
+  const [searchParams] = useSearchParams()
+  const searchParamsObject = Object.fromEntries(searchParams)
+  return queryParamsSchema.safeParse(searchParamsObject)
+}
+
+const DEFAULT_ERROR_TITLE = 'There was an error processing your request.'
+const DEFAULT_ERROR_MESSAGE = 'This is typically due to a misconfiguration by your wallet provider.'
+
 function App() {
-  const [loginSuccess, setLoginSuccess] = useState(false)
+
+  const queryParamsResults = useQueryParams()
+  const [step, setStep] = useState(Steps.One)
+  const [errorTitle, setErrorTitle] = useState(DEFAULT_ERROR_TITLE)
+  const [errorMessage, setErrorMessage] = useState(DEFAULT_ERROR_MESSAGE)
+  const [showError, setShowError] = useState(false)
 
   return (
     <WagmiConfig config={wagmiConfig}>
       <RainbowKitProvider chains={chains}>
         <div className="App">
           <header className="App-header">
-            <ConnectButton />
-            <SIWEConnectButton onLoginSuccess={() => setLoginSuccess(true)} />
-            {
-              <FiatAccountDetailsForm country={'Nigeria'} />
-              /* TODO(M1): get country from query parameter */
-            }
+	    <div className="Container">
+	      {(queryParamsResults.success && !showError) ?
+	      <div className="SectionContainer">
+		<div className='ProviderTitle'>
+		  {providerIdToProviderName[queryParamsResults.data.providerId]}
+		</div>
+		<StepsHeader step={step} />
+	      </div>
+		:
+	      <ErrorSection title={errorTitle} message={errorMessage}/>
+	      }
+	    </div>
           </header>
         </div>
       </RainbowKitProvider>
