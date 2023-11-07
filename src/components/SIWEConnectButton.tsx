@@ -73,7 +73,7 @@ function SIWEConnectButton({
     if (siweError) {
       return 'Error signing in with Ethereum'
     } else {
-      return 'SIWE connecting, check your wallet...'
+      return 'Connecting...'
     }
   }
 

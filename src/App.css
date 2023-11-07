@@ -173,7 +173,7 @@
   color: black;
 }
 
-.SignInScreen {
+.ContentContainer {
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -381,4 +381,16 @@
 
 #SIWESignInButton:disabled {
   background-color: #c2c2c2;
+}
+
+#PaymentInfo-Title {
+  font-size: 18px;
+  font-weight: bold;
+  padding-bottom: 5px;
+}
+
+#PaymentInfo-Subtitle {
+  font-size: 12px;
+  color: #515151;
+  font-weight: bold;
 }

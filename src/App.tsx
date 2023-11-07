@@ -5,19 +5,14 @@ import { Steps, queryParamsSchema } from './types'
 import { publicProvider } from 'wagmi/providers/public'
 import { configureChains, createConfig, WagmiConfig } from 'wagmi'
 import { celoAlfajores } from 'viem/chains'
-import {
-  getDefaultWallets,
-  RainbowKitProvider,
-  lightTheme,
-  Theme,
-} from '@rainbow-me/rainbowkit'
-import { useActionData, useSearchParams } from 'react-router-dom'
+import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit'
+import { useSearchParams } from 'react-router-dom'
 import '@fontsource/inter'
 import { StepsHeader } from './components/StepsHeader'
 import { ErrorSection } from './components/ErrorSection'
 import { providerIdToProviderName } from './constants'
 import { SignInScreen } from './components/SignInScreen'
-import merge from 'lodash.merge'
+import { PaymentInfoScreen } from './components/PaymentInfoScreen'
 
 const { chains, publicClient } = configureChains(
   [celoAlfajores],
@@ -35,6 +30,12 @@ const wagmiConfig = createConfig({
 })
 
 function useQueryParams() {
+  // TODO: We should do some semantic validation here to ensure that stuff doesn't break later in the flow.
+  // This includes:
+  //  - Check that the FiatAccountSchema is actually supported in this widget currently
+  //  - Check that allowedValues is syntactically valid, deserialize it to an object before returning
+  //  - Check that fiatAmount and cryptoAmount can be deserialied to floats, and deserialize them before returning
+  //  - Check that transferType is currently supported by the widget
   const [searchParams] = useSearchParams()
   const searchParamsObject = Object.fromEntries(searchParams)
   return queryParamsSchema.safeParse(searchParamsObject)
@@ -65,6 +66,15 @@ function App() {
     if (step === Steps.One) {
       return (
         <SignInScreen
+          onError={onError}
+          onNext={setStep}
+          params={queryParamsResults.data}
+        />
+      )
+    }
+    if (step === Steps.Two) {
+      return (
+        <PaymentInfoScreen
           onError={onError}
           onNext={setStep}
           params={queryParamsResults.data}
