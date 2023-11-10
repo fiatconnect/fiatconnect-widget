@@ -411,6 +411,10 @@
   height: 55px;
 }
 
+#SubmitPaymentInfoButton:hover {
+  background-color: #4871dc;
+}
+
 #SubmitPaymentInfoButton:disabled {
   background-color: #c2c2c2;
 }
