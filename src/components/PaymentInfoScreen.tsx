@@ -44,7 +44,10 @@ export function PaymentInfoScreen({ onError, onNext, params }: Props) {
     setSubmitDisabled(true)
     try {
       const response = await addFiatAccount(
-        fiatAccountDetails as PostFiatAccountRequestBody,
+        {
+          data: fiatAccountDetails as PostFiatAccountRequestBody['data'],
+          fiatAccountSchema: params.fiatAccountSchema,
+        } as PostFiatAccountRequestBody, // todo avoid type casts
         fiatConnectClientConfig,
       )
       if (response.ok) {
