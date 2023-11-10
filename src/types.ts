@@ -33,6 +33,7 @@ export const queryParamsSchema = z.object({
   fiatAccountType: fiatAccountTypeSchema,
   fiatAccountSchema: fiatAccountSchemaSchema,
   allowedValues: z.string().optional(),
+  country: z.string(),
 })
 
 export type QueryParams = z.infer<typeof queryParamsSchema>
