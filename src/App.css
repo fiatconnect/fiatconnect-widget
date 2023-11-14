@@ -418,20 +418,3 @@
 #SubmitPaymentInfoButton:disabled {
   background-color: #c2c2c2;
 }
-
-#PaymentInfoLineItem {
-  display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
-  flex-direction: column;
-  font-size: 13px;
-  padding-top: 20px;
-}
-
-#PaymentInfoLineItem-Input {
-  margin-top: 8px;
-  padding-left: 10px;
-  border-radius: 5px;
-  border-width: 1px;
-  height: 35px;
-}

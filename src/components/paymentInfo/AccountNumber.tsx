@@ -4,6 +4,7 @@ import {
   FiatAccountType,
 } from '@fiatconnect/fiatconnect-types'
 import { PaymentInfoLineItem } from './PaymentInfoLineItem'
+import styled from 'styled-components'
 
 interface Props {
   country: string
@@ -50,7 +51,7 @@ export function AccountNumberSection({
   }, [fiatAccountDetails])
 
   return (
-    <div>
+    <Container>
       <PaymentInfoLineItem
         title={'Institution Name'}
         placeholder={'Your Institution Name'}
@@ -69,6 +70,16 @@ export function AccountNumberSection({
         onChange={(value) => setFiatAccountDetails({ accountNumber: value })}
         value={fiatAccountDetails.accountNumber ?? ''}
       />
-    </div>
+    </Container>
   )
 }
+
+const Container = styled.div`
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-direction: column;
+  gap: 20px;
+  padding-top: 20px;
+  width: 100%;
+`

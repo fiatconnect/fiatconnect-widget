@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import styled from 'styled-components'
+
 interface Props {
   title: string
   placeholder: string
@@ -22,19 +24,45 @@ export function PaymentInfoLineItem({
   }
 
   return (
-    <div>
-      <form>
-        <label id="PaymentInfoLineItem">
-          {title}
-          <input
-            id="PaymentInfoLineItem-Input"
+    <Container>
+      <Form>
+      <Fieldset>
+        <legend>{title}</legend>
+          <Input
             type="text"
             placeholder={placeholder}
             value={value}
             onChange={onChangeWrapper}
           />
-        </label>
-      </form>
-    </div>
+        </ Fieldset>
+      </Form>
+    </Container>
   )
 }
+
+const Fieldset = styled.fieldset`
+  border-radius: 5px;
+  border-width: 1px;
+  text-align: start;
+  width: calc(100% - 14px);
+`
+
+const Form = styled.form`
+  width: 100%;
+`
+
+const Input = styled.input`
+  border: none;
+  outline: none;
+  text-align-vertical: bottom;
+  width: 100%;
+`
+
+const Container = styled.div`
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-direction: column;
+  font-size: 13px;
+  width: 100%;
+`
