@@ -50,10 +50,10 @@ export function SignInScreen({ onError, onNext, params }: Props) {
 
   return (
     <div className="ContentContainer">
-      <p id="PaymentMethodLine">
+      <div id="PaymentMethodLine">
         <div id="PaymentMethodLine-Title">Payment Method:</div>{' '}
         {fiatAccountSchemaToPaymentMethod[params.fiatAccountSchema]}
-      </p>
+      </div>
       <QuoteAmountBox
         fiatAmount={params.fiatAmount}
         cryptoAmount={params.cryptoAmount}
