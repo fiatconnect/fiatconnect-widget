@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './App.css'
 import '@rainbow-me/rainbowkit/styles.css'
 
@@ -11,6 +11,7 @@ import {
   RainbowKitProvider,
 } from '@rainbow-me/rainbowkit'
 import SIWEConnectButton from './components/SIWEConnectButton'
+import { FiatAccountDetailsForm } from './components/FiatAccountDetailsForm'
 
 const { chains, publicClient } = configureChains(
   [celoAlfajores],
@@ -28,13 +29,19 @@ const wagmiConfig = createConfig({
 })
 
 function App() {
+  const [loginSuccess, setLoginSuccess] = useState(false)
+
   return (
     <WagmiConfig config={wagmiConfig}>
       <RainbowKitProvider chains={chains}>
         <div className="App">
           <header className="App-header">
             <ConnectButton />
-            <SIWEConnectButton />
+            <SIWEConnectButton onLoginSuccess={() => setLoginSuccess(true)} />
+            {
+              <FiatAccountDetailsForm country={'Nigeria'} />
+              /* TODO(M1): get country from query parameter */
+            }
           </header>
         </div>
       </RainbowKitProvider>
