@@ -47,6 +47,10 @@ const DEFAULT_ERROR_MESSAGE =
 
 function App() {
   const queryParamsResults = useQueryParams()
+  if (!queryParamsResults.success) {
+    //eslint-disable-next-line no-console
+    console.error('Invalid query params: ', queryParamsResults.error)
+  }
   const [step, setStep] = useState(Steps.One)
   const [errorTitle, setErrorTitle] = useState(DEFAULT_ERROR_TITLE)
   const [errorMessage, setErrorMessage] = useState(DEFAULT_ERROR_MESSAGE)
