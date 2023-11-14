@@ -26,15 +26,15 @@ export function PaymentInfoLineItem({
   return (
     <Container>
       <Form>
-      <Fieldset>
-        <legend>{title}</legend>
+        <Fieldset>
+          <legend>{title}</legend>
           <Input
             type="text"
             placeholder={placeholder}
             value={value}
             onChange={onChangeWrapper}
           />
-        </ Fieldset>
+        </Fieldset>
       </Form>
     </Container>
   )
