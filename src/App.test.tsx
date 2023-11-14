@@ -6,7 +6,16 @@ jest.mock('react-router-dom', () => ({
   useSearchParams: jest.fn().mockReturnValue([
     new URLSearchParams({
       apiKey: 'mock-api-key',
-      providerId: 'mock-provider-id',
+      providerId: 'test-provider',
+      transferType: 'TransferIn',
+      fiatAmount: '10',
+      cryptoAmount: '15',
+      fiatType: 'NGN',
+      cryptoType: 'CELO',
+      country: 'NG',
+      fiatAccountType: 'BankAccount',
+      fiatAccountSchema: 'AccountNumber',
+      quoteId: 'mock-quote-id',
     }),
     jest.fn(),
   ]),
@@ -14,7 +23,7 @@ jest.mock('react-router-dom', () => ({
 describe('App', () => {
   it('renders wallet connect element', () => {
     render(<App />)
-    const connectWalletElement = screen.getByText(/Connect wallet/i)
+    const connectWalletElement = screen.getByText(/Connect Your Wallet/i)
     expect(connectWalletElement).toBeTruthy()
   })
 })
