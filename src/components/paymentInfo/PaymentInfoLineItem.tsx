@@ -44,7 +44,6 @@ const Fieldset = styled.fieldset`
   border-radius: 5px;
   border-width: 1px;
   text-align: start;
-  width: calc(100% - 14px);
 `
 
 const Form = styled.form`
