@@ -48,3 +48,17 @@ export const fiatTypeToImage: Partial<Record<FiatType, JSX.Element>> = {
 export const cryptoTypeToImage: Partial<Record<CryptoType, JSX.Element>> = {
   [CryptoType.CELO]: <img src={CELO} id="TokenIcon" />,
 }
+
+export const fiatTypeToSymbol: Partial<Record<FiatType, string>> = {
+  [FiatType.USD]: '$',
+  [FiatType.EUR]: '€',
+  [FiatType.GBP]: '£',
+  [FiatType.NGN]: '₦',
+  [FiatType.GHS]: '₵',
+  [FiatType.KES]: 'KSh',
+  [FiatType.ZAR]: 'R',
+  [FiatType.UGX]: 'USh',
+  [FiatType.RWF]: 'RF',
+  [FiatType.XAF]: 'FCFA',
+  [FiatType.XOF]: 'CFA',
+}

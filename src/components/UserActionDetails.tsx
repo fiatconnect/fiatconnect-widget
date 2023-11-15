@@ -1,16 +1,24 @@
-import {ContentContainer, SectionSubtitle, sectionSubtitle, SectionTitle} from '../styles'
+import {
+  ContentContainer,
+  SectionSubtitle,
+  sectionSubtitle,
+  SectionTitle,
+} from '../styles'
 import {
   accountNumberUserActionSchema,
+  FiatType,
   TransferInUserActionDetails,
   UserActionDetails as UserActionDetailsType,
 } from '@fiatconnect/fiatconnect-types'
 import { ProviderIds } from '../types'
-import { providerIdToProviderName } from '../constants'
+import { fiatTypeToSymbol, providerIdToProviderName } from '../constants'
 import { z } from 'zod'
 
 interface Props {
   userActionDetails: UserActionDetailsType
   providerId: ProviderIds
+  fiatAmount: string
+  fiatType: FiatType
 }
 
 function AccountNumberUserActionDetailsBody({
@@ -20,8 +28,7 @@ function AccountNumberUserActionDetailsBody({
   transactionReference,
 }: z.infer<typeof accountNumberUserActionSchema>) {
   // TODO styling
-  // TODO include fiat amount, fiat type
-  // TODO make some fields copyable (fiat amount, account number, transaction reference)
+  // TODO make some fields copyable (account number, transaction reference)
   return (
     <div id="AccountNumberUserActionDetails-Body">
       <table>
@@ -50,21 +57,31 @@ function AccountNumberUserActionDetailsBody({
   )
 }
 
-export function UserActionDetails(props: Props) {
+export function UserActionDetails({
+  userActionDetails,
+  fiatAmount,
+  fiatType,
+  providerId,
+}: Props) {
   let body = null
   if (
-    props.userActionDetails.userActionType ===
+    userActionDetails.userActionType ===
     TransferInUserActionDetails.AccountNumberUserAction
   ) {
-    body = AccountNumberUserActionDetailsBody(props.userActionDetails)
+    body = AccountNumberUserActionDetailsBody(userActionDetails)
   }
+  const amountPrefix =
+    fiatType in fiatTypeToSymbol ? fiatTypeToSymbol[fiatType] : ''
+  // TODO make amount copyable
+  const amountString = parseFloat(fiatAmount).toLocaleString()
   return (
     <ContentContainer>
       <SectionTitle>Payment Information</SectionTitle>
-      <SectionSubtitle style={{textAlign: 'left'}}>
-        Complete your purchase by sending funds to
-        {' ' + providerIdToProviderName[props.providerId]} using the merchant
-        details below.
+      <SectionSubtitle style={{ textAlign: 'left' }}>
+        Complete your purchase by sending {amountPrefix}
+        {amountString} to
+        {' ' + providerIdToProviderName[providerId]} using the merchant details
+        below.
       </SectionSubtitle>
       {body}
     </ContentContainer>

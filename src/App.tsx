@@ -14,7 +14,10 @@ import { providerIdToProviderName } from './constants'
 import { SignInScreen } from './components/SignInScreen'
 import { PaymentInfoScreen } from './components/PaymentInfoScreen'
 import { UserActionDetails } from './components/UserActionDetails'
-import { TransferInUserActionDetails } from '@fiatconnect/fiatconnect-types'
+import {
+  FiatType,
+  TransferInUserActionDetails,
+} from '@fiatconnect/fiatconnect-types'
 
 const { chains, publicClient } = configureChains(
   [celoAlfajores],
@@ -70,11 +73,13 @@ function App() {
         <UserActionDetails
           userActionDetails={{
             userActionType: TransferInUserActionDetails.AccountNumberUserAction,
-            institutionName: 'Bank of America',
-            accountNumber: '1234567890',
-            accountName: 'Provider bank account',
-            transactionReference: '1234567890',
+            institutionName: 'ProvidusBank',
+            accountNumber: '9603494078',
+            accountName: 'JOYCE IBIA ANIEDIP',
+            transactionReference: 'WDGANZ8WcFOG',
           }}
+          fiatAmount={'6000'}
+          fiatType={FiatType.NGN}
           providerId={ProviderIds.TestProvider}
         />
       )
