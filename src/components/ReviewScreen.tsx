@@ -49,7 +49,6 @@ export function ReviewScreen({
   const settlementTimeString = '1 - 3 Days'
 
   const onClick = async () => {
-    // Should never happen
     if (!fiatConnectClientConfig) {
       return
     }

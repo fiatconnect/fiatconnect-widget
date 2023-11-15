@@ -77,7 +77,7 @@ function SIWEConnectButton({
   return (
     <button
       onClick={onClick}
-      id="PrimaryButton"
+      id="SIWESignInButton"
       disabled={!account.isConnected || siweConnecting || siweSuccess}
     >
       {getText()}
