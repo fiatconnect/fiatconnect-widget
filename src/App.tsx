@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import './App.css'
 import '@rainbow-me/rainbowkit/styles.css'
-import { ProviderIds, queryParamsSchema, Steps } from './types'
+import { queryParamsSchema, Steps } from './types'
 import { publicProvider } from 'wagmi/providers/public'
 import { configureChains, createConfig, WagmiConfig } from 'wagmi'
 import { celoAlfajores } from 'viem/chains'
@@ -18,8 +18,6 @@ import { ReviewScreen } from './components/ReviewScreen'
 import {
   ObfuscatedFiatAccountData,
   TransferResponse,
-  FiatType,
-  TransferInUserActionDetails,
 } from '@fiatconnect/fiatconnect-types'
 
 const { chains, publicClient } = configureChains(
@@ -77,24 +75,6 @@ function App() {
   }
 
   const getSection = () => {
-    if (Date.now() > 0) {
-      // fixme remove (just here for testing
-      return (
-        <UserActionDetails
-          userActionDetails={{
-            userActionType: TransferInUserActionDetails.AccountNumberUserAction,
-            institutionName: 'ProvidusBank',
-            accountNumber: '9603494078',
-            accountName: 'JOYCE IBIA ANIEDIP',
-            transactionReference: 'WDGANZ8WcFOG',
-          }}
-          fiatAmount={'6000'}
-          fiatType={FiatType.NGN}
-          providerId={ProviderIds.TestProvider}
-        />
-      )
-    }
-
     // TODO: should never happen
     if (!queryParamsResults.success) {
       return
@@ -127,6 +107,22 @@ function App() {
           params={queryParamsResults.data}
           linkedAccount={linkedAccount}
           setTransferResponse={setTransferResponse}
+        />
+      )
+    }
+
+    if (
+      step === Steps.Four &&
+      transferResponse &&
+      'userActionDetails' in transferResponse &&
+      transferResponse.userActionDetails
+    ) {
+      return (
+        <UserActionDetails
+          userActionDetails={transferResponse.userActionDetails}
+          fiatAmount={queryParamsResults.data.fiatAmount}
+          fiatType={queryParamsResults.data.fiatType}
+          providerId={queryParamsResults.data.providerId}
         />
       )
     }
