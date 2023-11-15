@@ -1,7 +1,6 @@
 import {
   ContentContainer,
   SectionSubtitle,
-  sectionSubtitle,
   SectionTitle,
 } from '../styles'
 import {

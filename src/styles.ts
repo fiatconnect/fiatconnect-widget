@@ -1,4 +1,3 @@
-import { CSSProperties } from 'react'
 import styled from 'styled-components'
 
 export const ContentContainer = styled.div`
@@ -14,14 +13,6 @@ export const SectionTitle = styled.div`
   font-weight: bold;
   padding-bottom: 5px;
 `
-
-export const sectionSubtitle: CSSProperties = {
-  display: 'flex',
-  fontSize: '12px',
-  color: '#515151',
-  fontWeight: 'bold',
-  justifyContent: 'flex-start',
-}
 
 export const SectionSubtitle = styled.div`
   display: flex;
