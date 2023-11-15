@@ -4,19 +4,26 @@ import { fiatAccountSchemaToPaymentMethod } from '../constants'
 import {
   FiatAccountSchema,
   PostFiatAccountRequestBody,
+  ObfuscatedFiatAccountData,
 } from '@fiatconnect/fiatconnect-types'
 import { AccountNumberSection } from './paymentInfo/AccountNumber'
-import { addFiatAccount } from '../FiatConnectClient'
+import { addFiatAccount, getLinkedAccount } from '../FiatConnectClient'
 import { useFiatConnectConfig } from '../hooks'
 import { providerIdToProviderName } from '../constants'
 
 interface Props {
   onError: (title: string, message: string) => void
   onNext: (step: Steps) => void
+  setLinkedAccount: (fiatAccount: ObfuscatedFiatAccountData) => void
   params: QueryParams
 }
 
-export function PaymentInfoScreen({ onError, onNext, params }: Props) {
+export function PaymentInfoScreen({
+  onError,
+  onNext,
+  setLinkedAccount,
+  params,
+}: Props) {
   // TODO: First thing we should do here is check if an account is already on file
   // that shares the same FiatAccountSchema as the one in the params. If we have one,
   // we should immediately skip to step 3 (show a little spinner while we do this)
@@ -51,7 +58,17 @@ export function PaymentInfoScreen({ onError, onNext, params }: Props) {
         fiatConnectClientConfig,
       )
       if (response.ok) {
-        onNext(Steps.Three)
+        const linkedAccount = await getLinkedAccount(
+          params.fiatAccountType,
+          params.fiatAccountSchema,
+          fiatConnectClientConfig,
+        )
+        if (linkedAccount) {
+          setLinkedAccount(linkedAccount)
+          onNext(Steps.Three)
+        } else {
+          onError(errorTitle, errorMessage)
+        }
       } else {
         onError(errorTitle, errorMessage)
       }
@@ -91,11 +108,7 @@ export function PaymentInfoScreen({ onError, onNext, params }: Props) {
       </div>
       {getSection()}
       <div id="Spacer" />
-      <button
-        onClick={onSubmit}
-        id="SubmitPaymentInfoButton"
-        disabled={submitDisabled}
-      >
+      <button onClick={onSubmit} id="PrimaryButton" disabled={submitDisabled}>
         Submit Payment Info
       </button>
     </div>

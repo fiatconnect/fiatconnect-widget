@@ -1,47 +1,37 @@
+import { useState } from 'react'
 import { Steps, QueryParams } from '../types'
 import { fiatAccountSchemaToPaymentMethod } from '../constants'
 import {
   TransferType,
   ObfuscatedFiatAccountData,
+  TransferResponse,
 } from '@fiatconnect/fiatconnect-types'
 import { QuoteAmountBox } from './QuoteAmountBox'
-import SIWEConnectButton from './SIWEConnectButton'
-import ConnectWalletButton from './ConnectWalletButton'
-import { useAccount } from 'wagmi'
-import { getLinkedAccount } from '../FiatConnectClient'
+import { transferIn } from '../FiatConnectClient'
 import { useFiatConnectConfig } from '../hooks'
+import { providerIdToProviderName } from '../constants'
 
 interface Props {
   onError: (title: string, message: string) => void
   onNext: (step: Steps) => void
-  setLinkedAccount: (fiatAccount: ObfuscatedFiatAccountData) => void
+  linkedAccount: ObfuscatedFiatAccountData
+  setTransferResponse: (transferResponse: TransferResponse) => void
   params: QueryParams
 }
 
-const circleCompletedStepStyle = {
-  border: '1px solid #BACDFF',
-  color: '#BACDFF',
-}
-
-const circleCurrentStepStyle = {
-  border: '1px solid #5987FF',
-  color: '#5987FF',
-}
-
-const circleInactiveStepStyle = {
-  border: '1px solid #7C7C7C',
-  color: '#7C7C7C',
-}
-
-export function SignInScreen({
+export function ReviewScreen({
   onError,
   onNext,
-  setLinkedAccount,
+  linkedAccount,
+  setTransferResponse,
   params,
 }: Props) {
   const fiatAmount = parseFloat(params.fiatAmount)
   const cryptoAmount = parseFloat(params.cryptoAmount)
+
   const fiatConnectClientConfig = useFiatConnectConfig()
+
+  const [transferStarted, setTransferStarted] = useState(false)
 
   let exchangeRateString = ''
   if (params.transferType === TransferType.TransferIn) {
@@ -58,34 +48,36 @@ export function SignInScreen({
   // TODO: Actually figure this out, and have sensible defaults like we do in the wallet
   const settlementTimeString = '1 - 3 Days'
 
-  const account = useAccount()
-
-  const onLoginSuccess = async () => {
+  const onClick = async () => {
     // Should never happen
     if (!fiatConnectClientConfig) {
       return
     }
 
-    const linkedAccount = await getLinkedAccount(
-      params.fiatAccountType,
-      params.fiatAccountSchema,
+    setTransferStarted(true)
+    const transferInResponse = await transferIn(
+      {
+        quoteId: params.quoteId,
+        fiatAccountId: linkedAccount.fiatAccountId,
+      },
       fiatConnectClientConfig,
     )
 
-    if (linkedAccount) {
-      setLinkedAccount(linkedAccount)
-      onNext(Steps.Three)
-    } else {
-      onNext(Steps.Two)
+    const providerName = providerIdToProviderName[params.providerId]
+    const errorTitle = 'There was an error submitting your order.'
+    const errorMessage = `${providerName} encountered an issue while processing your order.`
+    if (!transferInResponse.ok) {
+      onError(errorTitle, errorMessage)
     }
+
+    const transferInResponseData =
+      (await transferInResponse.json()) as TransferResponse
+    setTransferResponse(transferInResponseData)
+    onNext(Steps.Four)
   }
 
   return (
     <div className="ContentContainer">
-      <div id="PaymentMethodLine">
-        <div id="PaymentMethodLine-Title">Payment Method:</div>{' '}
-        {fiatAccountSchemaToPaymentMethod[params.fiatAccountSchema]}
-      </div>
       <QuoteAmountBox
         fiatAmount={params.fiatAmount}
         cryptoAmount={params.cryptoAmount}
@@ -102,40 +94,22 @@ export function SignInScreen({
         <div id="LineItem-Right">{settlementTimeString}</div>
       </div>
       <hr id="SectionBorder" />
-      <div id="Spacer" />
-      <div id="ButtonSection">
-        <div id="ButtonRow">
-          <div
-            id="SignInStepCircle"
-            style={
-              account.isConnected
-                ? circleCompletedStepStyle
-                : circleCurrentStepStyle
-            }
-          >
-            1
-          </div>
-          <ConnectWalletButton />
-        </div>
-        <div id="ButtonRow">
-          <div
-            id="SignInStepCircle"
-            style={
-              account.isConnected
-                ? circleCurrentStepStyle
-                : circleInactiveStepStyle
-            }
-          >
-            2
-          </div>
-          <SIWEConnectButton
-            providerId={params.providerId}
-            apiKey={params.apiKey}
-            onLoginSuccess={onLoginSuccess}
-            onError={onError}
-          />
+      <div id="AccountInfoSectionTitle">Linked Account</div>
+      <div id="LineItem">
+        <div id="LineItem-Left">Account Type</div>
+        <div id="LineItem-Right">
+          {fiatAccountSchemaToPaymentMethod[linkedAccount.fiatAccountSchema]}
         </div>
       </div>
+      <div id="LineItem">
+        <div id="LineItem-Left">Account Name</div>
+        <div id="LineItem-Right">{linkedAccount.accountName}</div>
+      </div>
+      <hr id="SectionBorder" />
+      <div id="Spacer" />
+      <button onClick={onClick} id="PrimaryButton" disabled={transferStarted}>
+        Submit Order
+      </button>
     </div>
   )
 }

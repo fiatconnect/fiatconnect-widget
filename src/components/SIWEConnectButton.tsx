@@ -67,9 +67,6 @@ function SIWEConnectButton({
     if (!siweConnecting && !(siweSuccess || siweError)) {
       return `Sign in with ${providerName}`
     }
-    if (siweSuccess) {
-      return `Successfully signed in with Ethereum to ${providerId}!`
-    }
     if (siweError) {
       return 'Error signing in with Ethereum'
     } else {
@@ -77,37 +74,10 @@ function SIWEConnectButton({
     }
   }
 
-  const getTheme = () => {
-    if (siweSuccess) {
-      return {
-        '&.Mui-disabled': {
-          background: 'green',
-          color: 'white',
-        },
-      }
-    }
-    if (siweError) {
-      return {
-        '&.Mui-disabled': {
-          background: 'red',
-          color: 'white',
-        },
-      }
-    }
-    if (siweConnecting) {
-      return {
-        '&.Mui-disabled': {
-          background: 'grey',
-          color: 'white',
-        },
-      }
-    }
-  }
-
   return (
     <button
       onClick={onClick}
-      id="SIWESignInButton"
+      id="PrimaryButton"
       disabled={!account.isConnected || siweConnecting || siweSuccess}
     >
       {getText()}

@@ -363,27 +363,6 @@
   flex-grow: 1;
 }
 
-#SIWESignInButton {
-  flex-grow: 1;
-  display: flex;
-  border: 0px;
-  justify-content: center;
-  align-items: center;
-  background-color: #5987ff;
-  border-radius: 5px;
-  font-size: 18px;
-  font-weight: bold;
-  height: 55px;
-}
-
-#SIWESignInButton:hover {
-  background-color: #4871dc;
-}
-
-#SIWESignInButton:disabled {
-  background-color: #c2c2c2;
-}
-
 #PaymentInfo-Title {
   font-size: 18px;
   font-weight: bold;
@@ -398,8 +377,8 @@
   justify-content: flex-start;
 }
 
-#SubmitPaymentInfoButton {
-  width: 100%;
+#PrimaryButton {
+  flex-grow: 1;
   display: flex;
   border: 0px;
   justify-content: center;
@@ -411,10 +390,15 @@
   height: 55px;
 }
 
-#SubmitPaymentInfoButton:hover {
+#PrimaryButton:hover {
   background-color: #4871dc;
 }
 
-#SubmitPaymentInfoButton:disabled {
+#PrimaryButton:disabled {
   background-color: #c2c2c2;
+}
+
+#AccountInfoSectionTitle {
+  font-weight: bold;
+  font-size: 12px;
 }
