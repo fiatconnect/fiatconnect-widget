@@ -10,6 +10,7 @@ import ConnectWalletButton from './ConnectWalletButton'
 import { useAccount } from 'wagmi'
 import { getLinkedAccount } from '../FiatConnectClient'
 import { useFiatConnectConfig } from '../hooks'
+import { providerIdToProviderName } from '../constants'
 
 interface Props {
   onError: (title: string, message: string) => void
@@ -66,17 +67,25 @@ export function SignInScreen({
       return
     }
 
-    const linkedAccount = await getLinkedAccount(
-      params.fiatAccountType,
-      params.fiatAccountSchema,
-      fiatConnectClientConfig,
-    )
+    try {
+      const linkedAccount = await getLinkedAccount(
+        params.fiatAccountType,
+        params.fiatAccountSchema,
+        fiatConnectClientConfig,
+      )
 
-    if (linkedAccount) {
-      setLinkedAccount(linkedAccount)
-      onNext(Steps.Three)
-    } else {
-      onNext(Steps.Two)
+      if (linkedAccount) {
+        setLinkedAccount(linkedAccount)
+        onNext(Steps.Three)
+      } else {
+        onNext(Steps.Two)
+      }
+    } catch {
+      const providerName = providerIdToProviderName[params.providerId]
+      onError(
+        `There was an error signing in with ${providerName}.`,
+        'This may be due to a misconfiguration by your wallet provider.',
+      )
     }
   }
 
@@ -130,7 +139,6 @@ export function SignInScreen({
           </div>
           <SIWEConnectButton
             providerId={params.providerId}
-            apiKey={params.apiKey}
             onLoginSuccess={onLoginSuccess}
             onError={onError}
           />

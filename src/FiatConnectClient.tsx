@@ -50,7 +50,13 @@ export async function getLinkedAccount(
 ): Promise<ObfuscatedFiatAccountData | undefined> {
   const getFiatAccountsResponse = await getFiatAccounts(clientConfig)
   if (!getFiatAccountsResponse.ok) {
-    return undefined
+    if (getFiatAccountsResponse.status === 404) {
+      return undefined
+    } else {
+      throw new Error(
+        'Non-404 error from provider while fetching linked accounts',
+      )
+    }
   }
   const linkedAccounts =
     (await getFiatAccountsResponse.json()) as GetFiatAccountsResponse

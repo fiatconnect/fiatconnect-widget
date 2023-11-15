@@ -58,15 +58,19 @@ export function PaymentInfoScreen({
         fiatConnectClientConfig,
       )
       if (response.ok) {
-        const linkedAccount = await getLinkedAccount(
-          params.fiatAccountType,
-          params.fiatAccountSchema,
-          fiatConnectClientConfig,
-        )
-        if (linkedAccount) {
-          setLinkedAccount(linkedAccount)
-          onNext(Steps.Three)
-        } else {
+        try {
+          const linkedAccount = await getLinkedAccount(
+            params.fiatAccountType,
+            params.fiatAccountSchema,
+            fiatConnectClientConfig,
+          )
+          if (linkedAccount) {
+            setLinkedAccount(linkedAccount)
+            onNext(Steps.Three)
+          } else {
+            onError(errorTitle, errorMessage)
+          }
+        } catch {
           onError(errorTitle, errorMessage)
         }
       } else {

@@ -7,17 +7,11 @@ import { providerIdToProviderName } from '../constants'
 
 interface Props {
   providerId: ProviderIds
-  apiKey?: string
   onLoginSuccess: () => any
   onError: (title: string, message: string) => void
 }
 
-function SIWEConnectButton({
-  providerId,
-  apiKey,
-  onLoginSuccess,
-  onError,
-}: Props) {
+function SIWEConnectButton({ providerId, onLoginSuccess, onError }: Props) {
   const fiatConnectClientConfig = useFiatConnectConfig()
   const [siweConnecting, setSiweConnecting] = useState(false)
   const [siweSuccess, setSiweSuccess] = useState(false)
