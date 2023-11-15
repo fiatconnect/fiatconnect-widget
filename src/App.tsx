@@ -14,7 +14,10 @@ import { providerIdToProviderName } from './constants'
 import { SignInScreen } from './components/SignInScreen'
 import { PaymentInfoScreen } from './components/PaymentInfoScreen'
 import { UserActionDetails } from './components/UserActionDetails'
+import { ReviewScreen } from './components/ReviewScreen'
 import {
+  ObfuscatedFiatAccountData,
+  TransferResponse,
   FiatType,
   TransferInUserActionDetails,
 } from '@fiatconnect/fiatconnect-types'
@@ -60,6 +63,12 @@ function App() {
   const [errorTitle, setErrorTitle] = useState(DEFAULT_ERROR_TITLE)
   const [errorMessage, setErrorMessage] = useState(DEFAULT_ERROR_MESSAGE)
   const [showError, setShowError] = useState(false)
+  const [linkedAccount, setLinkedAccount] = useState<
+    ObfuscatedFiatAccountData | undefined
+  >(undefined)
+  const [transferResponse, setTransferResponse] = useState<
+    TransferResponse | undefined
+  >(undefined)
 
   const onError = (title: string, message: string) => {
     setErrorTitle(title)
@@ -96,6 +105,7 @@ function App() {
           onError={onError}
           onNext={setStep}
           params={queryParamsResults.data}
+          setLinkedAccount={setLinkedAccount}
         />
       )
     }
@@ -105,6 +115,18 @@ function App() {
           onError={onError}
           onNext={setStep}
           params={queryParamsResults.data}
+          setLinkedAccount={setLinkedAccount}
+        />
+      )
+    }
+    if (step === Steps.Three && linkedAccount) {
+      return (
+        <ReviewScreen
+          onError={onError}
+          onNext={setStep}
+          params={queryParamsResults.data}
+          linkedAccount={linkedAccount}
+          setTransferResponse={setTransferResponse}
         />
       )
     }

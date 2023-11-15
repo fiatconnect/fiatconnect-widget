@@ -183,6 +183,7 @@
 
 #PaymentMethodLine {
   display: inline;
+  padding-bottom: 20px;
   font-weight: bold;
   font-size: 12px;
   color: #515151;
@@ -353,7 +354,21 @@
   background-color: #c2c2c2;
 }
 
-#SubmitPaymentInfoButton {
+#PaymentInfo-Title {
+  font-size: 18px;
+  font-weight: bold;
+  padding-bottom: 5px;
+}
+
+#PaymentInfo-Subtitle {
+  display: flex;
+  font-size: 12px;
+  color: #515151;
+  font-weight: bold;
+  justify-content: flex-start;
+}
+
+#PrimaryButton {
   width: 100%;
   display: flex;
   border: 0px;
@@ -366,10 +381,15 @@
   height: 55px;
 }
 
-#SubmitPaymentInfoButton:hover {
+#PrimaryButton:hover {
   background-color: #4871dc;
 }
 
-#SubmitPaymentInfoButton:disabled {
+#PrimaryButton:disabled {
   background-color: #c2c2c2;
+}
+
+#AccountInfoSectionTitle {
+  font-weight: bold;
+  font-size: 12px;
 }
