@@ -10,7 +10,7 @@ import { AccountNumberSection } from './paymentInfo/AccountNumber'
 import { addFiatAccount, getLinkedAccount } from '../FiatConnectClient'
 import { useFiatConnectConfig } from '../hooks'
 import { providerIdToProviderName } from '../constants'
-import { SectionSubtitle, SectionTitle } from '../styles'
+import { ContentContainer, SectionSubtitle, SectionTitle } from '../styles'
 
 interface Props {
   onError: (title: string, message: string) => void
@@ -106,7 +106,7 @@ export function PaymentInfoScreen({
   }
 
   return (
-    <SectionTitle className="ContentContainer">
+    <ContentContainer>
       <SectionTitle>Payment Info</SectionTitle>
       <SectionSubtitle>
         {fiatAccountSchemaToPaymentMethod[params.fiatAccountSchema]}
@@ -116,6 +116,6 @@ export function PaymentInfoScreen({
       <button onClick={onSubmit} id="PrimaryButton" disabled={submitDisabled}>
         Submit Payment Info
       </button>
-    </SectionTitle>
+    </ContentContainer>
   )
 }
