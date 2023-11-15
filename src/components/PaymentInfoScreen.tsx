@@ -9,7 +9,7 @@ import { AccountNumberSection } from './paymentInfo/AccountNumber'
 import { addFiatAccount } from '../FiatConnectClient'
 import { useFiatConnectConfig } from '../hooks'
 import { providerIdToProviderName } from '../constants'
-import { SectionSubtitle, SectionTitle } from '../styles'
+import { Button, SectionSubtitle, SectionTitle } from '../styles'
 
 interface Props {
   onError: (title: string, message: string) => void
@@ -92,13 +92,14 @@ export function PaymentInfoScreen({ onError, onNext, params }: Props) {
       </SectionSubtitle>
       {getSection()}
       <div id="Spacer" />
-      <button
+      <Button
+        style={{ width: '100%' }}
         onClick={onSubmit}
         id="SubmitPaymentInfoButton"
         disabled={submitDisabled}
       >
         Submit Payment Info
-      </button>
+      </Button>
     </SectionTitle>
   )
 }

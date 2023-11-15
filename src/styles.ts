@@ -21,3 +21,15 @@ export const SectionSubtitle = styled.div`
   font-weight: bold;
   justify-content: flex-start;
 `
+
+export const Button = styled.button`
+  display: flex;
+  border: 0px;
+  justify-content: center;
+  align-items: center;
+  background-color: #5987ff;
+  border-radius: 5px;
+  font-size: 18px;
+  font-weight: bold;
+  height: 55px;
+`

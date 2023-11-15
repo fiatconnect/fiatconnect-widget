@@ -5,12 +5,31 @@ import { QuoteAmountBox } from './QuoteAmountBox'
 import SIWEConnectButton from './SIWEConnectButton'
 import ConnectWalletButton from './ConnectWalletButton'
 import { useAccount } from 'wagmi'
+import styled from 'styled-components'
 
 interface Props {
   onError: (title: string, message: string) => void
   onNext: (step: Steps) => void
   params: QueryParams
 }
+
+const ButtonSection = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  align-self: flex-end;
+`
+
+const ButtonRow = styled.div`
+  padding-top: 10px;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  width: 100%;
+  justify-content: flex-start;
+`
 
 const circleCompletedStepStyle = {
   border: '1px solid #BACDFF',
@@ -71,8 +90,8 @@ export function SignInScreen({ onError, onNext, params }: Props) {
       </div>
       <hr id="SectionBorder" />
       <div id="Spacer" />
-      <div id="ButtonSection">
-        <div id="ButtonRow">
+      <ButtonSection>
+        <ButtonRow>
           <div
             id="SignInStepCircle"
             style={
@@ -84,8 +103,8 @@ export function SignInScreen({ onError, onNext, params }: Props) {
             1
           </div>
           <ConnectWalletButton />
-        </div>
-        <div id="ButtonRow">
+        </ButtonRow>
+        <ButtonRow>
           <div
             id="SignInStepCircle"
             style={
@@ -102,8 +121,8 @@ export function SignInScreen({ onError, onNext, params }: Props) {
             onLoginSuccess={() => onNext(Steps.Two)}
             onError={onError}
           />
-        </div>
-      </div>
+        </ButtonRow>
+      </ButtonSection>
     </div>
   )
 }

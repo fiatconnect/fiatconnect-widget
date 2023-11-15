@@ -1,4 +1,5 @@
 import {
+  Button,
   ContentContainer,
   SectionSubtitle,
   SectionTitle,
@@ -12,6 +13,7 @@ import {
 import { ProviderIds } from '../types'
 import { fiatTypeToSymbol, providerIdToProviderName } from '../constants'
 import { z } from 'zod'
+import styled from 'styled-components'
 
 interface Props {
   userActionDetails: UserActionDetailsType
@@ -20,39 +22,72 @@ interface Props {
   fiatType: FiatType
 }
 
+const BodyCard = styled.div`
+  background-color: #f0f8ff; /* Pale blue background color */
+  padding: 20px;
+  border-radius: 8px;
+  width: 90%;
+  margin-top: 20px;
+  align-self: center;
+  font-size: 14px;
+`
+
+function Row({
+  label,
+  value,
+}: {
+  label: string
+  value: string
+  copyable?: boolean
+}) {
+  // TODO make copyable if copyable is true
+  return (
+    <tr>
+      <td
+        style={{
+          textAlign: 'left',
+          fontWeight: 'bold',
+        }}
+      >
+        {label}
+      </td>
+      <td
+        style={{
+          textAlign: 'right',
+        }}
+      >
+        {value}
+      </td>
+    </tr>
+  )
+}
+
+const BodyTable = styled.table`
+  width: 100%;
+`
+
 function AccountNumberUserActionDetailsBody({
   institutionName,
   accountNumber,
   accountName,
   transactionReference,
 }: z.infer<typeof accountNumberUserActionSchema>) {
-  // TODO styling
   // TODO make some fields copyable (account number, transaction reference)
   return (
-    <div id="AccountNumberUserActionDetails-Body">
-      <table>
+    <BodyCard>
+      <BodyTable>
         <tbody>
-          <tr>
-            <td>Institution Name:</td>
-            <td>{institutionName}</td>
-          </tr>
-          <tr>
-            <td>Account Name:</td>
-            <td>{accountName}</td>
-          </tr>
-          <tr>
-            <td>Account Number:</td>
-            <td>{accountNumber}</td>
-          </tr>
-          {transactionReference && (
-            <tr>
-              <td>Transaction Reference:</td>
-              <td>{transactionReference}</td>
-            </tr>
-          )}
+          {Row({ label: 'Institution Name', value: institutionName })}
+          {Row({ label: 'Account Name', value: accountName })}
+          {Row({ label: 'Account Number', value: accountNumber })}
+          {transactionReference &&
+            Row({
+              label: 'Transaction Reference',
+              value: transactionReference,
+            })}
         </tbody>
-      </table>
-    </div>
+      </BodyTable>
+    </BodyCard>
   )
 }
 
@@ -83,6 +118,7 @@ export function UserActionDetails({
         below.
       </SectionSubtitle>
       {body}
+      <Button style={{ width: '100%', marginTop: '10px' }}>Done</Button>
     </ContentContainer>
-  ) // TODO add 'done' button
+  )
 }

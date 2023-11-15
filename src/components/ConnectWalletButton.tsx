@@ -1,4 +1,19 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit'
+import styled from 'styled-components'
+import { Button } from '../styles'
+
+const ConnectWalletButtonAfterConnecting = styled.button`
+  flex-grow: 1;
+  display: flex;
+  border: 0px;
+  justify-content: center;
+  align-items: center;
+  background-color: #bacdff;
+  border-radius: 5px;
+  font-size: 18px;
+  font-weight: bold;
+  height: 55px;
+`
 
 // Largely copy-pasted from here: https://www.rainbowkit.com/docs/custom-connect-button
 function ConnectWalletButton() {
@@ -37,13 +52,13 @@ function ConnectWalletButton() {
             {(() => {
               if (!connected) {
                 return (
-                  <button
+                  <Button
+                    style={{ flexGrow: 1 }}
                     onClick={openConnectModal}
-                    id="ConnectWalletButton-Unconnected"
                     type="button"
                   >
                     Connect Your Wallet
-                  </button>
+                  </Button>
                 )
               }
 
@@ -56,13 +71,12 @@ function ConnectWalletButton() {
               }
 
               return (
-                <button
+                <ConnectWalletButtonAfterConnecting
                   onClick={openAccountModal}
-                  id="ConnectWalletButton-Connected"
                   type="button"
                 >
                   Connected to {account.displayName}
-                </button>
+                </ConnectWalletButtonAfterConnecting>
               )
             })()}
           </div>
