@@ -1,14 +1,21 @@
 import { Steps, QueryParams } from '../types'
 import { fiatAccountSchemaToPaymentMethod } from '../constants'
-import { TransferType } from '@fiatconnect/fiatconnect-types'
+import {
+  TransferType,
+  ObfuscatedFiatAccountData,
+} from '@fiatconnect/fiatconnect-types'
 import { QuoteAmountBox } from './QuoteAmountBox'
 import SIWEConnectButton from './SIWEConnectButton'
 import ConnectWalletButton from './ConnectWalletButton'
 import { useAccount } from 'wagmi'
+import { getLinkedAccount } from '../FiatConnectClient'
+import { useFiatConnectConfig } from '../hooks'
+import { providerIdToProviderName } from '../constants'
 
 interface Props {
   onError: (title: string, message: string) => void
   onNext: (step: Steps) => void
+  setLinkedAccount: (fiatAccount: ObfuscatedFiatAccountData) => void
   params: QueryParams
 }
 
@@ -27,9 +34,15 @@ const circleInactiveStepStyle = {
   color: '#7C7C7C',
 }
 
-export function SignInScreen({ onError, onNext, params }: Props) {
+export function SignInScreen({
+  onError,
+  onNext,
+  setLinkedAccount,
+  params,
+}: Props) {
   const fiatAmount = parseFloat(params.fiatAmount)
   const cryptoAmount = parseFloat(params.cryptoAmount)
+  const fiatConnectClientConfig = useFiatConnectConfig()
 
   let exchangeRateString = ''
   if (params.transferType === TransferType.TransferIn) {
@@ -47,6 +60,34 @@ export function SignInScreen({ onError, onNext, params }: Props) {
   const settlementTimeString = '1 - 3 Days'
 
   const account = useAccount()
+
+  const onLoginSuccess = async () => {
+    // Should never happen
+    if (!fiatConnectClientConfig) {
+      return
+    }
+
+    try {
+      const linkedAccount = await getLinkedAccount(
+        params.fiatAccountType,
+        params.fiatAccountSchema,
+        fiatConnectClientConfig,
+      )
+
+      if (linkedAccount) {
+        setLinkedAccount(linkedAccount)
+        onNext(Steps.Three)
+      } else {
+        onNext(Steps.Two)
+      }
+    } catch {
+      const providerName = providerIdToProviderName[params.providerId]
+      onError(
+        `There was an error signing in with ${providerName}.`,
+        'This may be due to a misconfiguration by your wallet provider.',
+      )
+    }
+  }
 
   return (
     <div className="ContentContainer">
@@ -98,8 +139,7 @@ export function SignInScreen({ onError, onNext, params }: Props) {
           </div>
           <SIWEConnectButton
             providerId={params.providerId}
-            apiKey={params.apiKey}
-            onLoginSuccess={() => onNext(Steps.Two)}
+            onLoginSuccess={onLoginSuccess}
             onError={onError}
           />
         </div>

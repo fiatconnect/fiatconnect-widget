@@ -1,6 +1,11 @@
 import {
   AuthRequestBody,
   PostFiatAccountRequestBody,
+  GetFiatAccountsResponse,
+  FiatAccountSchema,
+  FiatAccountType,
+  ObfuscatedFiatAccountData,
+  TransferRequestBody,
 } from '@fiatconnect/fiatconnect-types'
 import { generateNonce, SiweMessage } from 'siwe'
 import { getAddress } from 'ethers'
@@ -27,6 +32,53 @@ export function addFiatAccount(
   })
 }
 
+export function getFiatAccounts(clientConfig: FiatConnectClientConfig) {
+  return fetch(`${clientConfig.baseUrl}/accounts`, {
+    method: 'GET',
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${clientConfig.apiKey}`,
+    },
+  })
+}
+
+export async function getLinkedAccount(
+  fiatAccountType: FiatAccountType,
+  fiatAccountSchema: FiatAccountSchema,
+  clientConfig: FiatConnectClientConfig,
+): Promise<ObfuscatedFiatAccountData | undefined> {
+  const getFiatAccountsResponse = await getFiatAccounts(clientConfig)
+  if (!getFiatAccountsResponse.ok) {
+    if (getFiatAccountsResponse.status === 404) {
+      return undefined
+    } else {
+      throw new Error(
+        'Non-404 error from provider while fetching linked accounts',
+      )
+    }
+  }
+  const linkedAccounts =
+    (await getFiatAccountsResponse.json()) as GetFiatAccountsResponse
+  return linkedAccounts?.[fiatAccountType]?.find(
+    (account) => account.fiatAccountSchema === fiatAccountSchema,
+  )
+}
+
+export function transferIn(
+  params: TransferRequestBody,
+  clientConfig: FiatConnectClientConfig,
+) {
+  return fetch(`${clientConfig.baseUrl}/transfer/in`, {
+    method: 'POST',
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${clientConfig.apiKey}`,
+    },
+    body: JSON.stringify(params),
+  })
+}
 export async function login(
   signingFunction: (message: string) => Promise<string>,
   clientConfig: FiatConnectClientConfig,

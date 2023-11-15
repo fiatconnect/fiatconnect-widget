@@ -7,17 +7,11 @@ import { providerIdToProviderName } from '../constants'
 
 interface Props {
   providerId: ProviderIds
-  apiKey?: string
   onLoginSuccess: () => any
   onError: (title: string, message: string) => void
 }
 
-function SIWEConnectButton({
-  providerId,
-  apiKey,
-  onLoginSuccess,
-  onError,
-}: Props) {
+function SIWEConnectButton({ providerId, onLoginSuccess, onError }: Props) {
   const fiatConnectClientConfig = useFiatConnectConfig()
   const [siweConnecting, setSiweConnecting] = useState(false)
   const [siweSuccess, setSiweSuccess] = useState(false)
@@ -67,40 +61,10 @@ function SIWEConnectButton({
     if (!siweConnecting && !(siweSuccess || siweError)) {
       return `Sign in with ${providerName}`
     }
-    if (siweSuccess) {
-      return `Successfully signed in with Ethereum to ${providerId}!`
-    }
     if (siweError) {
       return 'Error signing in with Ethereum'
     } else {
       return 'Connecting...'
-    }
-  }
-
-  const getTheme = () => {
-    if (siweSuccess) {
-      return {
-        '&.Mui-disabled': {
-          background: 'green',
-          color: 'white',
-        },
-      }
-    }
-    if (siweError) {
-      return {
-        '&.Mui-disabled': {
-          background: 'red',
-          color: 'white',
-        },
-      }
-    }
-    if (siweConnecting) {
-      return {
-        '&.Mui-disabled': {
-          background: 'grey',
-          color: 'white',
-        },
-      }
     }
   }
 
