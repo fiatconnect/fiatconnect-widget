@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from 'react'
-import { Steps, QueryParams } from '../types'
-import { fiatAccountSchemaToPaymentMethod } from '../constants'
+import React, {useState, useEffect} from 'react'
+import {Steps, QueryParams} from '../types'
+import {fiatAccountSchemaToPaymentMethod} from '../constants'
 import {
   FiatAccountSchema,
   PostFiatAccountRequestBody,
 } from '@fiatconnect/fiatconnect-types'
-import { AccountNumberSection } from './paymentInfo/AccountNumber'
-import { addFiatAccount } from '../FiatConnectClient'
-import { useFiatConnectConfig } from '../hooks'
-import { providerIdToProviderName } from '../constants'
+import {AccountNumberSection} from './paymentInfo/AccountNumber'
+import {addFiatAccount} from '../FiatConnectClient'
+import {useFiatConnectConfig} from '../hooks'
+import {providerIdToProviderName} from '../constants'
+import {SectionSubtitle, sectionSubtitle, SectionTitle} from "../styles";
 
 interface Props {
   onError: (title: string, message: string) => void
@@ -16,7 +17,7 @@ interface Props {
   params: QueryParams
 }
 
-export function PaymentInfoScreen({ onError, onNext, params }: Props) {
+export function PaymentInfoScreen({onError, onNext, params}: Props) {
   // TODO: First thing we should do here is check if an account is already on file
   // that shares the same FiatAccountSchema as the one in the params. If we have one,
   // we should immediately skip to step 3 (show a little spinner while we do this)
@@ -84,13 +85,13 @@ export function PaymentInfoScreen({ onError, onNext, params }: Props) {
   }
 
   return (
-    <div className="ContentContainer">
-      <div id="PaymentInfo-Title">Payment Info</div>
-      <div id="PaymentInfo-Subtitle">
+    <SectionTitle className="ContentContainer">
+      <SectionTitle>Payment Info</SectionTitle>
+      <SectionSubtitle>
         {fiatAccountSchemaToPaymentMethod[params.fiatAccountSchema]}
-      </div>
+      </SectionSubtitle>
       {getSection()}
-      <div id="Spacer" />
+      <div id="Spacer"/>
       <button
         onClick={onSubmit}
         id="SubmitPaymentInfoButton"
@@ -98,6 +99,6 @@ export function PaymentInfoScreen({ onError, onNext, params }: Props) {
       >
         Submit Payment Info
       </button>
-    </div>
+    </SectionTitle>
   )
 }

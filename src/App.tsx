@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import './App.css'
 import '@rainbow-me/rainbowkit/styles.css'
-import { Steps, queryParamsSchema } from './types'
+import { ProviderIds, queryParamsSchema, Steps } from './types'
 import { publicProvider } from 'wagmi/providers/public'
 import { configureChains, createConfig, WagmiConfig } from 'wagmi'
 import { celoAlfajores } from 'viem/chains'
@@ -13,6 +13,8 @@ import { ErrorSection } from './components/ErrorSection'
 import { providerIdToProviderName } from './constants'
 import { SignInScreen } from './components/SignInScreen'
 import { PaymentInfoScreen } from './components/PaymentInfoScreen'
+import { UserActionDetails } from './components/UserActionDetails'
+import { TransferInUserActionDetails } from '@fiatconnect/fiatconnect-types'
 
 const { chains, publicClient } = configureChains(
   [celoAlfajores],
@@ -63,6 +65,21 @@ function App() {
   }
 
   const getSection = () => {
+    if (Date.now() > 0) { // fixme remove (just here for testing
+      return (
+        <UserActionDetails
+          userActionDetails={{
+            userActionType: TransferInUserActionDetails.AccountNumberUserAction,
+            institutionName: 'Bank of America',
+            accountNumber: '1234567890',
+            accountName: 'Provider bank account',
+            transactionReference: '1234567890',
+          }}
+          providerId={ProviderIds.TestProvider}
+        />
+      )
+    }
+
     // TODO: should never happen
     if (!queryParamsResults.success) {
       return
