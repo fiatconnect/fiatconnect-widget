@@ -72,18 +72,22 @@ function AccountNumberUserActionDetailsBody({
   accountName,
   transactionReference,
 }: z.infer<typeof accountNumberUserActionSchema>) {
-  // TODO make some fields copyable (account number, transaction reference)
   return (
     <BodyCard>
       <BodyTable>
         <tbody>
           {Row({ label: 'Institution Name', value: institutionName })}
           {Row({ label: 'Account Name', value: accountName })}
-          {Row({ label: 'Account Number', value: accountNumber })}
+          {Row({
+            label: 'Account Number',
+            value: accountNumber,
+            copyable: true,
+          })}
           {transactionReference &&
             Row({
               label: 'Transaction Reference',
               value: transactionReference,
+              copyable: true,
             })}
         </tbody>
       </BodyTable>
