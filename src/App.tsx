@@ -68,7 +68,8 @@ function App() {
   }
 
   const getSection = () => {
-    if (Date.now() > 0) { // fixme remove (just here for testing
+    if (Date.now() > 0) {
+      // fixme remove (just here for testing
       return (
         <UserActionDetails
           userActionDetails={{
