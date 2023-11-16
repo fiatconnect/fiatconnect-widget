@@ -127,7 +127,7 @@ export async function login(
 
 export const providerIdToBaseUrl: Record<ProviderIds, string> = {
   [ProviderIds.Bitmama]:
-    'https://quiet-castle-48076-f4c3da6faaae.herokuapp.com/https://cico-staging.bitmama.io', // todo do something smarter than hardcoding this CORS proxy in (like ask Bitmama to allow CORS)
+    'https://cico-staging.bitmama.io',
   [ProviderIds.TestProvider]:
     'https://mock-fc-provider-dot-celo-mobile-alfajores.appspot.com',
 }
