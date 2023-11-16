@@ -126,8 +126,7 @@ export async function login(
 }
 
 export const providerIdToBaseUrl: Record<ProviderIds, string> = {
-  [ProviderIds.Bitmama]:
-    'https://cico-staging.bitmama.io',
+  [ProviderIds.Bitmama]: 'https://cico-staging.bitmama.io',
   [ProviderIds.TestProvider]:
     'https://mock-fc-provider-dot-celo-mobile-alfajores.appspot.com',
 }
