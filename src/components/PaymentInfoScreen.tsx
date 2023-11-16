@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Steps, QueryParams } from '../types'
+import { Steps } from '../types'
 import { fiatAccountSchemaToPaymentMethod } from '../constants'
 import {
   FiatAccountSchema,
@@ -11,6 +11,7 @@ import { addFiatAccount, getLinkedAccount } from '../FiatConnectClient'
 import { useFiatConnectConfig } from '../hooks'
 import { providerIdToProviderName } from '../constants'
 import { ContentContainer, SectionSubtitle, SectionTitle } from '../styles'
+import { QueryParams } from '../schema'
 
 interface Props {
   onError: (title: string, message: string) => void

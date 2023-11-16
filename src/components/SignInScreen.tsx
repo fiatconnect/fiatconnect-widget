@@ -1,4 +1,4 @@
-import { Steps, QueryParams } from '../types'
+import { Steps } from '../types'
 import { fiatAccountSchemaToPaymentMethod } from '../constants'
 import {
   TransferType,
@@ -12,6 +12,7 @@ import styled from 'styled-components'
 import { getLinkedAccount } from '../FiatConnectClient'
 import { useFiatConnectConfig } from '../hooks'
 import { providerIdToProviderName } from '../constants'
+import {QueryParams} from "../schema";
 
 interface Props {
   onError: (title: string, message: string) => void
