@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@fiatconnect/fiatconnect-sdk": "^0.5.19",
-    "@fiatconnect/fiatconnect-types": "^13.2.2",
+    "@fiatconnect/fiatconnect-types": "^13.3.0",
     "@fontsource/inter": "^5.0.15",
     "@rainbow-me/rainbowkit": "^1.1.1",
     "@testing-library/react": "^13.0.0",

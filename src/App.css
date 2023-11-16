@@ -292,37 +292,6 @@
   border: 1px solid #cbcbcb;
 }
 
-#ButtonSection {
-  display: flex;
-  width: 100%;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  align-self: flex-end;
-}
-
-#ButtonRow {
-  padding-top: 10px;
-  display: flex;
-  align-items: center;
-  flex-direction: row;
-  width: 100%;
-  justify-content: flex-start;
-}
-
-#ConnectWalletButton-Unconnected {
-  flex-grow: 1;
-  display: flex;
-  border: 0px;
-  justify-content: center;
-  align-items: center;
-  background-color: #5987ff;
-  border-radius: 5px;
-  font-size: 18px;
-  font-weight: bold;
-  height: 55px;
-}
-
 #ConnectWalletButton-Connected {
   flex-grow: 1;
   display: flex;

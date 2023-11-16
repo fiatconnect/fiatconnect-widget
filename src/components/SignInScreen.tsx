@@ -8,6 +8,7 @@ import { QuoteAmountBox } from './QuoteAmountBox'
 import SIWEConnectButton from './SIWEConnectButton'
 import ConnectWalletButton from './ConnectWalletButton'
 import { useAccount } from 'wagmi'
+import styled from 'styled-components'
 import { getLinkedAccount } from '../FiatConnectClient'
 import { useFiatConnectConfig } from '../hooks'
 import { providerIdToProviderName } from '../constants'
@@ -18,6 +19,24 @@ interface Props {
   setLinkedAccount: (fiatAccount: ObfuscatedFiatAccountData) => void
   params: QueryParams
 }
+
+const ButtonSection = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  align-self: flex-end;
+`
+
+const ButtonRow = styled.div`
+  padding-top: 10px;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  width: 100%;
+  justify-content: flex-start;
+`
 
 const circleCompletedStepStyle = {
   border: '1px solid #BACDFF',
@@ -112,8 +131,8 @@ export function SignInScreen({
       </div>
       <hr id="SectionBorder" />
       <div id="Spacer" />
-      <div id="ButtonSection">
-        <div id="ButtonRow">
+      <ButtonSection>
+        <ButtonRow>
           <div
             id="SignInStepCircle"
             style={
@@ -125,8 +144,8 @@ export function SignInScreen({
             1
           </div>
           <ConnectWalletButton />
-        </div>
-        <div id="ButtonRow">
+        </ButtonRow>
+        <ButtonRow>
           <div
             id="SignInStepCircle"
             style={
@@ -142,8 +161,8 @@ export function SignInScreen({
             onLoginSuccess={onLoginSuccess}
             onError={onError}
           />
-        </div>
-      </div>
+        </ButtonRow>
+      </ButtonSection>
     </div>
   )
 }

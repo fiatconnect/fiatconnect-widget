@@ -1398,6 +1398,13 @@
   dependencies:
     zod "^3.22.4"
 
+"@fiatconnect/fiatconnect-types@^13.3.0":
+  version "13.3.0"
+  resolved "https://registry.yarnpkg.com/@fiatconnect/fiatconnect-types/-/fiatconnect-types-13.3.0.tgz#4fac2160cf69923fc5c9f9ac1ef48e79de222af3"
+  integrity sha512-MXi/M76piNiD6L+dihwjU3wPeihZ4/tEccRObId2XK+qZsCDi76fB38J7eo6LmfWsxBq1V0WwrFM/aagjgtkNQ==
+  dependencies:
+    zod "^3.22.4"
+
 "@fontsource/inter@^5.0.15":
   version "5.0.15"
   resolved "https://registry.yarnpkg.com/@fontsource/inter/-/inter-5.0.15.tgz#c01d160cd02bde1a4ce09f2c38b2063b66caf870"

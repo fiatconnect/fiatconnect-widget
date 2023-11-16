@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import './App.css'
 import '@rainbow-me/rainbowkit/styles.css'
-import { Steps, queryParamsSchema } from './types'
+import { queryParamsSchema, Steps } from './types'
 import { publicProvider } from 'wagmi/providers/public'
 import { configureChains, createConfig, WagmiConfig } from 'wagmi'
 import { celoAlfajores } from 'viem/chains'
@@ -13,6 +13,7 @@ import { ErrorSection } from './components/ErrorSection'
 import { providerIdToProviderName } from './constants'
 import { SignInScreen } from './components/SignInScreen'
 import { PaymentInfoScreen } from './components/PaymentInfoScreen'
+import { UserActionDetails } from './components/UserActionDetails'
 import { ReviewScreen } from './components/ReviewScreen'
 import {
   ObfuscatedFiatAccountData,
@@ -106,6 +107,22 @@ function App() {
           params={queryParamsResults.data}
           linkedAccount={linkedAccount}
           setTransferResponse={setTransferResponse}
+        />
+      )
+    }
+
+    if (
+      step === Steps.Four &&
+      transferResponse &&
+      'userActionDetails' in transferResponse &&
+      transferResponse.userActionDetails
+    ) {
+      return (
+        <UserActionDetails
+          userActionDetails={transferResponse.userActionDetails}
+          fiatAmount={queryParamsResults.data.fiatAmount}
+          fiatType={queryParamsResults.data.fiatType}
+          providerId={queryParamsResults.data.providerId}
         />
       )
     }
