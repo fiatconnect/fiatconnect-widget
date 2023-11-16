@@ -8,11 +8,12 @@ Deployment details differ by provider. You may find [this resource](https://crea
 
 ## FiatConnect Provider requirements
 
-The FiatConnect Widget is intended to be an interface for any server offering a FiatConnect-compliant API. Besides 
+The FiatConnect Widget is intended to be an interface for any server offering a FiatConnect-compliant API. Besides
 implementing a compliant API, the server must also be configured to allow cross-origin requests from the domain where
 the widget is hosted, and must mark session cookies as `SameSite=None; Secure` to allow the widget to use them.
 
 For more information on these requirements, you may consult these resources:
+
 - [FiatConnect API Specification](https://github.com/fiatconnect/specification/blob/main/fiatconnect-api.md)
 - [SameSite cookies explained](https://web.dev/articles/samesite-cookies-explained)
 - [StackOverflow post on allowing cross-origin requests](https://stackoverflow.com/a/64504149/5807149)
@@ -20,6 +21,7 @@ For more information on these requirements, you may consult these resources:
 ## Implementation status
 
 ### Fiat Account Schemas supported
+
 - [x] [AccountNumber](https://github.com/fiatconnect/specification/blob/main/fiatconnect-api.md#9321-accountnumber)
 - [ ] [MobileMoney](https://github.com/fiatconnect/specification/blob/main/fiatconnect-api.md#9322-mobilemoney)
 - [ ] [DuniaWallet](https://github.com/fiatconnect/specification/blob/main/fiatconnect-api.md#9323-duniawallet)
@@ -49,9 +51,9 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ### Environment variables
 
-Environment variables are loaded in `src/config.ts`. See that module for details. 
+Environment variables are loaded in `src/config.ts`. See that module for details.
 
-See [here](https://stackoverflow.com/a/46367006/5807149) for advice on setting environment variables for development or 
+See [here](https://stackoverflow.com/a/46367006/5807149) for advice on setting environment variables for development or
 for use in a production build.
 
 ### Available Scripts
@@ -84,8 +86,8 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 
 **Note: this is a one-way operation. Once you `eject`, you can’t go back!**
 
-For many overrides that would otherwise require you to eject, you can use [react-app-rewired](https://www.npmjs.com/package/react-app-rewired), 
-and just update `config-overrides.js`. If you get compilation errors citing missing Webpack polyfills on v5, try this before ejecting. 
+For many overrides that would otherwise require you to eject, you can use [react-app-rewired](https://www.npmjs.com/package/react-app-rewired),
+and just update `config-overrides.js`. If you get compilation errors citing missing Webpack polyfills on v5, try this before ejecting.
 
 If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
