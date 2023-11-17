@@ -1,5 +1,11 @@
 import React from 'react'
 import ErrorIcon from '../icons/Error'
+import {
+  StatusContentContainer,
+  StatusTitle,
+  StatusIconContainer,
+  StatusText,
+} from '../styles'
 
 interface Props {
   title: string
@@ -8,16 +14,16 @@ interface Props {
 
 export function ErrorSection({ title, message }: Props) {
   return (
-    <div className="ErrorSection">
-      <div id="errorTitle">{title}</div>
-      <div id="errorIcon">
+    <StatusContentContainer>
+      <StatusTitle>{title}</StatusTitle>
+      <StatusIconContainer>
         <ErrorIcon />
-      </div>
-      <div id="errorText">{message}</div>
-      <div id="errorText">
+      </StatusIconContainer>
+      <StatusText>{message}</StatusText>
+      <StatusText>
         You can try again, or if the error persists, contact your wallet
         provider for more help.
-      </div>
-    </div>
+      </StatusText>
+    </StatusContentContainer>
   )
 }
