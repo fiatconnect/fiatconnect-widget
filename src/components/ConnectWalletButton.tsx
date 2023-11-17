@@ -1,5 +1,6 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import styled from 'styled-components'
+import { Button } from '../styles'
 
 // Largely copy-pasted from here: https://www.rainbowkit.com/docs/custom-connect-button
 function ConnectWalletButton() {
@@ -79,22 +80,6 @@ function ConnectWalletButton() {
 const ButtonContainer = styled.div`
   display: flex;
   flex-grow: 1;
-`
-
-const Button = styled.button`
-  flex-grow: 1;
-  display: flex;
-  border: 0px;
-  justify-content: center;
-  align-items: center;
-  border-radius: 5px;
-  font-size: 18px;
-  font-weight: bold;
-  height: 55px;
-  opacity: 0.8;
-  &:hover {
-    opacity: 1;
-  }
 `
 
 export default ConnectWalletButton

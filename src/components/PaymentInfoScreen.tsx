@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { Steps, QueryParams } from '../types'
+import React, { useState } from 'react'
+import { Steps } from '../types'
 import { fiatAccountSchemaToPaymentMethod } from '../constants'
 import {
   FiatAccountSchema,
@@ -10,6 +10,8 @@ import { AccountNumberSection } from './paymentInfo/AccountNumber'
 import { addFiatAccount, getLinkedAccount } from '../FiatConnectClient'
 import { useFiatConnectConfig } from '../hooks'
 import { providerIdToProviderName } from '../constants'
+import { ContentContainer, SectionSubtitle, SectionTitle } from '../styles'
+import { QueryParams } from '../schema'
 
 interface Props {
   onError: (title: string, message: string) => void
@@ -105,16 +107,16 @@ export function PaymentInfoScreen({
   }
 
   return (
-    <div className="ContentContainer">
-      <div id="PaymentInfo-Title">Payment Info</div>
-      <div id="PaymentInfo-Subtitle">
+    <ContentContainer>
+      <SectionTitle>Payment Info</SectionTitle>
+      <SectionSubtitle>
         {fiatAccountSchemaToPaymentMethod[params.fiatAccountSchema]}
-      </div>
+      </SectionSubtitle>
       {getSection()}
       <div id="Spacer" />
       <button onClick={onSubmit} id="PrimaryButton" disabled={submitDisabled}>
         Submit Payment Info
       </button>
-    </div>
+    </ContentContainer>
   )
 }

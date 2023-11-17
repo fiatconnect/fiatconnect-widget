@@ -262,29 +262,12 @@
 #Spacer {
   flex-grow: 1;
 }
+
 #SectionBorder {
   padding: 0px;
   margin-top: 15px;
   width: 100%;
   border: 1px solid #cbcbcb;
-}
-
-#ButtonSection {
-  display: flex;
-  width: 100%;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  align-self: flex-end;
-}
-
-#ButtonRow {
-  padding-top: 10px;
-  display: flex;
-  align-items: center;
-  flex-direction: row;
-  width: 100%;
-  justify-content: flex-start;
 }
 
 #SignInStepCircle {
