@@ -9,4 +9,3 @@ export enum Steps {
   Three = 3,
   Four = 4,
 }
-

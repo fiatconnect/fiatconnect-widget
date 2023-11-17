@@ -10,7 +10,7 @@ import { QuoteAmountBox } from './QuoteAmountBox'
 import { transferIn } from '../FiatConnectClient'
 import { useFiatConnectConfig } from '../hooks'
 import { providerIdToProviderName } from '../constants'
-import {QueryParams} from "../schema";
+import { QueryParams } from '../schema'
 
 interface Props {
   onError: (title: string, message: string) => void
