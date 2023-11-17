@@ -10,7 +10,7 @@ import {
   TransferInUserActionDetails,
   UserActionDetails as UserActionDetailsType,
 } from '@fiatconnect/fiatconnect-types'
-import { ProviderIds } from '../types'
+import { ProviderIds, Steps } from '../types'
 import { fiatTypeToSymbol, providerIdToProviderName } from '../constants'
 import { z } from 'zod'
 import styled from 'styled-components'
@@ -20,6 +20,7 @@ interface Props {
   providerId: ProviderIds
   fiatAmount: string
   fiatType: FiatType
+  onNext: (step: Steps) => void
 }
 
 const BodyCard = styled.div`
@@ -95,7 +96,9 @@ function AccountNumberUserActionDetailsBody({
   )
 }
 
+// TODO: Make button highlight on hover/press
 export function UserActionDetails({
+  onNext,
   userActionDetails,
   fiatAmount,
   fiatType,
@@ -122,7 +125,12 @@ export function UserActionDetails({
         below.
       </SectionSubtitle>
       {body}
-      <Button style={{ width: '100%', marginTop: '10px' }}>Done</Button>
+      <Button
+        onClick={() => onNext(Steps.Five)}
+        style={{ width: '100%', marginTop: '10px' }}
+      >
+        Done
+      </Button>
     </ContentContainer>
   )
 }

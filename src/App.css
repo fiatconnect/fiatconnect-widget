@@ -72,31 +72,7 @@
 
 .ProviderTitle {
   font-size: 18px;
-
   font-weight: bold;
-}
-
-.ErrorSection {
-  display: flex;
-  flex-grow: 1;
-  flex-direction: column;
-  justify-content: center;
-}
-
-#errorTitle {
-  color: black;
-  font-size: 18px;
-  font-weight: bold;
-}
-
-#errorIcon {
-  padding: 30px;
-}
-
-#errorText {
-  color: black;
-  font-size: 18px;
-  padding-bottom: 20px;
 }
 
 .StepsHeader {

@@ -20,6 +20,7 @@ import {
 } from '@fiatconnect/fiatconnect-types'
 import { loadConfig } from './config'
 import { queryParamsSchema } from './schema'
+import { DoneSection } from './components/DoneSection'
 
 function useQueryParams() {
   const [searchParams] = useSearchParams()
@@ -117,12 +118,18 @@ function App() {
     ) {
       return (
         <UserActionDetails
+          onNext={setStep}
           userActionDetails={transferResponse.userActionDetails}
           fiatAmount={queryParamsResults.data.fiatAmount}
           fiatType={queryParamsResults.data.fiatType}
           providerId={queryParamsResults.data.providerId}
         />
       )
+    }
+    if (step === Steps.Five) {
+      // TODO: Actually figure this out, and have sensible defaults like we do in the wallet
+      const settlementTime = '1 - 3 days'
+      return <DoneSection settlementTime={settlementTime} />
     }
   }
 
