@@ -1,11 +1,9 @@
 import { z } from 'zod'
 import {
-  accountNumberSchema,
   cryptoTypeSchema,
   FiatAccountType,
   fiatTypeSchema,
   TransferType,
-  accountNumberUserActionSchema,
   FiatAccountSchema,
   TransferInUserActionDetails,
 } from '@fiatconnect/fiatconnect-types'
