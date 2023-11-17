@@ -96,6 +96,7 @@ function AccountNumberUserActionDetailsBody({
   )
 }
 
+// TODO: Make button highlight on hover/press
 export function UserActionDetails({
   onNext,
   userActionDetails,
