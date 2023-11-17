@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import './App.css'
 import '@rainbow-me/rainbowkit/styles.css'
 import { queryParamsSchema, Steps } from './types'
@@ -19,21 +19,7 @@ import {
   ObfuscatedFiatAccountData,
   TransferResponse,
 } from '@fiatconnect/fiatconnect-types'
-
-const { chains, publicClient } = configureChains(
-  [celoAlfajores],
-  [publicProvider()],
-)
-const { connectors } = getDefaultWallets({
-  appName: 'My RainbowKit App',
-  projectId: 'ccf8cc7da29e8b1ed52a455b808f2699',
-  chains,
-})
-const wagmiConfig = createConfig({
-  autoConnect: true,
-  connectors,
-  publicClient,
-})
+import { loadConfig } from './config'
 
 function useQueryParams() {
   // TODO: We should do some semantic validation here to ensure that stuff doesn't break later in the flow.
@@ -67,6 +53,24 @@ function App() {
   const [transferResponse, setTransferResponse] = useState<
     TransferResponse | undefined
   >(undefined)
+
+  const config = loadConfig()
+  const { chains, publicClient } = useMemo(
+    () => configureChains(config.wagmi.defaultChains, [publicProvider()]),
+    [config],
+  )
+  const wagmiConfig = useMemo(() => {
+    const { connectors } = getDefaultWallets({
+      appName: config.walletConnect.appName,
+      projectId: config.walletConnect.projectId,
+      chains,
+    })
+    return createConfig({
+      autoConnect: true,
+      connectors,
+      publicClient,
+    })
+  }, [config])
 
   const onError = (title: string, message: string) => {
     setErrorTitle(title)
