@@ -16,6 +16,7 @@ jest.mock('react-router-dom', () => ({
       fiatAccountType: 'BankAccount',
       fiatAccountSchema: 'AccountNumber',
       quoteId: 'mock-quote-id',
+      userActionDetailsSchema: 'AccountNumberUserAction',
     }),
     jest.fn(),
   ]),

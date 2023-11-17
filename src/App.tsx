@@ -1,10 +1,9 @@
 import React, { useMemo, useState } from 'react'
 import './App.css'
 import '@rainbow-me/rainbowkit/styles.css'
-import { queryParamsSchema, Steps } from './types'
+import { Steps } from './types'
 import { publicProvider } from 'wagmi/providers/public'
 import { configureChains, createConfig, WagmiConfig } from 'wagmi'
-import { celoAlfajores } from 'viem/chains'
 import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit'
 import { useSearchParams } from 'react-router-dom'
 import '@fontsource/inter'
@@ -20,14 +19,9 @@ import {
   TransferResponse,
 } from '@fiatconnect/fiatconnect-types'
 import { loadConfig } from './config'
+import { queryParamsSchema } from './schema'
 
 function useQueryParams() {
-  // TODO: We should do some semantic validation here to ensure that stuff doesn't break later in the flow.
-  // This includes:
-  //  - Check that the FiatAccountSchema is actually supported in this widget currently
-  //  - Check that allowedValues is syntactically valid, deserialize it to an object before returning
-  //  - Check that fiatAmount and cryptoAmount can be deserialied to floats, and deserialize them before returning
-  //  - Check that transferType is currently supported by the widget
   const [searchParams] = useSearchParams()
   const searchParamsObject = Object.fromEntries(searchParams)
   return queryParamsSchema.safeParse(searchParamsObject)
