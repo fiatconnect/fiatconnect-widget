@@ -5,7 +5,7 @@ import { Steps } from './types'
 import { publicProvider } from 'wagmi/providers/public'
 import { configureChains, createConfig, WagmiConfig } from 'wagmi'
 import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit'
-import { useSearchParams } from 'react-router-dom'
+import { HashRouter, useSearchParams } from 'react-router-dom'
 import '@fontsource/inter'
 import { StepsHeader } from './components/StepsHeader'
 import { ErrorSection } from './components/ErrorSection'
@@ -134,45 +134,47 @@ function App() {
   }
 
   return (
-    <WagmiConfig config={wagmiConfig}>
-      <RainbowKitProvider chains={chains}>
-        <div className="App">
-          <header className="App-header">
-            <div className="Container">
-              {queryParamsResults.success && !showError ? (
-                <div className="SectionContainer">
-                  <div className="ProviderTitle">
-                    {
-                      providerIdToProviderName[
-                        queryParamsResults.data.providerId
-                      ]
-                    }
-                  </div>
-                  <StepsHeader step={step} />
-                  {getSection()}
-                </div>
-              ) : (
-                <div className="ErrorContainer">
-                  {queryParamsResults.success && (
-                    <div>
-                      <div className="ProviderTitle">
-                        {
-                          providerIdToProviderName[
-                            queryParamsResults.data.providerId
-                          ]
-                        }
-                      </div>
-                      <StepsHeader step={step} />
+    <HashRouter>
+      <WagmiConfig config={wagmiConfig}>
+        <RainbowKitProvider chains={chains}>
+          <div className="App">
+            <header className="App-header">
+              <div className="Container">
+                {queryParamsResults.success && !showError ? (
+                  <div className="SectionContainer">
+                    <div className="ProviderTitle">
+                      {
+                        providerIdToProviderName[
+                          queryParamsResults.data.providerId
+                        ]
+                      }
                     </div>
-                  )}
-                  <ErrorSection title={errorTitle} message={errorMessage} />
-                </div>
-              )}
-            </div>
-          </header>
-        </div>
-      </RainbowKitProvider>
-    </WagmiConfig>
+                    <StepsHeader step={step} />
+                    {getSection()}
+                  </div>
+                ) : (
+                  <div className="ErrorContainer">
+                    {queryParamsResults.success && (
+                      <div>
+                        <div className="ProviderTitle">
+                          {
+                            providerIdToProviderName[
+                              queryParamsResults.data.providerId
+                            ]
+                          }
+                        </div>
+                        <StepsHeader step={step} />
+                      </div>
+                    )}
+                    <ErrorSection title={errorTitle} message={errorMessage} />
+                  </div>
+                )}
+              </div>
+            </header>
+          </div>
+        </RainbowKitProvider>
+      </WagmiConfig>
+    </HashRouter>
   )
 }
 
