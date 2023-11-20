@@ -37,3 +37,26 @@ export const Button = styled.button`
     opacity: 1;
   }
 `
+
+export const StatusContentContainer = styled.div`
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  justify-content: center;
+`
+
+export const StatusTitle = styled.div`
+  color: black;
+  font-size: 18px;
+  font-weight: bold;
+`
+
+export const StatusIconContainer = styled.div`
+  padding: 30px;
+`
+
+export const StatusText = styled.div`
+  color: black;
+  font-size: 18px;
+  padding-bottom: 20px;
+`

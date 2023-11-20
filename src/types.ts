@@ -8,4 +8,5 @@ export enum Steps {
   Two = 2,
   Three = 3,
   Four = 4,
+  Five = 5,
 }
