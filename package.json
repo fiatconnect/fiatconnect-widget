@@ -40,7 +40,7 @@
     "deploy": "gh-pages -d build",
     "test": "jest",
     "e2e": "synpress run",
-    "e2e:ci": "start-server-and-test start http://localhost:3000 'yarn e2e'",
+    "e2e:ci": "start-server-and-test start http://127.0.0.1:3000 'yarn e2e'",
     "eject": "react-app-rewired eject"
   },
   "eslintConfig": {
