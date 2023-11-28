@@ -1,4 +1,7 @@
 .App {
+  justify-content: flex-start;
+  display: flex;
+  align-items: flex-start;
   text-align: center;
 }
 
@@ -14,12 +17,13 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  flex: 1;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: #e5e5e5;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
 }
@@ -35,4 +39,333 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.Container {
+  color: black;
+  display: flex;
+  box-sizing: border-box;
+  font-family: 'Inter';
+  background-color: white;
+  justify-content: center;
+  padding: 50px;
+  width: min(500px, 100vw);
+  height: min(700px, 100vh);
+  border-radius: 20px;
+}
+
+.SectionContainer {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  flex-grow: 1;
+  flex-direction: column;
+}
+
+.ErrorContainer {
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+  flex-grow: 1;
+  display: flex;
+}
+
+.ProviderTitle {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.StepsHeader {
+  width: 100%;
+  padding: 10px;
+  padding-bottom: 40px;
+  display: flex;
+  flex-direction: column;
+  font-weight: 200;
+  font-size: 11px;
+  line-height: 17px;
+}
+
+.StepsLine {
+  border: 1px solid #868686;
+}
+
+#StepsCircle-Inactive {
+  position: relative;
+  height: 18px;
+  width: 18px;
+  border-radius: 50%;
+  border: 1px solid #868686;
+  color: #868686;
+  display: flex;
+  justify-content: center;
+}
+
+#StepsCircle-Current {
+  position: relative;
+  height: 18px;
+  width: 18px;
+  border-radius: 50%;
+  border: 1px solid #5987ff;
+  color: #5987ff;
+  display: flex;
+  justify-content: center;
+}
+
+#StepsCircle-Complete {
+  position: relative;
+  display: flex;
+  height: 18px;
+  width: 18px;
+  border-radius: 50%;
+  border: 1px solid #bacdff;
+  color: #bacdff;
+  display: flex;
+  justify-content: center;
+}
+
+#StepsCircle-Divider {
+  align-self: center;
+  display: flex;
+  height: 0px;
+  width: 27%;
+  border: 1px solid #cbcbcb;
+}
+
+.StepsHeader-Progress {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+#StepsHeader-Title {
+  position: absolute;
+  display: table;
+  top: 100%;
+  white-space: nowrap;
+  text-align: center;
+  font-size: 10px;
+  justify-content: space-between;
+  color: black;
+}
+
+.ContentContainer {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+#PaymentMethodLine {
+  display: inline;
+  padding-bottom: 20px;
+  font-weight: bold;
+  font-size: 12px;
+  color: #515151;
+}
+
+#PaymentMethodLine-Title {
+  display: inline;
+  color: #7c7c7c;
+}
+
+.QuoteAmountBox {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+#QuoteAmountBox-Top {
+  height: 64px;
+  width: 100%;
+  border-radius: 10px 10px 0px 0px;
+  background: #f5f5f5;
+  border: 1px solid #bbbbbb;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+#QuoteAmountBox-Bottom {
+  height: 64px;
+  width: 100%;
+  border-radius: 0px 0px 10px 10px;
+  background: #f5f5f5;
+  border: 1px solid #bbbbbb;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+#QuoteAmountBox-Left {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding-left: 15px;
+  align-self: center;
+  text-align: left;
+}
+
+#QuoteAmountBox-LeftTitle {
+  color: #7c7c7c;
+  font-size: 11px;
+  font-weight: bold;
+  padding-bottom: 10px;
+}
+
+#QuoteAmountBox-LeftAmount {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+#QuoteAmountBox-Right {
+  display: flex;
+  flex-direction: row;
+  align-self: center;
+  padding-right: 15px;
+}
+
+#QuoteAmountBox-RightSymbol {
+}
+
+#QuoteAmountBox-RightAmount {
+  padding-left: 5px;
+  font-size: 18px;
+  font-weight: bold;
+  align-self: center;
+}
+
+#TokenIcon {
+  width: 26px;
+  height: 26px;
+}
+
+#LineItem {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  font-size: 11px;
+  font-weight: bold;
+  justify-content: space-between;
+  padding-top: 10px;
+}
+
+#LineItem-Left {
+  color: #7c7c7c;
+}
+
+#LineItem-Right {
+}
+
+#Spacer {
+  flex-grow: 1;
+}
+#SectionBorder {
+  padding: 0px;
+  margin-top: 15px;
+  width: 100%;
+  border: 1px solid #cbcbcb;
+}
+
+#ConnectWalletButton-Connected {
+  flex-grow: 1;
+  display: flex;
+  border: 0px;
+  justify-content: center;
+  align-items: center;
+  background-color: #bacdff;
+  border-radius: 5px;
+  font-size: 18px;
+  font-weight: bold;
+  height: 55px;
+}
+
+#ConnectWalletButton-Connected:hover {
+  background-color: #a2b5e5;
+}
+
+#ConnectWalletButton-Unconnected:hover {
+  background-color: #4871dc;
+}
+
+#SignInStepCircle {
+  margin-left: 10px;
+  margin-right: 20px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  height: 24px;
+  width: 24px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  font-weight: 100;
+  font-size: 11px;
+}
+
+#ConnectWalletButton-Wrapper {
+  display: flex;
+  flex-grow: 1;
+}
+
+#SIWESignInButton {
+  flex-grow: 1;
+  display: flex;
+  border: 0px;
+  justify-content: center;
+  align-items: center;
+  background-color: #5987ff;
+  border-radius: 5px;
+  font-size: 18px;
+  font-weight: bold;
+  height: 55px;
+}
+
+#SIWESignInButton:hover {
+  background-color: #4871dc;
+}
+
+#SIWESignInButton:disabled {
+  background-color: #c2c2c2;
+}
+
+#PaymentInfo-Title {
+  font-size: 18px;
+  font-weight: bold;
+  padding-bottom: 5px;
+}
+
+#PaymentInfo-Subtitle {
+  display: flex;
+  font-size: 12px;
+  color: #515151;
+  font-weight: bold;
+  justify-content: flex-start;
+}
+
+#PrimaryButton {
+  width: 100%;
+  display: flex;
+  border: 0px;
+  justify-content: center;
+  align-items: center;
+  background-color: #5987ff;
+  border-radius: 5px;
+  font-size: 18px;
+  font-weight: bold;
+  height: 55px;
+}
+
+#PrimaryButton:hover {
+  background-color: #4871dc;
+}
+
+#PrimaryButton:disabled {
+  background-color: #c2c2c2;
+}
+
+#AccountInfoSectionTitle {
+  font-weight: bold;
+  font-size: 12px;
 }

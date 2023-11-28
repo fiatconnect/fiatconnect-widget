@@ -1,24 +1,26 @@
-import React, { useState } from 'react'
-import Button from '@mui/material/Button'
-import { signMessage } from '@wagmi/core'
-import { useAccount, useNetwork } from 'wagmi'
+import React, { useState, useEffect } from 'react'
+import { useAccount, useSignMessage } from 'wagmi'
 import { login } from '../FiatConnectClient'
 import { useFiatConnectConfig } from '../hooks'
+import { ProviderIds } from '../types'
+import { providerIdToProviderName } from '../constants'
 
 interface Props {
+  providerId: ProviderIds
   onLoginSuccess: () => any
+  onError: (title: string, message: string) => void
 }
 
-function SIWEConnectButton({ onLoginSuccess }: Props) {
+function SIWEConnectButton({ providerId, onLoginSuccess, onError }: Props) {
   const fiatConnectClientConfig = useFiatConnectConfig()
   const [siweConnecting, setSiweConnecting] = useState(false)
   const [siweSuccess, setSiweSuccess] = useState(false)
   const [siweError, setSiweError] = useState(false)
 
-  const searchParams = new URLSearchParams(window.location.search)
-  const providerId = searchParams.get('providerId') ?? undefined
+  const { signMessageAsync } = useSignMessage()
 
   const account = useAccount()
+  const providerName = providerIdToProviderName[providerId]
 
   // For some reason (not fully understood by me) we need to do this in order
   // to get the fetching to work correctly, despite using the browser SDK.
@@ -29,13 +31,13 @@ function SIWEConnectButton({ onLoginSuccess }: Props) {
   }
 
   const onClick = async () => {
-    if (!fiatConnectClientConfig) {
-      return
-    }
-    setSiweConnecting(true)
     try {
+      if (!fiatConnectClientConfig) {
+        throw new Error(`Invalid client config; should never happen`)
+      }
+      setSiweConnecting(true)
       const response = await login(
-        (message) => signMessage({ message }),
+        (message) => signMessageAsync({ message }),
         fiatConnectClientConfig,
       )
       if (response.ok) {
@@ -47,62 +49,33 @@ function SIWEConnectButton({ onLoginSuccess }: Props) {
       }
     } catch (e) {
       setSiweError(true)
+      onError(
+        `There was an error signing in with ${providerName}.`,
+        'This may be due to a misconfiguration by your wallet provider.',
+      )
       setSiweConnecting(false)
     }
   }
 
   const getText = () => {
     if (!siweConnecting && !(siweSuccess || siweError)) {
-      return `Sign in with Ethereum to ${providerId}`
-    }
-    if (siweSuccess) {
-      return `Successfully signed in with Ethereum to ${providerId}!`
+      return `Sign in with ${providerName}`
     }
     if (siweError) {
       return 'Error signing in with Ethereum'
     } else {
-      return 'SIWE connecting, check your wallet...'
-    }
-  }
-
-  const getTheme = () => {
-    if (siweSuccess) {
-      return {
-        '&.Mui-disabled': {
-          background: 'green',
-          color: 'white',
-        },
-      }
-    }
-    if (siweError) {
-      return {
-        '&.Mui-disabled': {
-          background: 'red',
-          color: 'white',
-        },
-      }
-    }
-    if (siweConnecting) {
-      return {
-        '&.Mui-disabled': {
-          background: 'grey',
-          color: 'white',
-        },
-      }
+      return 'Connecting...'
     }
   }
 
   return (
-    <div>
-      <Button
-        onClick={onClick}
-        sx={getTheme()}
-        variant="contained"
-        disabled={!account.isConnected || siweConnecting || siweSuccess}
-      >
-        {getText()}
-      </Button>
-    </div>
+    <button
+      onClick={onClick}
+      id="SIWESignInButton"
+      disabled={!account.isConnected || siweConnecting || siweSuccess}
+    >
+      {getText()}
+    </button>
   )
 }
 
