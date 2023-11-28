@@ -64,16 +64,17 @@ jobs:
     #     sudo apt-get install --no-install-recommends -y \
     #     fluxbox \
     #     xvfb
-    # - name: Run xvfb and fluxbox
-    #   run: |
-    #     Xvfb :0 -screen 0 1024x768x24 -listen tcp -ac &
-    #     fluxbox &
-    #   env:
-    #     DISPLAY: :0.0
-    - run: yarn
+    - name: yarn install
+      run: yarn
+    - name: Run xvfb and fluxbox
+      run: |
+        Xvfb :0 -screen 0 1024x768x24 -listen tcp -ac &
+        fluxbox &
+      env:
+        DISPLAY: :0.0
     # - run: yarn build
-    - name: Run xvfb
-      run: xvfb-run --auto-servernum yarn e2e:ci
+    - name: Run e2e tests
+      run: e2e:ci
     # - name: Synpress
     #   uses: cypress-io/github-action@v6
     #   timeout-minutes: 60
