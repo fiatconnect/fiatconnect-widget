@@ -73,7 +73,7 @@ jobs:
     - run: yarn
     # - run: yarn build
     - name: Run xvfb
-      run: xvfb-run yarn e2e:ci
+      run: xvfb-run --auto-servernum yarn e2e:ci
     # - name: Synpress
     #   uses: cypress-io/github-action@v6
     #   timeout-minutes: 60
