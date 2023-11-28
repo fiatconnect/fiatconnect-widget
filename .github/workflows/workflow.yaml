@@ -66,7 +66,7 @@ jobs:
         xvfb
     - name: Run xvfb and fluxbox
       run: |
-        Xvfb :0 -screen 0 1024x768x24 -listen tcp -ac &
+        Xvfb :0 -a -screen 0 1024x768x24 -listen tcp -ac &
         fluxbox &
       env:
         DISPLAY: :0.0
