@@ -37,7 +37,7 @@
     "start": "DISABLE_ESLINT_PLUGIN=true react-app-rewired start",
     "build": "react-app-rewired build",
     "predeploy": "yarn build",
-    "deploy": "gh-pages -d build",
+    "deploy": "gh-pages -d build -f",
     "test": "jest",
     "eject": "react-app-rewired eject"
   },
