@@ -26,7 +26,6 @@ import { SendCrypto } from './components/SendCrypto'
 
 function useQueryParams() {
   const [searchParams] = useSearchParams()
-  console.log(Object.fromEntries(searchParams))
   const searchParamsObject = Object.fromEntries(searchParams)
   return queryParamsSchema.safeParse(searchParamsObject)
 }
@@ -136,7 +135,6 @@ function App() {
       transferResponse &&
       queryParamsResults.data.transferType === TransferType.TransferOut
     ) {
-      // Deal with transfer out TX
       return (
         <SendCrypto
           onNext={setStep}
