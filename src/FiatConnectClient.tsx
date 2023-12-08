@@ -79,6 +79,22 @@ export function transferIn(
     body: JSON.stringify(params),
   })
 }
+
+export function transferOut(
+  params: TransferRequestBody,
+  clientConfig: FiatConnectClientConfig,
+) {
+  return fetch(`${clientConfig.baseUrl}/transfer/out`, {
+    method: 'POST',
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${clientConfig.apiKey}`,
+    },
+    body: JSON.stringify(params),
+  })
+}
+
 export async function login(
   signingFunction: (message: string) => Promise<string>,
   clientConfig: FiatConnectClientConfig,
