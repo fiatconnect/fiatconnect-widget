@@ -66,14 +66,14 @@ export function SignInScreen({
 
   let exchangeRateString = ''
   if (params.transferType === TransferType.TransferIn) {
-    const exchangeRate = fiatAmount / cryptoAmount
+    const exchangeRate = cryptoAmount / fiatAmount
     exchangeRateString = `1 ${params.fiatType} = ${exchangeRate.toFixed(2)} ${
       params.cryptoType
     }`
   } else {
-    const exchangeRate = cryptoAmount / fiatAmount
-    exchangeRateString = `1 ${params.fiatType} = ${exchangeRate.toFixed(2)} ${
-      params.cryptoType
+    const exchangeRate = fiatAmount / cryptoAmount
+    exchangeRateString = `1 ${params.cryptoType} = ${exchangeRate.toFixed(2)} ${
+      params.fiatType
     }`
   }
   // TODO: Actually figure this out, and have sensible defaults like we do in the wallet

@@ -7,7 +7,7 @@ import {
   TransferResponse,
 } from '@fiatconnect/fiatconnect-types'
 import { QuoteAmountBox } from './QuoteAmountBox'
-import { transferIn } from '../FiatConnectClient'
+import { transferIn, transferOut } from '../FiatConnectClient'
 import { useFiatConnectConfig } from '../hooks'
 import { providerIdToProviderName } from '../constants'
 import { QueryParams } from '../schema'
@@ -36,14 +36,14 @@ export function ReviewScreen({
 
   let exchangeRateString = ''
   if (params.transferType === TransferType.TransferIn) {
-    const exchangeRate = fiatAmount / cryptoAmount
+    const exchangeRate = cryptoAmount / fiatAmount
     exchangeRateString = `1 ${params.fiatType} = ${exchangeRate.toFixed(2)} ${
       params.cryptoType
     }`
   } else {
-    const exchangeRate = cryptoAmount / fiatAmount
-    exchangeRateString = `1 ${params.fiatType} = ${exchangeRate.toFixed(2)} ${
-      params.cryptoType
+    const exchangeRate = fiatAmount / cryptoAmount
+    exchangeRateString = `1 ${params.cryptoType} = ${exchangeRate.toFixed(2)} ${
+      params.fiatType
     }`
   }
   // TODO: Actually figure this out, and have sensible defaults like we do in the wallet
@@ -55,24 +55,36 @@ export function ReviewScreen({
     }
 
     setTransferStarted(true)
-    const transferInResponse = await transferIn(
-      {
-        quoteId: params.quoteId,
-        fiatAccountId: linkedAccount.fiatAccountId,
-      },
-      fiatConnectClientConfig,
-    )
+    let transferResponse
+
+    if (params.transferType === TransferType.TransferIn) {
+      transferResponse = await transferIn(
+        {
+          quoteId: params.quoteId,
+          fiatAccountId: linkedAccount.fiatAccountId,
+        },
+        fiatConnectClientConfig,
+      )
+    } else {
+      transferResponse = await transferOut(
+        {
+          quoteId: params.quoteId,
+          fiatAccountId: linkedAccount.fiatAccountId,
+        },
+        fiatConnectClientConfig,
+      )
+    }
 
     const providerName = providerIdToProviderName[params.providerId]
     const errorTitle = 'There was an error submitting your order.'
     const errorMessage = `${providerName} encountered an issue while processing your order.`
-    if (!transferInResponse.ok) {
+    if (!transferResponse.ok) {
       onError(errorTitle, errorMessage)
     }
 
-    const transferInResponseData =
-      (await transferInResponse.json()) as TransferResponse
-    setTransferResponse(transferInResponseData)
+    const transferResponseData =
+      (await transferResponse.json()) as TransferResponse
+    setTransferResponse(transferResponseData)
     onNext(Steps.Four)
   }
 

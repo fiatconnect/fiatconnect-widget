@@ -17,10 +17,12 @@ import { ReviewScreen } from './components/ReviewScreen'
 import {
   ObfuscatedFiatAccountData,
   TransferResponse,
+  TransferType,
 } from '@fiatconnect/fiatconnect-types'
 import { loadConfig } from './config'
 import { queryParamsSchema } from './schema'
 import { DoneSection } from './components/DoneSection'
+import { SendCrypto } from './components/SendCrypto'
 
 function useQueryParams() {
   const [searchParams] = useSearchParams()
@@ -114,7 +116,8 @@ function App() {
       step === Steps.Four &&
       transferResponse &&
       'userActionDetails' in transferResponse &&
-      transferResponse.userActionDetails
+      transferResponse.userActionDetails &&
+      queryParamsResults.data.transferType === TransferType.TransferIn
     ) {
       return (
         <UserActionDetails
@@ -126,6 +129,24 @@ function App() {
         />
       )
     }
+
+    if (
+      step === Steps.Four &&
+      transferResponse &&
+      queryParamsResults.data.transferType === TransferType.TransferOut
+    ) {
+      return (
+        <SendCrypto
+          onNext={setStep}
+          onError={onError}
+          transferAddress={transferResponse.transferAddress}
+          cryptoAmount={queryParamsResults.data.cryptoAmount}
+          cryptoType={queryParamsResults.data.cryptoType}
+          providerId={queryParamsResults.data.providerId}
+        />
+      )
+    }
+
     if (step === Steps.Five) {
       // TODO: Actually figure this out, and have sensible defaults like we do in the wallet
       const settlementTime = '1 - 3 days'
