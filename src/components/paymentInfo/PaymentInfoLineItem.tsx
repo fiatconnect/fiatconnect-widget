@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 
 interface Props {
@@ -16,30 +16,51 @@ export function PaymentInfoLineItem({
   value,
   allowedValues,
 }: Props) {
-  // TODO: Implement allowedValues
-
   const onChangeWrapper = (e: any) => {
     const newValue = e.target.value
     onChange(newValue)
   }
 
+  const renderContents = () => {
+    if (allowedValues) {
+      return (
+        <Select value={value} onChange={onChangeWrapper}>
+          {allowedValues.map((allowedValue) => (
+            <option value={allowedValue}>{allowedValue}</option>
+          ))}
+        </Select>
+      )
+    } else {
+      return (
+        <Input
+          type="text"
+          placeholder={placeholder}
+          value={value}
+          onChange={onChangeWrapper}
+        />
+      )
+    }
+  }
   return (
     <Container>
       <Form>
         <Fieldset>
           <legend>{title}</legend>
-          <Input
-            type="text"
-            placeholder={placeholder}
-            value={value}
-            onChange={onChangeWrapper}
-          />
+          {renderContents()}
         </Fieldset>
       </Form>
     </Container>
   )
 }
 
+const Select = styled.select`
+  width: 100%;
+  border: 0;
+  background: white;
+  &:focus {
+    outline: none;
+  }
+`
 const Fieldset = styled.fieldset`
   border-radius: 5px;
   border-width: 1px;

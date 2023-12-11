@@ -9,6 +9,17 @@ import {
 } from '@fiatconnect/fiatconnect-types'
 import { ProviderIds } from './types'
 
+const stringToJSONSchema = z
+  .string()
+  .transform((str, ctx): z.infer<ReturnType<typeof Object>> => {
+    try {
+      return JSON.parse(str)
+    } catch (e) {
+      ctx.addIssue({ code: 'custom', message: 'Invalid JSON' })
+      return z.NEVER
+    }
+  })
+
 const stringifiedNumberSchema = z.string().regex(/^(\d+|\d*\.\d+)$/)
 export const queryParamsSchema = z.object({
   providerId: z.nativeEnum(ProviderIds),
@@ -26,7 +37,9 @@ export const queryParamsSchema = z.object({
   userActionDetailsSchema: z
     .enum([TransferInUserActionDetails.AccountNumberUserAction])
     .optional(),
-  allowedValues: z.string().optional(),
+  allowedValues: stringToJSONSchema
+    .pipe(z.record(z.array(z.string()).nonempty()))
+    .optional(),
   country: z.string(),
 })
 export type QueryParams = z.infer<typeof queryParamsSchema>

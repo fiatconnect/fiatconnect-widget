@@ -81,8 +81,6 @@ export function PaymentInfoScreen({
     } catch (e) {
       onError(errorTitle, errorMessage)
     }
-    // TODO: try submitting fiat account info
-    // TODO: Go to step three
   }
 
   const getSection = () => {
@@ -94,6 +92,7 @@ export function PaymentInfoScreen({
             fiatAccountDetails={fiatAccountDetails}
             setFiatAccountDetails={setFiatAccountDetailsWrapper}
             setSubmitDisabled={setSubmitDisabled}
+            allowedValues={params.allowedValues}
           />
         )
       }

@@ -29,12 +29,22 @@ export function AccountNumberSection({
   setSubmitDisabled,
   allowedValues,
 }: Props) {
-  // TODO: Pass allowedValues through once it's been implemented
-
   useEffect(() => {
-    setFiatAccountDetails({
+    const initialDetails = {
       fiatAccountType: FiatAccountType.BankAccount,
       country,
+    }
+    setFiatAccountDetails({
+      ...initialDetails,
+      ...(allowedValues?.institutionName
+        ? { institutionName: allowedValues.institutionName[0] }
+        : {}),
+      ...(allowedValues?.accountName
+        ? { accountName: allowedValues.accountName[0] }
+        : {}),
+      ...(allowedValues?.accountNumber
+        ? { accountNumber: allowedValues.accountNumber[0] }
+        : {}),
     })
   }, []) // Empty array required to only run this effect once ever
 
@@ -57,18 +67,21 @@ export function AccountNumberSection({
         placeholder={'Your Institution Name'}
         onChange={(value) => setFiatAccountDetails({ institutionName: value })}
         value={fiatAccountDetails.institutionName ?? ''}
+        allowedValues={allowedValues?.institutionName}
       />
       <PaymentInfoLineItem
         title={'Account Name'}
         placeholder={'Your Account Name'}
         onChange={(value) => setFiatAccountDetails({ accountName: value })}
         value={fiatAccountDetails.accountName ?? ''}
+        allowedValues={allowedValues?.accountName}
       />
       <PaymentInfoLineItem
         title={'Account Number'}
         placeholder={'1234567890'}
         onChange={(value) => setFiatAccountDetails({ accountNumber: value })}
         value={fiatAccountDetails.accountNumber ?? ''}
+        allowedValues={allowedValues?.accountNumber}
       />
     </Container>
   )
