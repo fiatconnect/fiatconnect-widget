@@ -32,8 +32,14 @@ export const queryParamsSchema = z.object({
   quoteId: z.string(),
   settlementTimeLowerBound: z.string().optional(),
   settlementTimeUpperBound: z.string().optional(),
-  fiatAccountType: z.enum([FiatAccountType.BankAccount]), // TODO(M3): add mobile money from fiatconnect-types when support is added
-  fiatAccountSchema: z.enum([FiatAccountSchema.AccountNumber]), // TODO(M3): add mobile money from fiatconnect-types when support is added
+  fiatAccountType: z.enum([
+    FiatAccountType.BankAccount,
+    FiatAccountType.MobileMoney,
+  ]),
+  fiatAccountSchema: z.enum([
+    FiatAccountSchema.AccountNumber,
+    FiatAccountSchema.MobileMoney,
+  ]),
   userActionDetailsSchema: z
     .enum([TransferInUserActionDetails.AccountNumberUserAction])
     .optional(),
