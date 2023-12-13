@@ -10,3 +10,17 @@ export enum Steps {
   Four = 4,
   Five = 5,
 }
+
+export interface FiatAccountFieldMetadata {
+  required: boolean
+  displayInfo?: {
+    title: string
+    placeholder: string
+  }
+  userField?: boolean
+  formatter?: (input: string) => string
+  validator?: (input: string) => {
+    valid: boolean
+    error?: string
+  }
+}
