@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 
 interface Props {
@@ -9,7 +9,7 @@ interface Props {
   allowedValues?: [string, ...string[]]
 }
 
-export function UserInfoLineItem({
+export function PaymentInfoLineItem({
   title,
   placeholder,
   onChange,

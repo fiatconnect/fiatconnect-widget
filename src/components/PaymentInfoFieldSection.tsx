@@ -1,43 +1,42 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { UserInfoLineItem } from './UserInfoLineItem'
+import { PaymentInfoLineItem } from './PaymentInfoLineItem'
 import { FiatAccountType } from '@fiatconnect/fiatconnect-types'
-import { UserInfoFieldMetadata } from '../types'
+import { FiatAccountFieldMetadata } from '../types'
 import styled from 'styled-components'
 
-interface FiatAccountInitialDetails {
-  fiatAccountType: FiatAccountType
+interface Props {
   country: string
-}
-
-interface Props<T extends FiatAccountInitialDetails> {
   fiatAccountDetails: Record<string, string>
   setFiatAccountDetails: (newDetails: Record<string, string>) => void
   setSubmitDisabled: (disabled: boolean) => void
   allowedValues?: Record<string, [string, ...string[]]>
-  initialDetails: {
-    fiatAccountType: FiatAccountType
-    country: string
-  }
-  userInfoSchemaMetadata: Record<string, UserInfoFieldMetadata>
+  fiatAccountType: FiatAccountType
+  fiatAccountSchemaMetadata: Record<string, FiatAccountFieldMetadata>
 }
 
-function UserInfoFieldSection<T extends FiatAccountInitialDetails>({
-  initialDetails,
+function PaymentInfoFieldSection({
+  country,
   fiatAccountDetails,
   setFiatAccountDetails,
   setSubmitDisabled,
   allowedValues,
-  userInfoSchemaMetadata,
-}: Props<T>) {
+  fiatAccountType,
+  fiatAccountSchemaMetadata,
+}: Props) {
   const [errorMessage, setErrorMessage] = useState<string | undefined>(
     undefined,
   )
 
-  const userFields = Object.entries(userInfoSchemaMetadata)
+  const userFields = Object.entries(fiatAccountSchemaMetadata)
     .filter(([_, metadata]) => metadata.userField)
     .map(([field, _]) => field)
 
   useEffect(() => {
+    const initialDetails = {
+      fiatAccountType,
+      country,
+    }
+
     const defaultFields = userFields.reduce((acc, field) => {
       return {
         ...acc,
@@ -52,7 +51,7 @@ function UserInfoFieldSection<T extends FiatAccountInitialDetails>({
   }, []) // Empty array required to only run this effect once ever
 
   useMemo(() => {
-    const requiredFields = Object.entries(userInfoSchemaMetadata)
+    const requiredFields = Object.entries(fiatAccountSchemaMetadata)
       .filter(([_, metadata]) => metadata.required)
       .map(([field, _]) => field)
     const fieldValues = requiredFields.map((field) => fiatAccountDetails[field])
@@ -63,7 +62,7 @@ function UserInfoFieldSection<T extends FiatAccountInitialDetails>({
     }
 
     for (const field of requiredFields) {
-      const fieldMetadata = userInfoSchemaMetadata[field]
+      const fieldMetadata = fiatAccountSchemaMetadata[field]
       if (!fieldMetadata.validator) {
         continue
       }
@@ -83,7 +82,7 @@ function UserInfoFieldSection<T extends FiatAccountInitialDetails>({
   const setFiatAccountDetailsWrapper = (newDetails: Record<string, string>) => {
     const formattedDetails: Record<string, string> = {}
     for (const [field, value] of Object.entries(newDetails)) {
-      const fieldMetadata = userInfoSchemaMetadata[field]
+      const fieldMetadata = fiatAccountSchemaMetadata[field]
       const formattedValue = fieldMetadata?.formatter
         ? fieldMetadata.formatter(value)
         : value
@@ -96,11 +95,11 @@ function UserInfoFieldSection<T extends FiatAccountInitialDetails>({
     <Container>
       {userFields.map((field) => {
         return (
-          <UserInfoLineItem
+          <PaymentInfoLineItem
             key={field}
-            title={userInfoSchemaMetadata[field].displayInfo?.title ?? ''}
+            title={fiatAccountSchemaMetadata[field].displayInfo?.title ?? ''}
             placeholder={
-              userInfoSchemaMetadata[field].displayInfo?.placeholder ?? ''
+              fiatAccountSchemaMetadata[field].displayInfo?.placeholder ?? ''
             }
             onChange={(value) =>
               setFiatAccountDetailsWrapper({ [field]: value })
@@ -130,4 +129,4 @@ const Container = styled.div`
   width: 100%;
 `
 
-export default UserInfoFieldSection
+export default PaymentInfoFieldSection
