@@ -24,3 +24,7 @@ export interface FiatAccountFieldMetadata {
     error?: string
   }
 }
+
+export interface KycFieldMetadata extends FiatAccountFieldMetadata {
+  group?: string // e.g. dateOfBirth, address
+}
