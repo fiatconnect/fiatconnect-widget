@@ -31,8 +31,8 @@ export const providerIdToProviderName: Record<ProviderIds, string> = {
 }
 
 export const providerIdToPrivacyPolicyURL: Record<ProviderIds, string> = {
-  [ProviderIds.Bitmama]: '', // TODO
-  [ProviderIds.TestProvider]: '', // TODO
+  [ProviderIds.Bitmama]: '', // TODO(M3): add this!
+  [ProviderIds.TestProvider]: '', // TODO(M3): add this!
 }
 
 export const fiatAccountSchemaToPaymentMethod: Record<

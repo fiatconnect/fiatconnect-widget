@@ -108,7 +108,7 @@ export const personalDataAndDocumentsSchemaMetadata: Record<
       title: 'Phone Number',
       placeholder: 'Your phone number',
     },
-    // TODO validation and formatting
+    // TODO(M3): validation and formatting
   },
-  // TODO selfie and ID documents
+  // TODO(M3): selfie and ID documents
 }
