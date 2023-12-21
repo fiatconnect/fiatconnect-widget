@@ -31,7 +31,7 @@ function KYCInfoFieldSection({
           `kycInfo key ${fieldMetadata.group} has been improperly set to a string, should be object`,
         )
       }
-      return groupObj[field]
+      return groupObj ? groupObj[field] : undefined
     } else {
       const fieldValue = kycInfo[field]
       if (typeof fieldValue === 'object') {

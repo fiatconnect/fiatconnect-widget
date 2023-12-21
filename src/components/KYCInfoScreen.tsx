@@ -7,8 +7,8 @@ import {
   providerIdToProviderName,
 } from '../constants'
 import styled from 'styled-components'
-import KYCInfoFieldSection from "./KYCInfoFieldSection";
-import {personalDataAndDocumentsSchemaMetadata} from "./kycInfo/PersonalDataAndDocuments";
+import KYCInfoFieldSection from './KYCInfoFieldSection'
+import { personalDataAndDocumentsSchemaMetadata } from './kycInfo/PersonalDataAndDocuments'
 
 interface Props {
   onError: (title: string, message: string) => void
@@ -18,13 +18,7 @@ interface Props {
 
 export function KYCInfoScreen({ onError, onNext, params }: Props) {
   const [submitDisabled, setSubmitDisabled] = useState(true)
-  const [agreeToShareInfo, setAgreeToShareInfo] = useState(false)
   const [kycInfo, setKycInfo] = useState({})
-
-  const handleAgreeToShareInfoChange = () => {
-    setAgreeToShareInfo(!agreeToShareInfo)
-    setSubmitDisabled(submitDisabled && agreeToShareInfo)
-  }
 
   const onSubmit = () => {
     // TODO post kyc info, then start polling for kyc status?
@@ -34,19 +28,23 @@ export function KYCInfoScreen({ onError, onNext, params }: Props) {
   return (
     <ContentContainer>
       <SectionTitle>Verify your identity</SectionTitle>
-      <SectionSubtitle>{providerName} requires that you verify your identity before you continue</SectionSubtitle>
-      <KYCInfoFieldSection kycInfo={kycInfo} setKycInfo={setKycInfo} setSubmitDisabled={setSubmitDisabled} kycSchemaMetadata={personalDataAndDocumentsSchemaMetadata} />
-      <input
-        type="checkbox"
-        checked={agreeToShareInfo}
-        onChange={handleAgreeToShareInfoChange}
-      >
+      <SectionSubtitle>
+        {providerName} requires that you verify your identity before you
+        continue
+      </SectionSubtitle>
+      <KYCInfoFieldSection
+        kycInfo={kycInfo}
+        setKycInfo={setKycInfo}
+        setSubmitDisabled={setSubmitDisabled}
+        kycSchemaMetadata={personalDataAndDocumentsSchemaMetadata}
+      />
+      <p>
         By continuing, I agree to share my information with {providerName} and I
         agree to their{' '}
         <a href={providerIdToPrivacyPolicyURL[params.providerId]}>
           Privacy Policy
         </a>
-      </input>
+      </p>
       <button onClick={onSubmit} disabled={submitDisabled} id="SubmitKYCInfo">
         Submit
       </button>
