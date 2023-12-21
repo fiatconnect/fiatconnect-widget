@@ -1,6 +1,6 @@
-import { FiatAccountFieldMetadata } from '../../types'
+import { UserInfoFieldMetadata } from '../../types'
 
-const accountNumberSchemaMetadata: Record<string, FiatAccountFieldMetadata> = {
+const accountNumberSchemaMetadata: Record<string, UserInfoFieldMetadata> = {
   country: {
     required: true,
   },

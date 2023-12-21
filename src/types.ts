@@ -11,7 +11,7 @@ export enum Steps {
   Five = 5,
 }
 
-export interface FiatAccountFieldMetadata {
+export interface UserInfoFieldMetadata {
   required: boolean
   displayInfo?: {
     title: string

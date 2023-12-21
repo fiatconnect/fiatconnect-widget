@@ -1,4 +1,4 @@
-import { FiatAccountFieldMetadata } from '../../types'
+import { UserInfoFieldMetadata } from '../../types'
 
 const mobileFormatter = (input: string) => {
   if (input.length && input[0] !== '+') {
@@ -17,7 +17,7 @@ const mobileValidator = (input: string) => {
   }
 }
 
-const mobileMoneySchemaMetadata: Record<string, FiatAccountFieldMetadata> = {
+const mobileMoneySchemaMetadata: Record<string, UserInfoFieldMetadata> = {
   country: {
     required: true,
   },

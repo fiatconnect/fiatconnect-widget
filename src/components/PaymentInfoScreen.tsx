@@ -9,7 +9,7 @@ import {
 } from '@fiatconnect/fiatconnect-types'
 import accountNumberSchemaMetadata from './paymentInfo/AccountNumber'
 import mobileMoneySchemaMetadata from './paymentInfo/MobileMoney'
-import PaymentInfoFieldSection from './PaymentInfoFieldSection'
+import UserInfoFieldSection from './UserInfoFieldSection'
 import { addFiatAccount, getLinkedAccount } from '../FiatConnectClient'
 import { useFiatConnectConfig } from '../hooks'
 import { providerIdToProviderName } from '../constants'
@@ -90,27 +90,31 @@ export function PaymentInfoScreen({
     switch (params.fiatAccountSchema) {
       case FiatAccountSchema.AccountNumber: {
         return (
-          <PaymentInfoFieldSection
-            country={params.country}
+          <UserInfoFieldSection
+            initialDetails={{
+              country: params.country,
+              fiatAccountType: FiatAccountType.BankAccount,
+            }}
             fiatAccountDetails={fiatAccountDetails}
             setFiatAccountDetails={setFiatAccountDetailsWrapper}
             setSubmitDisabled={setSubmitDisabled}
             allowedValues={params.allowedValues}
-            fiatAccountType={FiatAccountType.BankAccount}
-            fiatAccountSchemaMetadata={accountNumberSchemaMetadata}
+            userInfoSchemaMetadata={accountNumberSchemaMetadata}
           />
         )
       }
       case FiatAccountSchema.MobileMoney: {
         return (
-          <PaymentInfoFieldSection
-            country={params.country}
+          <UserInfoFieldSection
+            initialDetails={{
+              country: params.country,
+              fiatAccountType: FiatAccountType.MobileMoney,
+            }}
             fiatAccountDetails={fiatAccountDetails}
             setFiatAccountDetails={setFiatAccountDetailsWrapper}
             setSubmitDisabled={setSubmitDisabled}
             allowedValues={params.allowedValues}
-            fiatAccountType={FiatAccountType.MobileMoney}
-            fiatAccountSchemaMetadata={mobileMoneySchemaMetadata}
+            userInfoSchemaMetadata={mobileMoneySchemaMetadata}
           />
         )
       }
