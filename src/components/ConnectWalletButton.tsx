@@ -2,19 +2,6 @@ import { ConnectButton } from '@rainbow-me/rainbowkit'
 import styled from 'styled-components'
 import { Button } from '../styles'
 
-const ConnectWalletButtonAfterConnecting = styled.button`
-  flex-grow: 1;
-  display: flex;
-  border: 0px;
-  justify-content: center;
-  align-items: center;
-  background-color: #bacdff;
-  border-radius: 5px;
-  font-size: 18px;
-  font-weight: bold;
-  height: 55px;
-`
-
 // Largely copy-pasted from here: https://www.rainbowkit.com/docs/custom-connect-button
 function ConnectWalletButton() {
   return (
@@ -38,7 +25,7 @@ function ConnectWalletButton() {
           (!authenticationStatus || authenticationStatus === 'authenticated')
 
         return (
-          <div
+          <ButtonContainer
             {...(!ready && {
               'aria-hidden': true,
               style: {
@@ -47,14 +34,13 @@ function ConnectWalletButton() {
                 userSelect: 'none',
               },
             })}
-            id="ConnectWalletButton-Wrapper"
           >
             {(() => {
               if (!connected) {
                 return (
                   <Button
-                    style={{ flexGrow: 1 }}
                     onClick={openConnectModal}
+                    style={{ backgroundColor: '#5987ff' }}
                     type="button"
                   >
                     Connect Your Wallet
@@ -64,26 +50,36 @@ function ConnectWalletButton() {
 
               if (chain.unsupported) {
                 return (
-                  <button onClick={openChainModal} type="button">
+                  <Button
+                    onClick={openChainModal}
+                    style={{ backgroundColor: '#e38580' }}
+                    type="button"
+                  >
                     Wrong network
-                  </button>
+                  </Button>
                 )
               }
 
               return (
-                <ConnectWalletButtonAfterConnecting
+                <Button
                   onClick={openAccountModal}
+                  style={{ backgroundColor: '#bacdff' }}
                   type="button"
                 >
                   Connected to {account.displayName}
-                </ConnectWalletButtonAfterConnecting>
+                </Button>
               )
             })()}
-          </div>
+          </ButtonContainer>
         )
       }}
     </ConnectButton.Custom>
   )
 }
+
+const ButtonContainer = styled.div`
+  display: flex;
+  flex-grow: 1;
+`
 
 export default ConnectWalletButton
