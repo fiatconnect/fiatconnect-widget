@@ -9,7 +9,7 @@ interface Props {
   allowedValues?: [string, ...string[]]
 }
 
-export function PaymentInfoLineItem({
+export function UserInfoLineItem({
   title,
   placeholder,
   onChange,

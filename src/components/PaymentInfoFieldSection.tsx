@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { PaymentInfoLineItem } from './PaymentInfoLineItem'
+import { UserInfoLineItem } from './UserInfoLineItem'
 import { FiatAccountType } from '@fiatconnect/fiatconnect-types'
 import { FiatAccountFieldMetadata } from '../types'
 import styled from 'styled-components'
@@ -95,7 +95,7 @@ function PaymentInfoFieldSection({
     <Container>
       {userFields.map((field) => {
         return (
-          <PaymentInfoLineItem
+          <UserInfoLineItem
             key={field}
             title={fiatAccountSchemaMetadata[field].displayInfo?.title ?? ''}
             placeholder={

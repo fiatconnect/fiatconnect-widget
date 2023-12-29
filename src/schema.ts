@@ -6,6 +6,7 @@ import {
   transferTypeSchema,
   FiatAccountSchema,
   TransferInUserActionDetails,
+  KycSchema,
 } from '@fiatconnect/fiatconnect-types'
 import { ProviderIds } from './types'
 
@@ -40,6 +41,7 @@ export const queryParamsSchema = z.object({
     FiatAccountSchema.AccountNumber,
     FiatAccountSchema.MobileMoney,
   ]),
+  kycSchema: z.enum([KycSchema.PersonalDataAndDocuments]).optional(),
   userActionDetailsSchema: z
     .enum([TransferInUserActionDetails.AccountNumberUserAction])
     .optional(),

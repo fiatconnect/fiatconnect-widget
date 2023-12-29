@@ -30,6 +30,11 @@ export const providerIdToProviderName: Record<ProviderIds, string> = {
   [ProviderIds.TestProvider]: 'Test Provider',
 }
 
+export const providerIdToPrivacyPolicyURL: Record<ProviderIds, string> = {
+  [ProviderIds.Bitmama]: '', // TODO(M3): add this!
+  [ProviderIds.TestProvider]: '', // TODO(M3): add this!
+}
+
 export const fiatAccountSchemaToPaymentMethod: Record<
   FiatAccountSchema,
   string
