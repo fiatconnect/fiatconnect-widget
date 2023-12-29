@@ -54,7 +54,7 @@ export const personalDataAndDocumentsSchemaMetadata: Record<
       title: 'Address Line 1',
       placeholder: 'Your Address',
     },
-    group: 'address'
+    group: 'address',
   },
   address2: {
     required: false,
@@ -63,7 +63,7 @@ export const personalDataAndDocumentsSchemaMetadata: Record<
       title: 'Address Line 2',
       placeholder: 'Your Address',
     },
-    group: 'address'
+    group: 'address',
   },
   city: {
     required: true,
@@ -72,7 +72,7 @@ export const personalDataAndDocumentsSchemaMetadata: Record<
       title: 'City',
       placeholder: 'Your city',
     },
-    group: 'address'
+    group: 'address',
   },
   isoRegionCode: {
     required: true,
@@ -81,7 +81,7 @@ export const personalDataAndDocumentsSchemaMetadata: Record<
       title: 'Region',
       placeholder: 'Your region',
     },
-    group: 'address'
+    group: 'address',
   },
   isoCountryCode: {
     required: true,
@@ -90,7 +90,7 @@ export const personalDataAndDocumentsSchemaMetadata: Record<
       title: 'Country',
       placeholder: 'Your country',
     },
-    group: 'address'
+    group: 'address',
   },
   postalCode: {
     required: true,
@@ -99,7 +99,7 @@ export const personalDataAndDocumentsSchemaMetadata: Record<
       title: 'Postal Code',
       placeholder: 'Your postal code',
     },
-    group: 'address'
+    group: 'address',
   },
   phoneNumber: {
     required: true,

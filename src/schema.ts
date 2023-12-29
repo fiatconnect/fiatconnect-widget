@@ -5,7 +5,8 @@ import {
   fiatTypeSchema,
   transferTypeSchema,
   FiatAccountSchema,
-  TransferInUserActionDetails, KycSchema,
+  TransferInUserActionDetails,
+  KycSchema,
 } from '@fiatconnect/fiatconnect-types'
 import { ProviderIds } from './types'
 
