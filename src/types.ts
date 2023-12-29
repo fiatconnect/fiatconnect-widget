@@ -15,7 +15,8 @@ export interface FiatAccountFieldMetadata {
   required: boolean
   displayInfo?: {
     title: string
-    placeholder: string
+    placeholder?: string
+    moreInfo?: string
   }
   userField?: boolean
   formatter?: (input: string) => string
@@ -27,4 +28,5 @@ export interface FiatAccountFieldMetadata {
 
 export interface KycFieldMetadata extends FiatAccountFieldMetadata {
   group?: string // e.g. dateOfBirth, address
+  image?: boolean
 }

@@ -110,5 +110,22 @@ export const personalDataAndDocumentsSchemaMetadata: Record<
     },
     // TODO(M3): validation and formatting
   },
-  // TODO(M3): selfie and ID documents
+  selfieDocument: {
+    required: true,
+    userField: true,
+    displayInfo: {
+      title: 'Selfie',
+      moreInfo: 'Image of your face. Must match the photo on your government ID.'
+    },
+    image: true,
+  },
+  identificationDocument: {
+    required: true,
+    userField: true,
+    displayInfo: {
+      title: 'Government ID',
+      moreInfo: 'Image of your government-issued ID. Must be clear and legible.'
+    },
+    image: true,
+  },
 }

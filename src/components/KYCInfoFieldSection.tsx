@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { UserInfoLineItem } from './UserInfoLineItem'
+import { ImageLineItem, TextLineItem } from './UserInfoLineItem'
 import { KycFieldMetadata } from '../types'
 import styled from 'styled-components'
 
@@ -109,12 +109,21 @@ function KYCInfoFieldSection({
     <Container>
       {userFields.map((field) => {
         const fieldMetadata = kycSchemaMetadata[field]
+        const onChange = (value: string) => setKycInfoWrapper({ [field]: value })
+        if (fieldMetadata.image) {
+          return (
+            <ImageLineItem
+              title={fieldMetadata.displayInfo?.title ?? ''}
+              onChange={onChange}
+              moreInfo={fieldMetadata.displayInfo?.moreInfo}
+            />
+          )
+        }
         return (
-          <UserInfoLineItem
-            key={field}
+          <TextLineItem
             title={fieldMetadata.displayInfo?.title ?? ''}
             placeholder={fieldMetadata.displayInfo?.placeholder ?? ''}
-            onChange={(value) => setKycInfoWrapper({ [field]: value })}
+            onChange={onChange}
             value={getFieldValue(field) ?? ''}
           />
         )

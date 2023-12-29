@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React, {useState, useEffect, ChangeEvent} from 'react'
 import styled from 'styled-components'
 
-interface Props {
+interface TextLineItemProps {
   title: string
   placeholder: string
   onChange: (value: string) => void
@@ -9,13 +9,47 @@ interface Props {
   allowedValues?: [string, ...string[]]
 }
 
-export function UserInfoLineItem({
+interface ImageLineItemProps {
+  title: string
+  onChange: (imageBase64: string) => void
+  moreInfo?: string
+}
+
+export function ImageLineItem({ title, moreInfo, onChange }: ImageLineItemProps) {
+  const onChangeWrapper = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (file) {
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        onChange(reader.result as string)
+      }
+      reader.readAsDataURL(file)
+    }
+  }
+
+  return (
+    <Container>
+      <Form>
+        <Fieldset>
+          <legend>{title}</legend>
+          {moreInfo && <p>{moreInfo}</p>}
+          <Input
+            accept="image/*"
+            onChange={onChangeWrapper}
+          />
+        </Fieldset>
+      </Form>
+    </Container>
+  )
+}
+
+export function TextLineItem({
   title,
   placeholder,
   onChange,
   value,
   allowedValues,
-}: Props) {
+}: TextLineItemProps) {
   const onChangeWrapper = (e: any) => {
     const newValue = e.target.value
     onChange(newValue)
@@ -57,6 +91,7 @@ const Select = styled.select`
   width: 100%;
   border: 0;
   background: white;
+
   &:focus {
     outline: none;
   }
