@@ -20,7 +20,7 @@ import {
   KycSchema,
   KycStatus,
   ObfuscatedFiatAccountData,
-  TransferResponse,
+  TransferResponse, TransferType,
 } from '@fiatconnect/fiatconnect-types'
 import { loadConfig } from './config'
 import { queryParamsSchema } from './schema'
@@ -169,15 +169,36 @@ function App() {
   }
 
   async function onUserActionSuccess() {
-    // TODO
+    setStep(Steps.Done)
   }
 
-  async function onReviewTransferSuccess() {
-    // TODO
+  async function onReviewTransferSuccess(
+    transferResponseData: TransferResponse,
+  ) {
+    if (!queryParamsResults.success) {
+      // should never happen
+      throw new Error(
+        `success callback cannot be called with invalid query params`,
+      )
+    }
+    setTransferResponse(transferResponseData)
+    if (
+      transferResponseData &&
+      'userActionDetails' in transferResponseData &&
+      transferResponseData.userActionDetails
+    ) {
+      setStep(Steps.UserAction)
+      return
+    }
+    if (queryParamsResults.data.transferType === TransferType.TransferOut) {
+      setStep(Steps.SendCrypto)
+      return
+    }
+    setStep(Steps.Done)
   }
 
   async function onSendCryptoSuccess() {
-    // TODO
+    setStep(Steps.Done)
   }
 
   const getSection = () => {
@@ -226,14 +247,11 @@ function App() {
           onNext={onReviewTransferSuccess}
           params={queryParamsResults.data}
           linkedAccount={linkedAccount}
-          setTransferResponse={setTransferResponse}
         />
       )
     }
 
-    if (
-      step === Steps.UserAction
-    ) {
+    if (step === Steps.UserAction) {
       if (
         !(
           transferResponse &&
@@ -256,11 +274,11 @@ function App() {
       )
     }
 
-    if (
-      step === Steps.SendCrypto
-    ) {
+    if (step === Steps.SendCrypto) {
       if (!transferResponse) {
-        throw new Error('Invalid transition to SendCrypto step: transferResponse must be defined')
+        throw new Error(
+          'Invalid transition to SendCrypto step: transferResponse must be defined',
+        )
       }
       return (
         <SendCrypto
