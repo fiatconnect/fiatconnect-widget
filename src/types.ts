@@ -4,11 +4,14 @@ export enum ProviderIds {
 }
 
 export enum Steps {
-  One = 1,
-  Two = 2,
-  Three = 3,
-  Four = 4,
-  Five = 5,
+  SignIn = 'SignIn',
+  AddFiatAccount = 'AddFiatAccount',
+  AddKyc = 'AddKyc',
+  KycPending = 'KycPending',
+  ReviewTransfer = 'ReviewTransfer',
+  UserAction = 'UserAction',
+  SendCrypto = 'SendCrypto',
+  Done = 'Done',
 }
 
 export interface FiatAccountFieldMetadata {

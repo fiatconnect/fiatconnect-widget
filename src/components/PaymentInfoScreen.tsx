@@ -18,7 +18,7 @@ import { QueryParams } from '../schema'
 
 interface Props {
   onError: (title: string, message: string) => void
-  onNext: (step: Steps) => void
+  onNext: () => Promise<void>
   setLinkedAccount: (fiatAccount: ObfuscatedFiatAccountData) => void
   params: QueryParams
 }
@@ -64,17 +64,7 @@ export function PaymentInfoScreen({
       )
       if (response.ok) {
         try {
-          const linkedAccount = await getLinkedAccount(
-            params.fiatAccountType,
-            params.fiatAccountSchema,
-            fiatConnectClientConfig,
-          )
-          if (linkedAccount) {
-            setLinkedAccount(linkedAccount)
-            onNext(Steps.Three)
-          } else {
-            onError(errorTitle, errorMessage)
-          }
+          await onNext()
         } catch {
           onError(errorTitle, errorMessage)
         }

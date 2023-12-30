@@ -1,10 +1,12 @@
 import {
   AuthRequestBody,
-  PostFiatAccountRequestBody,
-  GetFiatAccountsResponse,
   FiatAccountSchema,
   FiatAccountType,
+  GetFiatAccountsResponse,
+  KycSchema,
+  KycStatus,
   ObfuscatedFiatAccountData,
+  PostFiatAccountRequestBody,
   TransferRequestBody,
 } from '@fiatconnect/fiatconnect-types'
 import { generateNonce, SiweMessage } from 'siwe'
@@ -63,6 +65,34 @@ export async function getLinkedAccount(
   return linkedAccounts?.[fiatAccountType]?.find(
     (account) => account.fiatAccountSchema === fiatAccountSchema,
   )
+}
+
+export async function getKycStatus(
+  kycSchema: KycSchema,
+  clientConfig: FiatConnectClientConfig,
+): Promise<KycStatus> {
+  const response = await fetch(
+    `${clientConfig.baseUrl}/kyc/${kycSchema}/status`,
+    {
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${clientConfig.apiKey}`,
+      },
+    },
+  )
+  if (!response.ok) {
+    if (response.status === 404) {
+      return KycStatus.KycNotCreated
+    } else {
+      throw new Error(
+        'Non-404 error from provider while fetching linked accounts',
+      )
+    }
+  }
+  const { kycStatus } = await response.json()
+  return kycStatus
 }
 
 export function transferIn(

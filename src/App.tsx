@@ -15,14 +15,21 @@ import { PaymentInfoScreen } from './components/PaymentInfoScreen'
 import { UserActionDetails } from './components/UserActionDetails'
 import { ReviewScreen } from './components/ReviewScreen'
 import {
+  FiatAccountSchema,
+  FiatAccountType,
+  KycSchema,
+  KycStatus,
   ObfuscatedFiatAccountData,
   TransferResponse,
-  TransferType,
 } from '@fiatconnect/fiatconnect-types'
 import { loadConfig } from './config'
 import { queryParamsSchema } from './schema'
 import { DoneSection } from './components/DoneSection'
 import { SendCrypto } from './components/SendCrypto'
+import { KYCInfoScreen } from './components/KYCInfoScreen'
+import { getKycStatus, getLinkedAccount } from './FiatConnectClient'
+import { useFiatConnectConfig } from './hooks'
+import { FiatConnectClientConfig } from '@fiatconnect/fiatconnect-sdk'
 
 function useQueryParams() {
   const [searchParams] = useSearchParams()
@@ -40,13 +47,14 @@ function App() {
     //eslint-disable-next-line no-console
     console.error('Invalid query params: ', queryParamsResults.error)
   }
-  const [step, setStep] = useState(Steps.One)
+  const [step, setStep] = useState(Steps.SignIn)
   const [errorTitle, setErrorTitle] = useState(DEFAULT_ERROR_TITLE)
   const [errorMessage, setErrorMessage] = useState(DEFAULT_ERROR_MESSAGE)
   const [showError, setShowError] = useState(false)
   const [linkedAccount, setLinkedAccount] = useState<
     ObfuscatedFiatAccountData | undefined
   >(undefined)
+  const [kycStatus, setKycStatus] = useState<KycStatus | undefined>(undefined)
   const [transferResponse, setTransferResponse] = useState<
     TransferResponse | undefined
   >(undefined)
@@ -75,36 +83,147 @@ function App() {
     setShowError(true)
   }
 
+  const fiatConnectClientConfig = useFiatConnectConfig()
+
+  async function updateLinkedAccount(
+    fiatConnectClientConfig: FiatConnectClientConfig,
+    fiatAccountType: FiatAccountType,
+    fiatAccountSchema: FiatAccountSchema,
+  ) {
+    const linkedAccount = await getLinkedAccount(
+      fiatAccountType,
+      fiatAccountSchema,
+      fiatConnectClientConfig,
+    )
+    setLinkedAccount(linkedAccount)
+    return linkedAccount
+  }
+
+  async function handleTransitionToKycStep(
+    fiatConnectClientConfig: FiatConnectClientConfig,
+    kycSchema?: KycSchema,
+  ) {
+    const kycStatus = kycSchema
+      ? await getKycStatus(kycSchema, fiatConnectClientConfig)
+      : undefined
+    setKycStatus(kycStatus)
+
+    if (!kycSchema || kycStatus === KycStatus.KycApproved) {
+      setStep(Steps.ReviewTransfer)
+      return
+    }
+    if (kycStatus === KycStatus.KycNotCreated) {
+      setStep(Steps.AddKyc)
+      return
+    }
+    // kyc required, but status is between 'not created' and 'approved'
+    setStep(Steps.KycPending)
+    return
+  }
+
+  async function onSignInSuccess() {
+    if (!queryParamsResults.success || !fiatConnectClientConfig) {
+      // should never happen
+      throw new Error(
+        `onSignInSuccess cannot be called with invalid query params or missing fiatconnect client config`,
+      )
+    }
+    const { fiatAccountType, fiatAccountSchema, kycSchema } =
+      queryParamsResults.data
+
+    const linkedAccount = await updateLinkedAccount(
+      fiatConnectClientConfig,
+      fiatAccountType,
+      fiatAccountSchema,
+    )
+
+    if (!linkedAccount) {
+      setStep(Steps.AddFiatAccount)
+      return
+    }
+    await handleTransitionToKycStep(fiatConnectClientConfig, kycSchema)
+  }
+
+  async function onAddFiatAccountSuccess() {
+    if (!queryParamsResults.success || !fiatConnectClientConfig) {
+      // should never happen
+      throw new Error(
+        `success callback cannot be called with invalid query params or missing fiatconnect client config`,
+      )
+    }
+    const { fiatAccountType, fiatAccountSchema, kycSchema } =
+      queryParamsResults.data
+    const linkedAccount = await updateLinkedAccount(
+      fiatConnectClientConfig,
+      fiatAccountType,
+      fiatAccountSchema,
+    )
+    if (!linkedAccount) {
+      throw new Error(`No linkedAccount found in onAddFiatAccountSuccess`)
+    }
+    await handleTransitionToKycStep(fiatConnectClientConfig, kycSchema)
+  }
+
+  async function onAddKycSuccess() {
+    // todo
+  }
+
+  async function onUserActionSuccess() {
+    // TODO
+  }
+
+  async function onReviewTransferSuccess() {
+    // TODO
+  }
+
+  async function onSendCryptoSuccess() {
+    // TODO
+  }
+
   const getSection = () => {
     // TODO: should never happen
     if (!queryParamsResults.success) {
       return
     }
-    if (step === Steps.One) {
+    if (step === Steps.AddKyc) {
+      return (
+        <KYCInfoScreen
+          onError={onError}
+          onNext={onAddKycSuccess}
+          params={queryParamsResults.data}
+        />
+      )
+    }
+    if (step === Steps.SignIn) {
       return (
         <SignInScreen
           onError={onError}
-          onNext={setStep}
+          onNext={onSignInSuccess}
           params={queryParamsResults.data}
           setLinkedAccount={setLinkedAccount}
         />
       )
     }
-    if (step === Steps.Two) {
+    if (step === Steps.AddFiatAccount) {
       return (
         <PaymentInfoScreen
           onError={onError}
-          onNext={setStep}
+          onNext={onAddFiatAccountSuccess}
           params={queryParamsResults.data}
           setLinkedAccount={setLinkedAccount}
         />
       )
     }
-    if (step === Steps.Three && linkedAccount) {
+    if (step === Steps.ReviewTransfer) {
+      if (!linkedAccount) {
+        throw new Error(
+          `Invalid state transition to ReviewTransfer: linkedAccount missing`,
+        )
+      }
       return (
         <ReviewScreen
           onError={onError}
-          onNext={setStep}
+          onNext={onReviewTransferSuccess}
           params={queryParamsResults.data}
           linkedAccount={linkedAccount}
           setTransferResponse={setTransferResponse}
@@ -113,15 +232,22 @@ function App() {
     }
 
     if (
-      step === Steps.Four &&
-      transferResponse &&
-      'userActionDetails' in transferResponse &&
-      transferResponse.userActionDetails &&
-      queryParamsResults.data.transferType === TransferType.TransferIn
+      step === Steps.UserAction
     ) {
+      if (
+        !(
+          transferResponse &&
+          'userActionDetails' in transferResponse &&
+          transferResponse.userActionDetails
+        )
+      ) {
+        throw new Error(
+          `Invalid transition to UserActionDetails step: transferResponse.userActionDetails must be defined`,
+        )
+      }
       return (
         <UserActionDetails
-          onNext={setStep}
+          onNext={onUserActionSuccess}
           userActionDetails={transferResponse.userActionDetails}
           fiatAmount={queryParamsResults.data.fiatAmount}
           fiatType={queryParamsResults.data.fiatType}
@@ -131,13 +257,14 @@ function App() {
     }
 
     if (
-      step === Steps.Four &&
-      transferResponse &&
-      queryParamsResults.data.transferType === TransferType.TransferOut
+      step === Steps.SendCrypto
     ) {
+      if (!transferResponse) {
+        throw new Error('Invalid transition to SendCrypto step: transferResponse must be defined')
+      }
       return (
         <SendCrypto
-          onNext={setStep}
+          onNext={onSendCryptoSuccess}
           onError={onError}
           transferAddress={transferResponse.transferAddress}
           cryptoAmount={queryParamsResults.data.cryptoAmount}
@@ -147,7 +274,7 @@ function App() {
       )
     }
 
-    if (step === Steps.Five) {
+    if (step === Steps.Done) {
       // TODO: Actually figure this out, and have sensible defaults like we do in the wallet
       const settlementTime = '1 - 3 days'
       return <DoneSection settlementTime={settlementTime} />
@@ -169,7 +296,7 @@ function App() {
                       ]
                     }
                   </div>
-                  <StepsHeader step={step} />
+                  <StepsHeader step={step} /> {/* fixme */}
                   {getSection()}
                 </div>
               ) : (

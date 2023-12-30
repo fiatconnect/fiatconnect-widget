@@ -12,7 +12,7 @@ import { personalDataAndDocumentsSchemaMetadata } from './kycInfo/PersonalDataAn
 
 interface Props {
   onError: (title: string, message: string) => void
-  onNext: (step: Steps) => void
+  onNext: () => void
   params: QueryParams
 }
 

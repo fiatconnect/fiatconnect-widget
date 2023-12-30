@@ -1,4 +1,3 @@
-import { Steps } from '../types'
 import { fiatAccountSchemaToPaymentMethod } from '../constants'
 import {
   TransferType,
@@ -16,7 +15,7 @@ import { QueryParams } from '../schema'
 
 interface Props {
   onError: (title: string, message: string) => void
-  onNext: (step: Steps) => void
+  onNext: () => Promise<void>
   setLinkedAccount: (fiatAccount: ObfuscatedFiatAccountData) => void
   params: QueryParams
 }
@@ -88,18 +87,7 @@ export function SignInScreen({
     }
 
     try {
-      const linkedAccount = await getLinkedAccount(
-        params.fiatAccountType,
-        params.fiatAccountSchema,
-        fiatConnectClientConfig,
-      )
-
-      if (linkedAccount) {
-        setLinkedAccount(linkedAccount)
-        onNext(Steps.Three)
-      } else {
-        onNext(Steps.Two)
-      }
+      await onNext()
     } catch {
       const providerName = providerIdToProviderName[params.providerId]
       onError(
