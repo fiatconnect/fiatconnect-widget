@@ -8,7 +8,7 @@ import {
 } from '@fiatconnect/fiatconnect-types'
 import { QuoteAmountBox } from './QuoteAmountBox'
 import { transferIn, transferOut } from '../FiatConnectClient'
-import { useFiatConnectConfig } from '../hooks'
+import { useFiatConnectConfig } from '../hooks/useFiatConnectConfig'
 import { providerIdToProviderName } from '../constants'
 import { QueryParams } from '../schema'
 

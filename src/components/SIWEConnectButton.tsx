@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useAccount, useSignMessage } from 'wagmi'
 import { login } from '../FiatConnectClient'
-import { useFiatConnectConfig } from '../hooks'
+import { useFiatConnectConfig } from '../hooks/useFiatConnectConfig'
 import { ProviderIds } from '../types'
 import { providerIdToProviderName } from '../constants'
 

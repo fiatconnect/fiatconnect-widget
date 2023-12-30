@@ -29,7 +29,7 @@ import { DoneSection } from './components/DoneSection'
 import { SendCrypto } from './components/SendCrypto'
 import { KYCInfoScreen } from './components/KYCInfoScreen'
 import { getKycStatus, getLinkedAccount } from './FiatConnectClient'
-import { useFiatConnectConfig } from './hooks'
+import { useFiatConnectConfig } from './hooks/useFiatConnectConfig'
 import { FiatConnectClientConfig } from '@fiatconnect/fiatconnect-sdk'
 
 function useQueryParams() {
