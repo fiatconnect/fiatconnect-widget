@@ -20,7 +20,8 @@ import {
   KycSchema,
   KycStatus,
   ObfuscatedFiatAccountData,
-  TransferResponse, TransferType,
+  TransferResponse,
+  TransferType,
 } from '@fiatconnect/fiatconnect-types'
 import { loadConfig } from './config'
 import { queryParamsSchema } from './schema'
@@ -112,12 +113,7 @@ function App() {
       setStep(Steps.ReviewTransfer)
       return
     }
-    if (kycStatus === KycStatus.KycNotCreated) {
-      setStep(Steps.AddKyc)
-      return
-    }
-    // kyc required, but status is between 'not created' and 'approved'
-    setStep(Steps.KycPending)
+    setStep(Steps.Kyc)
     return
   }
 
@@ -206,7 +202,7 @@ function App() {
     if (!queryParamsResults.success) {
       return
     }
-    if (step === Steps.AddKyc) {
+    if (step === Steps.Kyc) {
       return (
         <KYCInfoScreen
           onError={onError}
@@ -314,7 +310,11 @@ function App() {
                       ]
                     }
                   </div>
-                  <StepsHeader step={step} /> {/* fixme */}
+                  <StepsHeader
+                    step={step}
+                    transferType={queryParamsResults.data.transferType}
+                    kycRequired={!!queryParamsResults.data.kycSchema}
+                  />
                   {getSection()}
                 </div>
               ) : (
@@ -328,7 +328,11 @@ function App() {
                           ]
                         }
                       </div>
-                      <StepsHeader step={step} />
+                      <StepsHeader
+                        step={step}
+                        transferType={queryParamsResults.data.transferType}
+                        kycRequired={!!queryParamsResults.data.kycSchema}
+                      />
                     </div>
                   )}
                   <ErrorSection title={errorTitle} message={errorMessage} />

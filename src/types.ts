@@ -6,8 +6,7 @@ export enum ProviderIds {
 export enum Steps {
   SignIn = 'SignIn',
   AddFiatAccount = 'AddFiatAccount',
-  AddKyc = 'AddKyc',
-  KycPending = 'KycPending',
+  Kyc = 'Kyc',
   ReviewTransfer = 'ReviewTransfer',
   UserAction = 'UserAction',
   SendCrypto = 'SendCrypto',
