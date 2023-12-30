@@ -14,8 +14,9 @@ import { QueryParams } from '../schema'
 
 interface Props {
   onError: (title: string, message: string) => void
-  onNext: (transferResponse: TransferResponse) => Promise<void>
+  onNext: () => Promise<void>
   linkedAccount: ObfuscatedFiatAccountData
+  setTransferResponse: (transferResponse: TransferResponse) => void
   params: QueryParams
 }
 
@@ -23,6 +24,7 @@ export function ReviewScreen({
   onError,
   onNext,
   linkedAccount,
+  setTransferResponse,
   params,
 }: Props) {
   const fiatAmount = parseFloat(params.fiatAmount)
@@ -82,7 +84,8 @@ export function ReviewScreen({
 
     const transferResponseData =
       (await transferResponse.json()) as TransferResponse
-    await onNext(transferResponseData)
+    setTransferResponse(transferResponseData)
+    await onNext()
   }
 
   return (

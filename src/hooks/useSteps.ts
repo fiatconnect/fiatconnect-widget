@@ -1,4 +1,3 @@
-import { QueryParams } from '../schema'
 import { useState } from 'react'
 import { Steps } from '../types'
 import { FiatConnectClientConfig } from '@fiatconnect/fiatconnect-sdk'
@@ -7,22 +6,21 @@ import {
   FiatAccountType,
   KycSchema,
   KycStatus,
-  ObfuscatedFiatAccountData, TransferResponse, TransferType,
+  ObfuscatedFiatAccountData,
+  TransferResponse,
+  TransferType,
 } from '@fiatconnect/fiatconnect-types'
 import { getKycStatus, getLinkedAccount } from '../FiatConnectClient'
 import { useQueryParams } from './useQueryParams'
 import { useFiatConnectConfig } from './useFiatConnectConfig'
 
-export function useSteps() {
+export function useSteps(transferResponse?: TransferResponse) {
   const queryParamsResults = useQueryParams()
   const fiatConnectClientConfig = useFiatConnectConfig()
 
   const [step, setStep] = useState(Steps.SignIn)
   const [linkedAccount, setLinkedAccount] = useState<
     ObfuscatedFiatAccountData | undefined
-  >(undefined)
-  const [transferResponse, setTransferResponse] = useState<
-    TransferResponse | undefined
   >(undefined)
 
   async function handleTransitionToKycStep(
@@ -106,26 +104,23 @@ export function useSteps() {
     setStep(Steps.Done)
   }
 
-  async function onReviewTransferSuccess(
-    transferResponseData: TransferResponse,
-  ) {
+  async function onReviewTransferSuccess() {
     if (!queryParamsResults.success) {
       // should never happen
       throw new Error(
         `success callback cannot be called with invalid query params`,
       )
     }
-    setTransferResponse(transferResponseData)
-    if (
-      transferResponseData &&
-      'userActionDetails' in transferResponseData &&
-      transferResponseData.userActionDetails
-    ) {
-      setStep(Steps.UserAction)
-      return
-    }
     if (queryParamsResults.data.transferType === TransferType.TransferOut) {
       setStep(Steps.SendCrypto)
+      return
+    }
+    if (
+      transferResponse &&
+      'userActionDetails' in transferResponse &&
+      transferResponse.userActionDetails
+    ) {
+      setStep(Steps.UserAction)
       return
     }
     setStep(Steps.Done)
@@ -136,10 +131,8 @@ export function useSteps() {
   }
 
   return {
-    // todo at some point we could make the api a bit nicer with just an "onNext" with smart routing based on the current step. however, onReviewTransferSuccess requires a param the others don't, so this is currently blocked..
     step,
-    linkedAccount,
-    transferResponse,
+    linkedAccount, // todo this is a bit out of place. might deserve its own hook.. or take as a parameter?
     onSignInSuccess,
     onAddKycSuccess,
     onUserActionSuccess,
