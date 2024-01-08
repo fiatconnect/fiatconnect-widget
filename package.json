@@ -39,6 +39,8 @@
     "predeploy": "yarn build",
     "deploy": "gh-pages -d build -f",
     "test": "jest",
+    "e2e": "synpress run",
+    "e2e:ci": "start-server-and-test start http://127.0.0.1:3000 'yarn e2e'",
     "eject": "react-app-rewired eject"
   },
   "eslintConfig": {
@@ -64,6 +66,7 @@
   "devDependencies": {
     "@babel/core": "^7.23.0",
     "@inrupt/jest-jsdom-polyfills": "^2.4.1",
+    "@synthetixio/synpress": "github:synthetixio/synpress#fc9b2aa",
     "@typescript-eslint/eslint-plugin": "^6.7.4",
     "@valora/eslint-config-typescript": "^1.0.2",
     "@valora/prettier-config": "^0.0.1",
@@ -82,6 +85,7 @@
     "jest-environment-jsdom": "^29.7.0",
     "lokijs": "^1.5.12",
     "prettier": "^3.0.3",
+    "start-server-and-test": "^2.0.1",
     "react-app-rewired": "^2.2.1",
     "ts-jest": "^29.1.1"
   },

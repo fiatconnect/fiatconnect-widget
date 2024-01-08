@@ -173,7 +173,7 @@ function App() {
                   {getSection()}
                 </div>
               ) : (
-                <div className="ErrorContainer">
+                <div data-testid="error-section" className="ErrorContainer">
                   {queryParamsResults.success && (
                     <div>
                       <div className="ProviderTitle">

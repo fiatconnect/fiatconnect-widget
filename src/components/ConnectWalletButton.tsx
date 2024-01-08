@@ -56,6 +56,7 @@ function ConnectWalletButton() {
                     style={{ flexGrow: 1 }}
                     onClick={openConnectModal}
                     type="button"
+                    data-testid="connect-wallet-button"
                   >
                     Connect Your Wallet
                   </Button>
@@ -74,6 +75,7 @@ function ConnectWalletButton() {
                 <ConnectWalletButtonAfterConnecting
                   onClick={openAccountModal}
                   type="button"
+                  data-testid="connected-wallet-button"
                 >
                   Connected to {account.displayName}
                 </ConnectWalletButtonAfterConnecting>

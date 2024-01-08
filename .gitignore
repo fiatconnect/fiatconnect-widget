@@ -24,3 +24,6 @@ yarn-error.log*
 
 # IDE
 .idea
+
+# E2E test results
+/tests/e2e/videos

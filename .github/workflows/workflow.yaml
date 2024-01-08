@@ -50,6 +50,43 @@ jobs:
       - run: yarn
       - run: yarn typecheck
       - run: yarn test:ci
+  e2e:
+    name: E2E
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        check-latest: true
+    # - name: Install linux deps
+    #   run: |
+    #     sudo apt-get install --no-install-recommends -y \
+    #     fluxbox \
+    #     xvfb
+    
+    - name: Run xvfb 
+      run: Xvfb :0 -screen 0 1024x768x24 -listen tcp -ac &
+      env:
+        DISPLAY: :0.0
+    - run: yarn
+    # - run: yarn build
+    - name: Run e2e tests
+      run: yarn e2e:ci
+    # - name: Synpress
+    #   uses: cypress-io/github-action@v6
+    #   timeout-minutes: 60
+    #   with:
+    #     command: yarn e2e
+    #     start: yarn start
+    #     wait-on: http://localhost:3000
+    #     browser: chrome
+    #     spec: test/e2e/specs/*.js
+    - uses: actions/upload-artifact@v3
+      if: failure()
+      with:
+        name: videos
+        path: tests/e2e/videos
   deploy:
     if: github.ref == 'refs/heads/main'
     name: Deploy to GH Pages
