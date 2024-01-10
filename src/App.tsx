@@ -14,11 +14,23 @@ import { SignInScreen } from './components/SignInScreen'
 import { PaymentInfoScreen } from './components/PaymentInfoScreen'
 import { UserActionDetails } from './components/UserActionDetails'
 import { ReviewScreen } from './components/ReviewScreen'
-import { TransferResponse } from '@fiatconnect/fiatconnect-types'
+import {
+  FiatAccountSchema,
+  FiatAccountType,
+  KycSchema,
+  KycStatus,
+  ObfuscatedFiatAccountData,
+  TransferResponse,
+  TransferType,
+} from '@fiatconnect/fiatconnect-types'
 import { loadConfig } from './config'
+import { queryParamsSchema } from './schema'
 import { DoneSection } from './components/DoneSection'
 import { SendCrypto } from './components/SendCrypto'
 import { KYCInfoScreen } from './components/KYCInfoScreen'
+import { getKycStatus, getLinkedAccount } from './FiatConnectClient'
+import { useFiatConnectConfig } from './hooks/useFiatConnectConfig'
+import { FiatConnectClientConfig } from '@fiatconnect/fiatconnect-sdk'
 import { useQueryParams } from './hooks/useQueryParams'
 import { useSteps } from './hooks/useSteps'
 
@@ -35,13 +47,11 @@ function App() {
   const [errorTitle, setErrorTitle] = useState(DEFAULT_ERROR_TITLE)
   const [errorMessage, setErrorMessage] = useState(DEFAULT_ERROR_MESSAGE)
   const [showError, setShowError] = useState(false)
-  const [transferResponse, setTransferResponse] = useState<
-    TransferResponse | undefined
-  >(undefined)
 
   const {
     step,
     linkedAccount,
+    transferResponse,
     onSignInSuccess,
     onAddKycSuccess,
     onUserActionSuccess,
@@ -117,7 +127,6 @@ function App() {
           onError={onError}
           onNext={onReviewTransferSuccess}
           params={queryParamsResults.data}
-          setTransferResponse={setTransferResponse}
           linkedAccount={linkedAccount}
         />
       )
