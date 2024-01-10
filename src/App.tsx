@@ -31,8 +31,12 @@ import { KYCInfoScreen } from './components/KYCInfoScreen'
 import { getKycStatus, getLinkedAccount } from './FiatConnectClient'
 import { useFiatConnectConfig } from './hooks/useFiatConnectConfig'
 import { FiatConnectClientConfig } from '@fiatconnect/fiatconnect-sdk'
-import { useQueryParams } from './hooks/useQueryParams'
-import { useSteps } from './hooks/useSteps'
+
+function useQueryParams() {
+  const [searchParams] = useSearchParams()
+  const searchParamsObject = Object.fromEntries(searchParams)
+  return queryParamsSchema.safeParse(searchParamsObject)
+}
 
 const DEFAULT_ERROR_TITLE = 'There was an error processing your request.'
 const DEFAULT_ERROR_MESSAGE =
@@ -44,21 +48,17 @@ function App() {
     //eslint-disable-next-line no-console
     console.error('Invalid query params: ', queryParamsResults.error)
   }
+  const [step, setStep] = useState(Steps.SignIn)
   const [errorTitle, setErrorTitle] = useState(DEFAULT_ERROR_TITLE)
   const [errorMessage, setErrorMessage] = useState(DEFAULT_ERROR_MESSAGE)
   const [showError, setShowError] = useState(false)
-
-  const {
-    step,
-    linkedAccount,
-    transferResponse,
-    onSignInSuccess,
-    onAddKycSuccess,
-    onUserActionSuccess,
-    onReviewTransferSuccess,
-    onSendCryptoSuccess,
-    onAddFiatAccountSuccess,
-  } = useSteps()
+  const [linkedAccount, setLinkedAccount] = useState<
+    ObfuscatedFiatAccountData | undefined
+  >(undefined)
+  const [kycStatus, setKycStatus] = useState<KycStatus | undefined>(undefined)
+  const [transferResponse, setTransferResponse] = useState<
+    TransferResponse | undefined
+  >(undefined)
 
   const config = loadConfig()
   const { chains, publicClient } = useMemo(
@@ -84,6 +84,119 @@ function App() {
     setShowError(true)
   }
 
+  const fiatConnectClientConfig = useFiatConnectConfig()
+
+  async function updateLinkedAccount(
+    fiatConnectClientConfig: FiatConnectClientConfig,
+    fiatAccountType: FiatAccountType,
+    fiatAccountSchema: FiatAccountSchema,
+  ) {
+    const linkedAccount = await getLinkedAccount(
+      fiatAccountType,
+      fiatAccountSchema,
+      fiatConnectClientConfig,
+    )
+    setLinkedAccount(linkedAccount)
+    return linkedAccount
+  }
+
+  async function handleTransitionToKycStep(
+    fiatConnectClientConfig: FiatConnectClientConfig,
+    kycSchema?: KycSchema,
+  ) {
+    const kycStatus = kycSchema
+      ? await getKycStatus(kycSchema, fiatConnectClientConfig)
+      : undefined
+    setKycStatus(kycStatus)
+
+    if (!kycSchema || kycStatus === KycStatus.KycApproved) {
+      setStep(Steps.ReviewTransfer)
+      return
+    }
+    setStep(Steps.Kyc)
+    return
+  }
+
+  async function onSignInSuccess() {
+    if (!queryParamsResults.success || !fiatConnectClientConfig) {
+      // should never happen
+      throw new Error(
+        `onSignInSuccess cannot be called with invalid query params or missing fiatconnect client config`,
+      )
+    }
+    const { fiatAccountType, fiatAccountSchema, kycSchema } =
+      queryParamsResults.data
+
+    const linkedAccount = await updateLinkedAccount(
+      fiatConnectClientConfig,
+      fiatAccountType,
+      fiatAccountSchema,
+    )
+
+    if (!linkedAccount) {
+      setStep(Steps.AddFiatAccount)
+      return
+    }
+    await handleTransitionToKycStep(fiatConnectClientConfig, kycSchema)
+  }
+
+  async function onAddFiatAccountSuccess() {
+    if (!queryParamsResults.success || !fiatConnectClientConfig) {
+      // should never happen
+      throw new Error(
+        `success callback cannot be called with invalid query params or missing fiatconnect client config`,
+      )
+    }
+    const { fiatAccountType, fiatAccountSchema, kycSchema } =
+      queryParamsResults.data
+    const linkedAccount = await updateLinkedAccount(
+      fiatConnectClientConfig,
+      fiatAccountType,
+      fiatAccountSchema,
+    )
+    if (!linkedAccount) {
+      throw new Error(`No linkedAccount found in onAddFiatAccountSuccess`)
+    }
+    await handleTransitionToKycStep(fiatConnectClientConfig, kycSchema)
+  }
+
+  async function onAddKycSuccess() {
+    // todo
+  }
+
+  async function onUserActionSuccess() {
+    setStep(Steps.Done)
+  }
+
+  async function onReviewTransferSuccess(
+    transferResponseData: TransferResponse,
+  ) {
+    if (!queryParamsResults.success) {
+      // should never happen
+      throw new Error(
+        `success callback cannot be called with invalid query params`,
+      )
+    }
+    setTransferResponse(transferResponseData)
+    if (
+      transferResponseData &&
+      'userActionDetails' in transferResponseData &&
+      transferResponseData.userActionDetails
+    ) {
+      setStep(Steps.UserAction)
+      return
+    }
+    if (queryParamsResults.data.transferType === TransferType.TransferOut) {
+      setStep(Steps.SendCrypto)
+      return
+    }
+    setStep(Steps.Done)
+  }
+
+  async function onSendCryptoSuccess() {
+    setStep(Steps.Done)
+  }
+
   const getSection = () => {
     // TODO: should never happen
     if (!queryParamsResults.success) {
@@ -104,6 +217,7 @@ function App() {
           onError={onError}
           onNext={onSignInSuccess}
           params={queryParamsResults.data}
+          setLinkedAccount={setLinkedAccount}
         />
       )
     }
@@ -113,6 +227,7 @@ function App() {
           onError={onError}
           onNext={onAddFiatAccountSuccess}
           params={queryParamsResults.data}
+          setLinkedAccount={setLinkedAccount}
         />
       )
     }

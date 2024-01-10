@@ -19,12 +19,14 @@ import { QueryParams } from '../schema'
 interface Props {
   onError: (title: string, message: string) => void
   onNext: () => Promise<void>
+  setLinkedAccount: (fiatAccount: ObfuscatedFiatAccountData) => void
   params: QueryParams
 }
 
 export function PaymentInfoScreen({
   onError,
   onNext,
+  setLinkedAccount,
   params,
 }: Props) {
   // TODO: First thing we should do here is check if an account is already on file

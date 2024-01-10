@@ -15,6 +15,7 @@ import { QueryParams } from '../schema'
 interface Props {
   onError: (title: string, message: string) => void
   onNext: () => Promise<void>
+  setLinkedAccount: (fiatAccount: ObfuscatedFiatAccountData) => void
   params: QueryParams
 }
 
@@ -54,6 +55,7 @@ const circleInactiveStepStyle = {
 export function SignInScreen({
   onError,
   onNext,
+  setLinkedAccount,
   params,
 }: Props) {
   const fiatAmount = parseFloat(params.fiatAmount)
