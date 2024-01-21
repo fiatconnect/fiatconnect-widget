@@ -125,10 +125,10 @@
 }
 
 #StepsCircle-Divider {
+  flex: 1;
   align-self: center;
   display: flex;
   height: 0px;
-  width: 27%;
   border: 1px solid #cbcbcb;
 }
 

@@ -19,7 +19,7 @@ interface Props {
   cryptoAmount: string
   transferAddress: string
   providerId: ProviderIds
-  onNext: (step: Steps) => void
+  onNext: () => void
   onError: (title: string, message: string) => void
 }
 
@@ -128,7 +128,7 @@ export function SendCrypto({
 
   useEffect(() => {
     if (isSuccess) {
-      onNext(Steps.Five)
+      onNext()
     }
     if (isError) {
       onError(

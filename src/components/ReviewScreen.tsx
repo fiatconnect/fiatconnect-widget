@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { Steps } from '../types'
 import { fiatAccountSchemaToPaymentMethod } from '../constants'
 import {
   TransferType,
@@ -14,7 +13,6 @@ import { QueryParams } from '../schema'
 
 interface Props {
   onError: (title: string, message: string) => void
-  onNext: (step: Steps) => void
   linkedAccount: ObfuscatedFiatAccountData
   setTransferResponse: (transferResponse: TransferResponse) => void
   params: QueryParams
@@ -22,7 +20,6 @@ interface Props {
 
 export function ReviewScreen({
   onError,
-  onNext,
   linkedAccount,
   setTransferResponse,
   params,
@@ -85,7 +82,6 @@ export function ReviewScreen({
     const transferResponseData =
       (await transferResponse.json()) as TransferResponse
     setTransferResponse(transferResponseData)
-    onNext(Steps.Four)
   }
 
   return (
