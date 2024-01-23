@@ -28,11 +28,13 @@ import {
   ObfuscatedFiatAccountData,
   TransferResponse,
   TransferType,
+  KycStatus,
 } from '@fiatconnect/fiatconnect-types'
 import { loadConfig } from './config'
 import { queryParamsSchema, QueryParams } from './schema'
 import { DoneSection } from './components/DoneSection'
 import { SendCrypto } from './components/SendCrypto'
+import { KYCInfoScreen } from './components/KYCInfoScreen'
 
 function useQueryParams() {
   const [searchParams] = useSearchParams()
@@ -50,7 +52,7 @@ function useAppState(
   finishedSignIn: boolean,
   finishedUserActionDetails: boolean,
   finishedSendCrypto: boolean,
-  kycApproved: boolean,
+  kycStatus: undefined | KycStatus,
   linkedAccount: ObfuscatedFiatAccountData | undefined,
   transferResponse: TransferResponse | undefined,
 ): AppState | undefined {
@@ -66,7 +68,7 @@ function useAppState(
       screens,
     }
   }
-  if (queryParams.kycSchema && !kycApproved) {
+  if (queryParams.kycSchema && kycStatus !== KycStatus.KycApproved) {
     return {
       currentScreen: Screens.KYCScreen,
       screens,
@@ -150,14 +152,14 @@ function App() {
   const [finishedUserActionDetails, setFinishedUserActionDetails] =
     useState(false)
   const [finishedSendCrypto, setFinishedSendCrypto] = useState(false)
-  const [kycApproved, setKycApproved] = useState(false)
+  const [kycStatus, setKycStatus] = useState<undefined | KycStatus>(undefined)
 
   const appState = useAppState(
     queryParamsResults.success ? queryParamsResults.data : undefined,
     finishedSignIn,
     finishedUserActionDetails,
     finishedSendCrypto,
-    kycApproved,
+    kycStatus,
     linkedAccount,
     transferResponse,
   )
@@ -195,10 +197,22 @@ function App() {
       case Screens.SignInScreen: {
         return (
           <SignInScreen
+            setKycStatus={setKycStatus}
             onError={onError}
             onNext={() => setFinishedSignIn(true)}
             params={queryParamsResults.data}
             setLinkedAccount={setLinkedAccount}
+          />
+        )
+      }
+      case Screens.KYCScreen: {
+        return (
+          <KYCInfoScreen
+            setKycStatus={setKycStatus}
+            kycStatus={kycStatus}
+            onError={onError}
+            onNext={() => {}}
+            params={queryParamsResults.data}
           />
         )
       }

@@ -1,4 +1,7 @@
 import { KycFieldMetadata } from '../../types'
+import { Buffer } from 'buffer'
+
+const b64Encode = (input: string) => Buffer.from(input).toString('base64')
 
 export const personalDataAndDocumentsSchemaMetadata: Record<
   string,
@@ -110,5 +113,25 @@ export const personalDataAndDocumentsSchemaMetadata: Record<
     },
     // TODO(M3): validation and formatting
   },
-  // TODO(M3): selfie and ID documents
+  selfieDocument: {
+    required: true,
+    userField: true,
+    displayInfo: {
+      title: 'Selfie Photo',
+      placeholder: 'Please upload a clear image of yourself facing the camera',
+    },
+    photo: true,
+    formatter: b64Encode,
+  },
+  identificationDocument: {
+    required: true,
+    userField: true,
+    displayInfo: {
+      title: 'ID Photo',
+      placeholder:
+        'Please upload a clear image of an identification document (e.g., passport, ID)',
+    },
+    photo: true,
+    formatter: b64Encode,
+  },
 }

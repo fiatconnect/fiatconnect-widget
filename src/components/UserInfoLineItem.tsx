@@ -6,6 +6,7 @@ interface Props {
   placeholder: string
   onChange: (value: string) => void
   value: string
+  photo?: boolean
   allowedValues?: [string, ...string[]]
 }
 
@@ -14,6 +15,7 @@ export function UserInfoLineItem({
   placeholder,
   onChange,
   value,
+  photo,
   allowedValues,
 }: Props) {
   const onChangeWrapper = (e: any) => {
@@ -22,7 +24,11 @@ export function UserInfoLineItem({
   }
 
   const renderContents = () => {
-    if (allowedValues) {
+    if (photo) {
+      return (
+        <ImageInput type="file" accept="image*/" onChange={onChangeWrapper} />
+      )
+    } else if (allowedValues) {
       return (
         <Select value={value} onChange={onChangeWrapper}>
           {allowedValues.map((allowedValue) => (
@@ -72,6 +78,13 @@ const Form = styled.form`
 `
 
 const Input = styled.input`
+  border: none;
+  outline: none;
+  text-align-vertical: bottom;
+  width: 100%;
+`
+
+const ImageInput = styled.input`
   border: none;
   outline: none;
   text-align-vertical: bottom;
