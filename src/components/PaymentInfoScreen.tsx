@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { Steps } from '../types'
 import { fiatAccountSchemaToPaymentMethod } from '../constants'
 import {
   FiatAccountSchema,
@@ -18,14 +17,12 @@ import { QueryParams } from '../schema'
 
 interface Props {
   onError: (title: string, message: string) => void
-  onNext: (step: Steps) => void
   setLinkedAccount: (fiatAccount: ObfuscatedFiatAccountData) => void
   params: QueryParams
 }
 
 export function PaymentInfoScreen({
   onError,
-  onNext,
   setLinkedAccount,
   params,
 }: Props) {
@@ -71,7 +68,6 @@ export function PaymentInfoScreen({
           )
           if (linkedAccount) {
             setLinkedAccount(linkedAccount)
-            onNext(Steps.Three)
           } else {
             onError(errorTitle, errorMessage)
           }

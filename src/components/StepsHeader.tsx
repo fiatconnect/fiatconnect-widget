@@ -1,42 +1,47 @@
-import { Steps } from '../types'
-import { TransferType } from '@fiatconnect/fiatconnect-types'
+import { AppState, TransferInUserActionNoKycScreens, Screens } from '../types'
+
+const SCREEN_NAME_MAP = {
+  [Screens.SignInScreen]: 'Sign In',
+  [Screens.PaymentInfoScreen]: 'Payment Info',
+  [Screens.KYCScreen]: 'KYC',
+  [Screens.ReviewScreen]: 'Review',
+  [Screens.UserActionDetailsScreen]: 'Pay',
+  [Screens.SendCryptoScreen]: 'Pay',
+  [Screens.DoneScreen]: 'Done', // This will never be shown
+}
 
 interface Props {
-  step: Steps
-  transferType?: TransferType
+  appState?: AppState
 }
 
-const MAX_STEPS = 4
+const DEFAULT_SCREENS = TransferInUserActionNoKycScreens
+const DEFAULT_CURRENT_SCREEN = Screens.SignInScreen
 
-const STEP_TO_TITLE: Record<number, string> = {
-  1: 'Sign In',
-  2: 'Payment Info',
-  3: 'Review',
-  4: 'Pay',
-}
+export function StepsHeader({ appState }: Props) {
+  const screens = appState ? appState.screens : DEFAULT_SCREENS
+  const currentScreen = appState
+    ? appState.currentScreen
+    : DEFAULT_CURRENT_SCREEN
 
-export function StepsHeader({
-  step,
-  transferType = TransferType.TransferIn,
-}: Props) {
-  // TODO M2: Update this to take into account transfers out
-
+  const currentScreenStep = screens.indexOf(currentScreen)
   const makeSections = () => {
     const sections = []
-    for (let curStep = 1; curStep <= MAX_STEPS; curStep++) {
+    for (let curStep = 0; curStep < screens.length; curStep++) {
+      const curStepScreen = screens[curStep]
+
       const id =
-        step === curStep
+        curStepScreen === currentScreen
           ? 'StepsCircle-Current'
-          : step > curStep
+          : currentScreenStep > curStep || currentScreen === Screens.DoneScreen
           ? 'StepsCircle-Complete'
           : 'StepsCircle-Inactive'
       sections.push(
         <div key={`StepsCircle-${curStep}`} id={id}>
-          <div>{curStep}</div>
-          <div id="StepsHeader-Title">{STEP_TO_TITLE[curStep]}</div>
+          <div>{curStep + 1}</div>
+          <div id="StepsHeader-Title">{SCREEN_NAME_MAP[curStepScreen]}</div>
         </div>,
       )
-      if (curStep !== MAX_STEPS) {
+      if (curStep !== screens.length - 1) {
         sections.push(
           <div
             id="StepsCircle-Divider"
