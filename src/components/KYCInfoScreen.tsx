@@ -11,12 +11,23 @@ import {
   providerIdToProviderName,
 } from '../constants'
 import KYCInfoFieldSection from './KYCInfoFieldSection'
-import { personalDataAndDocumentsSchemaMetadata } from './kycInfo/PersonalDataAndDocuments'
 import { useFiatConnectConfig } from '../hooks'
 import { addKyc } from '../FiatConnectClient'
 import { KycPending } from './kycStatusScreens/KycPending'
 import { KycDenied } from './kycStatusScreens/KycDenied'
 import { KycExpired } from './kycStatusScreens/KycExpired'
+import { KycFieldMetadata } from '../types'
+import { personalDataAndDocumentsSchemaMetadata } from './kycInfo/PersonalDataAndDocuments'
+import { personalDataAndDocumentsDetailedSchemaMetadata } from './kycInfo/PersonalDataAndDocumentsDetailed'
+
+const kycSchemaToMetadata: Record<
+  KycSchema,
+  Record<KycSchema, KycFieldMetadata>
+> = {
+  [KycSchema.PersonalDataAndDocuments]: personalDataAndDocumentsSchemaMetadata,
+  [KycSchema.PersonalDataAndDocumentsDetailed]:
+    personalDataAndDocumentsDetailedSchemaMetadata,
+}
 
 interface Props {
   kycStatus: KycStatus | undefined
@@ -112,7 +123,7 @@ export function KYCInfoScreen({
           kycInfo={kycInfo}
           setKycInfo={setKycInfoWrapper}
           setSubmitDisabled={setSubmitDisabled}
-          kycSchemaMetadata={personalDataAndDocumentsSchemaMetadata}
+          kycSchemaMetadata={kycSchemaToMetadata[params.kycSchema]}
         />
       </div>
       <div id="KYCBottomSection">

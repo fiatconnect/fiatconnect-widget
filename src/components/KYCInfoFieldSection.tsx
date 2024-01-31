@@ -127,7 +127,12 @@ function KYCInfoFieldSection({
             title={fieldMetadata.displayInfo?.title ?? ''}
             placeholder={fieldMetadata.displayInfo?.placeholder ?? ''}
             onChange={(value) => setKycInfoWrapper({ [field]: value })}
-            value={getFieldValue(field) ?? ''}
+            value={
+              (fieldMetadata.reverseFormatter
+                ? fieldMetadata.reverseFormatter(getFieldValue(field))
+                : getFieldValue(field)) ?? ''
+            }
+            allowedValues={fieldMetadata.choices ?? undefined}
           />
         )
       })}
