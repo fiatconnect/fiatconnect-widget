@@ -3,5 +3,6 @@ ignores: [
   "@types/node",
   "identity-obj-proxy",
   "jest-environment-jsdom",
-  "lokijs"
+  "lokijs",
+  "buffer"
 ]
