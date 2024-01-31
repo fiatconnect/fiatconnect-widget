@@ -6,7 +6,10 @@ import {
   StatusText,
 } from '../../styles'
 import { ProviderIds } from '../../types'
-import { providerIdToProviderName } from '../../constants'
+import {
+  providerIdToProviderName,
+  providerIdToSupportEmail,
+} from '../../constants'
 import ErrorIcon from '../../icons/Error'
 
 interface Props {
@@ -25,7 +28,8 @@ export function KycDenied({ providerId }: Props) {
         Your identification information has been denied by {providerName}.
       </StatusText>
       <StatusText>
-        If you think this was a mistake, please contact your wallet provider.
+        If you think this was a mistake, please contact the provider at{' '}
+        {providerIdToSupportEmail[providerId]}.
       </StatusText>
     </StatusContentContainer>
   )

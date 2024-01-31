@@ -206,13 +206,16 @@ function App() {
         )
       }
       case Screens.KYCScreen: {
+        if (!queryParamsResults.data.kycSchema) return
         return (
           <KYCInfoScreen
             setKycStatus={setKycStatus}
             kycStatus={kycStatus}
             onError={onError}
-            onNext={() => {}}
-            params={queryParamsResults.data}
+            params={{
+              ...queryParamsResults.data,
+              kycSchema: queryParamsResults.data.kycSchema,
+            }}
           />
         )
       }

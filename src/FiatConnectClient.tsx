@@ -37,9 +37,10 @@ export async function addKyc<T extends KycSchema>(
       body: JSON.stringify(params.data),
     },
   )
+
   if (!addKycResponse.ok) {
     throw new Error(
-      'Non-404 error from provider while fetching linked accounts',
+      'Non-OK status ${addKycResponse.status} from provider while adding KYC',
     )
   }
   const response = (await addKycResponse.json()) as KycStatusResponse

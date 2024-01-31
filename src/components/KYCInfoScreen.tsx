@@ -1,5 +1,9 @@
 import { QueryParams } from '../schema'
-import { KycStatus, KycSchemas } from '@fiatconnect/fiatconnect-types'
+import {
+  KycStatus,
+  KycSchemas,
+  KycSchema,
+} from '@fiatconnect/fiatconnect-types'
 import React, { useState } from 'react'
 import { ContentContainer, SectionSubtitle, SectionTitle } from '../styles'
 import {
@@ -18,13 +22,11 @@ interface Props {
   kycStatus: KycStatus | undefined
   setKycStatus: (kycStatus: KycStatus | undefined) => void
   onError: (title: string, message: string) => void
-  onNext: () => void
-  params: QueryParams
+  params: QueryParams & { kycSchema: KycSchema }
 }
 
 export function KYCInfoScreen({
   onError,
-  onNext,
   params,
   kycStatus,
   setKycStatus,
@@ -44,7 +46,7 @@ export function KYCInfoScreen({
   }
   const onSubmit = async () => {
     try {
-      if (!params.kycSchema || !fiatConnectClientConfig) {
+      if (!fiatConnectClientConfig) {
         throw new Error()
       }
 
@@ -65,7 +67,6 @@ export function KYCInfoScreen({
   }
 
   if (kycStatus === KycStatus.KycPending) {
-    if (!params.kycSchema) return
     return (
       <ContentContainer>
         <KycPending
@@ -87,7 +88,6 @@ export function KYCInfoScreen({
   }
 
   if (kycStatus === KycStatus.KycExpired) {
-    if (!params.kycSchema) return
     return (
       <ContentContainer>
         <KycExpired
