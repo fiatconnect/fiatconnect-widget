@@ -6,6 +6,10 @@ import {
   FiatAccountType,
   ObfuscatedFiatAccountData,
   TransferRequestBody,
+  KycRequestParams,
+  KycStatusResponse,
+  KycStatus,
+  KycSchema,
 } from '@fiatconnect/fiatconnect-types'
 import { generateNonce, SiweMessage } from 'siwe'
 import { getAddress } from 'ethers'
@@ -15,9 +19,83 @@ import {
 } from '@fiatconnect/fiatconnect-sdk'
 import { createSiweConfig } from '@fiatconnect/fiatconnect-sdk/dist/fiat-connect-client'
 import { fiatConnectNetworkToChainId } from './constants'
-import { ProviderIds } from './types'
+import { ProviderIds, AddKycParams } from './types'
 
-export function addFiatAccount(
+export async function addKyc<T extends KycSchema>(
+  params: AddKycParams<T>,
+  clientConfig: FiatConnectClientConfig,
+): Promise<KycStatus> {
+  const addKycResponse = await fetch(
+    `${clientConfig.baseUrl}/kyc/${params.kycSchemaName}`,
+    {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${clientConfig.apiKey}`,
+      },
+      body: JSON.stringify(params.data),
+    },
+  )
+
+  if (!addKycResponse.ok) {
+    throw new Error(
+      'Non-OK status ${addKycResponse.status} from provider while adding KYC',
+    )
+  }
+  const response = (await addKycResponse.json()) as KycStatusResponse
+  return response.kycStatus
+}
+
+export async function deleteKyc(
+  params: KycRequestParams,
+  clientConfig: FiatConnectClientConfig,
+): Promise<void> {
+  const deleteKycStatusResponse = await fetch(
+    `${clientConfig.baseUrl}/kyc/${params.kycSchema}`,
+    {
+      method: 'DELETE',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${clientConfig.apiKey}`,
+      },
+    },
+  )
+  if (!deleteKycStatusResponse.ok) {
+    if (deleteKycStatusResponse.status !== 404) {
+      throw new Error('Non-404 error from provider while deleting KYC')
+    }
+  }
+}
+
+export async function getKycStatus(
+  params: KycRequestParams,
+  clientConfig: FiatConnectClientConfig,
+): Promise<KycStatus | undefined> {
+  const getKycStatusResponse = await fetch(
+    `${clientConfig.baseUrl}/kyc/${params.kycSchema}/status`,
+    {
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${clientConfig.apiKey}`,
+      },
+    },
+  )
+  if (!getKycStatusResponse.ok) {
+    if (getKycStatusResponse.status === 404) {
+      return undefined
+    } else {
+      throw new Error('Non-404 error from provider while getting KYC status')
+    }
+  }
+  const response = (await getKycStatusResponse.json()) as KycStatusResponse
+  return response.kycStatus
+}
+
+export async function addFiatAccount(
   params: PostFiatAccountRequestBody,
   clientConfig: FiatConnectClientConfig,
 ) {

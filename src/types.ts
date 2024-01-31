@@ -1,3 +1,5 @@
+import { KycSchema, KycSchemas } from '@fiatconnect/fiatconnect-types'
+
 export enum ProviderIds {
   Bitmama = 'bitmama',
   TestProvider = 'test-provider',
@@ -27,6 +29,7 @@ export interface FiatAccountFieldMetadata {
 
 export interface KycFieldMetadata extends FiatAccountFieldMetadata {
   group?: string // e.g. dateOfBirth, address
+  photo?: boolean
 }
 
 export enum Screens {
@@ -37,6 +40,11 @@ export enum Screens {
   UserActionDetailsScreen = 'UserActionDetailsScreen',
   SendCryptoScreen = 'SendCryptoScreen',
   DoneScreen = 'DoneScreen',
+}
+
+export interface AddKycParams<T extends KycSchema> {
+  kycSchemaName: T
+  data: KycSchemas[T]
 }
 
 export interface AppState {

@@ -31,12 +31,13 @@ For more information on these requirements, you may consult these resources:
 
 ### KYC Schemas supported
 
-none at this time
+- [x] [PersonalDataAndDocuments](https://github.com/fiatconnect/specification/blob/main/fiatconnect-api.md#9311-personaldataanddocuments)
+- [ ] [PersonalDataAndDocumentsDetailed]()
 
 ### Transfer Types supported
 
 - [x] Transfers In
-- [ ] Transfers Out
+- [x] Transfers Out
 
 ### UserActionDetails Schemas supported
 

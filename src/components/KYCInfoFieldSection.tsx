@@ -51,13 +51,23 @@ function KYCInfoFieldSection({
     const requiredFields = Object.entries(kycSchemaMetadata)
       .filter(([_, metadata]) => metadata.required)
       .map(([field, _]) => field)
-    const fieldValues = requiredFields.map((field) => kycInfo[field])
-    if (!fieldValues.every((value) => !!value)) {
-      setErrorMessage(undefined)
-      setSubmitDisabled(true)
-      return
+    for (const requiredField of requiredFields) {
+      const fieldMetadata = kycSchemaMetadata[requiredField]
+      if (fieldMetadata.group) {
+        const groupValue = kycInfo[fieldMetadata.group]
+        if (typeof groupValue === 'object' && !groupValue[requiredField]) {
+          setErrorMessage(undefined)
+          setSubmitDisabled(true)
+          return
+        }
+      } else {
+        if (!kycInfo[requiredField]) {
+          setErrorMessage(undefined)
+          setSubmitDisabled(true)
+          return
+        }
+      }
     }
-
     for (const field of requiredFields) {
       const fieldMetadata = kycSchemaMetadata[field]
       if (!fieldMetadata.validator) {
@@ -81,7 +91,8 @@ function KYCInfoFieldSection({
   }, [kycInfo])
 
   const setKycInfoWrapper = (newDetails: Record<string, string>) => {
-    const formattedInfo: Record<string, string | Record<string, string>> = {}
+    const formattedInfo: Record<string, string | Record<string, string>> =
+      kycInfo
     for (const [field, value] of Object.entries(newDetails)) {
       const fieldMetadata = kycSchemaMetadata[field]
       const formattedValue = fieldMetadata?.formatter
@@ -112,6 +123,7 @@ function KYCInfoFieldSection({
         return (
           <UserInfoLineItem
             key={field}
+            photo={fieldMetadata.photo}
             title={fieldMetadata.displayInfo?.title ?? ''}
             placeholder={fieldMetadata.displayInfo?.placeholder ?? ''}
             onChange={(value) => setKycInfoWrapper({ [field]: value })}
