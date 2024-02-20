@@ -134,7 +134,7 @@ export function SendCrypto({
     if (prepareContractWriteStatus === 'error') {
       onError(
         'There was an error preparing your transaction.',
-        `This may occur if you have less than ${cryptoAmount} ${cryptoType} in your wallet.`,
+        `This may occur if you have less ${cryptoType} in your wallet than you are trying to send (${cryptoAmount}).`,
       )
     }
   }, [prepareContractWriteStatus])
