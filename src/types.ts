@@ -30,6 +30,11 @@ export interface FiatAccountFieldMetadata {
 export interface KycFieldMetadata extends FiatAccountFieldMetadata {
   group?: string // e.g. dateOfBirth, address
   photo?: boolean
+  choices?: [string, ...string[]]
+  // A "reverse formatter" is needed when the choices displayed to a user in a dropdown
+  // are not the direct values sent in the form data, in order for the dropdown
+  // to "know" which value is selected.
+  reverseFormatter?: (input: string | undefined) => string
 }
 
 export enum Screens {

@@ -23,7 +23,7 @@ For more information on these requirements, you may consult these resources:
 ### Fiat Account Schemas supported
 
 - [x] [AccountNumber](https://github.com/fiatconnect/specification/blob/main/fiatconnect-api.md#9321-accountnumber)
-- [ ] [MobileMoney](https://github.com/fiatconnect/specification/blob/main/fiatconnect-api.md#9322-mobilemoney)
+- [x] [MobileMoney](https://github.com/fiatconnect/specification/blob/main/fiatconnect-api.md#9322-mobilemoney)
 - [ ] [DuniaWallet](https://github.com/fiatconnect/specification/blob/main/fiatconnect-api.md#9323-duniawallet)
 - [ ] [IBANNumber](https://github.com/fiatconnect/specification/blob/main/fiatconnect-api.md#9324-ibannumber)
 - [ ] [IFSCAccount](https://github.com/fiatconnect/specification/blob/main/fiatconnect-api.md#9325-ifscaccount)
@@ -32,7 +32,7 @@ For more information on these requirements, you may consult these resources:
 ### KYC Schemas supported
 
 - [x] [PersonalDataAndDocuments](https://github.com/fiatconnect/specification/blob/main/fiatconnect-api.md#9311-personaldataanddocuments)
-- [ ] [PersonalDataAndDocumentsDetailed]()
+- [x] [PersonalDataAndDocumentsDetailed](https://github.com/fiatconnect/specification/blob/main/fiatconnect-api.md#9312-personaldataanddocumentsdetailed)
 
 ### Transfer Types supported
 

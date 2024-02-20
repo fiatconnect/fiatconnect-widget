@@ -41,7 +41,12 @@ export const queryParamsSchema = z.object({
     FiatAccountSchema.AccountNumber,
     FiatAccountSchema.MobileMoney,
   ]),
-  kycSchema: z.enum([KycSchema.PersonalDataAndDocuments]).optional(),
+  kycSchema: z
+    .enum([
+      KycSchema.PersonalDataAndDocuments,
+      KycSchema.PersonalDataAndDocumentsDetailed,
+    ])
+    .optional(),
   userActionDetailsSchema: z
     .enum([TransferInUserActionDetails.AccountNumberUserAction])
     .optional(),
