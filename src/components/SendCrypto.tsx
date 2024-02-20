@@ -133,8 +133,8 @@ export function SendCrypto({
   useEffect(() => {
     if (prepareContractWriteStatus === 'error') {
       onError(
-        'There was an error preparing your payment.',
-        `There was an issue while preparing your payment to ${providerIdToProviderName[providerId]}`,
+        'There was an error preparing your transaction.',
+        `This may occur if you have less than ${cryptoAmount} ${cryptoType} in your wallet.`,
       )
     }
   }, [prepareContractWriteStatus])
