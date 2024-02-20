@@ -6,7 +6,7 @@ import {
   SectionTitle,
 } from '../styles'
 import { CryptoType } from '@fiatconnect/fiatconnect-types'
-import { ProviderIds, Steps } from '../types'
+import { ProviderIds } from '../types'
 import { providerIdToProviderName } from '../constants'
 import styled from 'styled-components'
 import { useContractWrite, usePrepareContractWrite } from 'wagmi'
@@ -102,7 +102,7 @@ export function SendCrypto({
   const appConfig = loadConfig()
   const tokenAddress =
     cryptoTypeToAddress[appConfig.fiatConnectNetwork][cryptoType]!
-  const { config } = usePrepareContractWrite({
+  const { config, status: prepareContractWriteStatus } = usePrepareContractWrite({
     address: getAddress(tokenAddress),
     abi: [
       {
@@ -121,10 +121,23 @@ export function SendCrypto({
     args: [getAddress(transferAddress), parseEther(cryptoAmount)],
   })
   const { isLoading, isSuccess, write, isError } = useContractWrite(config)
+  useEffect(() => {
+    // eslint-disable-next-line no-console
+    console.log(`config: ${JSON.stringify(config)}, config.result: ${config.result}, isSuccess: ${isSuccess}, isError: ${isError}, isLoading: ${isLoading}`)
+  }, [config, isSuccess, isError])
 
   const onClick = () => {
     write?.()
   }
+
+  useEffect(() => {
+    if (prepareContractWriteStatus === 'error') {
+      onError(
+        'There was an error preparing your payment.',
+        `There was an issue while preparing your payment to ${providerIdToProviderName[providerId]}`,
+      )
+    }
+  }, [prepareContractWriteStatus])
 
   useEffect(() => {
     if (isSuccess) {
@@ -153,7 +166,7 @@ export function SendCrypto({
       />
       <Button
         onClick={onClick}
-        disabled={isLoading}
+        disabled={isLoading || prepareContractWriteStatus !== 'success'}
         style={{ width: '100%', marginTop: '10px' }}
       >
         {isLoading ? 'Sending Payment...' : 'Send Payment'}
