@@ -9,7 +9,7 @@ import { CryptoType } from '@fiatconnect/fiatconnect-types'
 import { ProviderIds, Steps } from '../types'
 import { providerIdToProviderName } from '../constants'
 import styled from 'styled-components'
-import { useContractWrite, usePrepareContractWrite } from 'wagmi'
+import { useWriteContract, useSimulateContract } from 'wagmi'
 import { loadConfig } from '../config'
 import { cryptoTypeToAddress } from '../constants'
 import { getAddress, parseEther } from 'viem'
@@ -70,6 +70,7 @@ const BodyTable = styled.table`
 function formatAddress(address: string) {
   return `${address.slice(0, 6)}...${address.slice(-4)}`
 }
+
 function SendPaymentBody({
   cryptoAmount,
   cryptoType,
@@ -102,7 +103,7 @@ export function SendCrypto({
   const appConfig = loadConfig()
   const tokenAddress =
     cryptoTypeToAddress[appConfig.fiatConnectNetwork][cryptoType]!
-  const { config } = usePrepareContractWrite({
+  const { data } = useSimulateContract({
     address: getAddress(tokenAddress),
     abi: [
       {
@@ -120,13 +121,17 @@ export function SendCrypto({
     functionName: 'transfer',
     args: [getAddress(transferAddress), parseEther(cryptoAmount)],
   })
-  const { isLoading, isSuccess, write, isError } = useContractWrite(config)
+  const { isSuccess, writeContract, isError } = useWriteContract()
 
   const onClick = () => {
-    write?.()
+    if (!data) {
+      throw new Error(`onClick called with no data`)
+    }
+    writeContract(data.request)
   }
 
   useEffect(() => {
+    // console.log(`isSuccess ${isSuccess} isError ${isError}`)
     if (isSuccess) {
       onNext()
     }
@@ -138,6 +143,7 @@ export function SendCrypto({
     }
   }, [isSuccess, isError])
 
+  const isLoading = !data?.request
   return (
     <ContentContainer>
       <SectionTitle>Send Payment</SectionTitle>
@@ -153,7 +159,7 @@ export function SendCrypto({
       />
       <Button
         onClick={onClick}
-        disabled={isLoading}
+        disabled={isLoading || isError || isLoading}
         style={{ width: '100%', marginTop: '10px' }}
       >
         {isLoading ? 'Sending Payment...' : 'Send Payment'}

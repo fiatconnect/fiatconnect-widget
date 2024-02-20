@@ -12,9 +12,9 @@ import {
   TransferOutNoKycScreens,
   TransferOutKycScreens,
 } from './types'
-import { publicProvider } from 'wagmi/providers/public'
-import { configureChains, createConfig, WagmiConfig } from 'wagmi'
-import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit'
+import { createConfig, usePublicClient, WagmiProvider } from 'wagmi'
+
+import { getDefaultConfig, RainbowKitProvider } from '@rainbow-me/rainbowkit'
 import { useSearchParams } from 'react-router-dom'
 import '@fontsource/inter'
 import { StepsHeader } from './components/StepsHeader'
@@ -35,6 +35,8 @@ import { queryParamsSchema, QueryParams } from './schema'
 import { DoneSection } from './components/DoneSection'
 import { SendCrypto } from './components/SendCrypto'
 import { KYCInfoScreen } from './components/KYCInfoScreen'
+import { celo, celoAlfajores } from 'viem/chains'
+import { walletConnect } from 'wagmi/connectors'
 
 function useQueryParams() {
   const [searchParams] = useSearchParams()
@@ -165,20 +167,12 @@ function App() {
   )
 
   const config = loadConfig()
-  const { chains, publicClient } = useMemo(
-    () => configureChains(config.wagmi.defaultChains, [publicProvider()]),
-    [config],
-  )
+  const chains = [celo, celoAlfajores] as const
   const wagmiConfig = useMemo(() => {
-    const { connectors } = getDefaultWallets({
+    return getDefaultConfig({
       appName: config.walletConnect.appName,
       projectId: config.walletConnect.projectId,
       chains,
-    })
-    return createConfig({
-      autoConnect: true,
-      connectors,
-      publicClient,
     })
   }, [config])
 
@@ -276,10 +270,9 @@ function App() {
       }
     }
   }
-
   return (
-    <WagmiConfig config={wagmiConfig}>
-      <RainbowKitProvider chains={chains}>
+    <WagmiProvider config={wagmiConfig}>
+      <RainbowKitProvider>
         <div className="App">
           <header className="App-header">
             <div className="Container">
@@ -316,7 +309,7 @@ function App() {
           </header>
         </div>
       </RainbowKitProvider>
-    </WagmiConfig>
+    </WagmiProvider>
   )
 }
 

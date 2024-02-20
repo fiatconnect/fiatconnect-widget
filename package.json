@@ -7,7 +7,8 @@
     "@fiatconnect/fiatconnect-sdk": "^0.5.19",
     "@fiatconnect/fiatconnect-types": "^13.3.0",
     "@fontsource/inter": "^5.0.15",
-    "@rainbow-me/rainbowkit": "^1.1.1",
+    "@rainbow-me/rainbowkit": "^2.0.0",
+    "@tanstack/react-query": "^5.18.1",
     "@testing-library/react": "^13.0.0",
     "@types/jest": "^27.0.1",
     "@types/node": "^16.7.13",
@@ -23,8 +24,8 @@
     "source-map-loader": "^4.0.1",
     "styled-components": "^6.1.1",
     "typescript": "^5.2.2",
-    "viem": "^1.15.4",
-    "wagmi": "^1.4.3",
+    "viem": "^2.7.3",
+    "wagmi": "^2.5.5",
     "zod": "^3.22.4"
   },
   "scripts": {
