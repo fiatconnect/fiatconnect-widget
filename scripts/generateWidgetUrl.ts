@@ -84,7 +84,6 @@ export async function generateWidgetUrl() {
   if (!response.ok) {
     throw new Error(`quote response error json: ${JSON.stringify(quoteJson)}`)
   }
-  console.log(`quote json: ${JSON.stringify(quoteJson)}`)
   const {
     quote: { fiatAmount, quoteId, transferType },
     kyc: { kycRequired, kycSchemas },
