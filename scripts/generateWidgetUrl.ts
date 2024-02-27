@@ -109,12 +109,14 @@ export async function generateWidgetUrl() {
     throw new Error('fiat account type not found in quote response')
   }
   widgetUrl += `&fiatAccountType=${fiatAccountType}`
-  const fiatAccountSchema = fiatAccountJson[fiatAccountType].fiatAccountSchemas[0].fiatAccountSchema
+  const fiatAccountSchema =
+    fiatAccountJson[fiatAccountType].fiatAccountSchemas[0].fiatAccountSchema
   if (!fiatAccountSchema) {
     throw new Error('fiat account schema not found in quote response')
   }
   widgetUrl += `&fiatAccountSchema=${fiatAccountSchema}`
-  const userActionType = fiatAccountJson[fiatAccountType].fiatAccountSchemas[0].userActionType
+  const userActionType =
+    fiatAccountJson[fiatAccountType].fiatAccountSchemas[0].userActionType
   if (userActionType) {
     widgetUrl += `&userActionDetailsSchema=${userActionType}`
   }
