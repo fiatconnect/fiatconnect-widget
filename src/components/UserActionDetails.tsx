@@ -20,7 +20,7 @@ interface Props {
   providerId: ProviderIds
   fiatAmount: string
   fiatType: FiatType
-  onNext: (step: Steps) => void
+  onNext: () => void
 }
 
 const BodyCard = styled.div`
@@ -125,10 +125,7 @@ export function UserActionDetails({
         below.
       </SectionSubtitle>
       {body}
-      <Button
-        onClick={() => onNext(Steps.Five)}
-        style={{ width: '100%', marginTop: '10px' }}
-      >
+      <Button onClick={onNext} style={{ width: '100%', marginTop: '10px' }}>
         Done
       </Button>
     </ContentContainer>

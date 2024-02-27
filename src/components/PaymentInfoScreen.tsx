@@ -1,12 +1,14 @@
 import React, { useState } from 'react'
-import { Steps } from '../types'
 import { fiatAccountSchemaToPaymentMethod } from '../constants'
 import {
   FiatAccountSchema,
+  FiatAccountType,
   PostFiatAccountRequestBody,
   ObfuscatedFiatAccountData,
 } from '@fiatconnect/fiatconnect-types'
-import { AccountNumberSection } from './paymentInfo/AccountNumber'
+import accountNumberSchemaMetadata from './paymentInfo/AccountNumber'
+import mobileMoneySchemaMetadata from './paymentInfo/MobileMoney'
+import PaymentInfoFieldSection from './PaymentInfoFieldSection'
 import { addFiatAccount, getLinkedAccount } from '../FiatConnectClient'
 import { useFiatConnectConfig } from '../hooks'
 import { providerIdToProviderName } from '../constants'
@@ -15,14 +17,12 @@ import { QueryParams } from '../schema'
 
 interface Props {
   onError: (title: string, message: string) => void
-  onNext: (step: Steps) => void
   setLinkedAccount: (fiatAccount: ObfuscatedFiatAccountData) => void
   params: QueryParams
 }
 
 export function PaymentInfoScreen({
   onError,
-  onNext,
   setLinkedAccount,
   params,
 }: Props) {
@@ -68,7 +68,6 @@ export function PaymentInfoScreen({
           )
           if (linkedAccount) {
             setLinkedAccount(linkedAccount)
-            onNext(Steps.Three)
           } else {
             onError(errorTitle, errorMessage)
           }
@@ -81,25 +80,39 @@ export function PaymentInfoScreen({
     } catch (e) {
       onError(errorTitle, errorMessage)
     }
-    // TODO: try submitting fiat account info
-    // TODO: Go to step three
   }
 
   const getSection = () => {
     switch (params.fiatAccountSchema) {
       case FiatAccountSchema.AccountNumber: {
         return (
-          <AccountNumberSection
+          <PaymentInfoFieldSection
             country={params.country}
             fiatAccountDetails={fiatAccountDetails}
             setFiatAccountDetails={setFiatAccountDetailsWrapper}
             setSubmitDisabled={setSubmitDisabled}
+            allowedValues={params.allowedValues}
+            fiatAccountType={FiatAccountType.BankAccount}
+            fiatAccountSchemaMetadata={accountNumberSchemaMetadata}
+          />
+        )
+      }
+      case FiatAccountSchema.MobileMoney: {
+        return (
+          <PaymentInfoFieldSection
+            country={params.country}
+            fiatAccountDetails={fiatAccountDetails}
+            setFiatAccountDetails={setFiatAccountDetailsWrapper}
+            setSubmitDisabled={setSubmitDisabled}
+            allowedValues={params.allowedValues}
+            fiatAccountType={FiatAccountType.MobileMoney}
+            fiatAccountSchemaMetadata={mobileMoneySchemaMetadata}
           />
         )
       }
       default: {
         onError(
-          'There was an error signing in with Bitmama.',
+          'There was an error signing in.',
           'This may be due to a misconfiguration by your wallet provider.',
         )
       }

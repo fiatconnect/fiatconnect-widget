@@ -20,17 +20,17 @@ describe('schema', () => {
       expect(queryParamsSchema.safeParse(validQueryParams).success).toEqual(
         true,
       )
-    })
-    it('rejects invalid input', () => {
-      // unsupported fiat account schema
+
       expect(
         queryParamsSchema.safeParse({
           ...validQueryParams,
           fiatAccountType: 'MobileMoney',
           fiatAccountSchema: 'MobileMoney',
         }).success,
-      ).toEqual(false) // TODO(M3): change this to true and move to 'accepts valid input' test
+      ).toEqual(true)
+    })
 
+    it('rejects invalid input', () => {
       // unsupported user action details schema
       expect(
         queryParamsSchema.safeParse({

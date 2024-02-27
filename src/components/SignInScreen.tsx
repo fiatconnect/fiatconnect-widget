@@ -1,22 +1,23 @@
-import { Steps } from '../types'
 import { fiatAccountSchemaToPaymentMethod } from '../constants'
 import {
   TransferType,
   ObfuscatedFiatAccountData,
+  KycStatus,
 } from '@fiatconnect/fiatconnect-types'
 import { QuoteAmountBox } from './QuoteAmountBox'
 import SIWEConnectButton from './SIWEConnectButton'
 import ConnectWalletButton from './ConnectWalletButton'
 import { useAccount } from 'wagmi'
 import styled from 'styled-components'
-import { getLinkedAccount } from '../FiatConnectClient'
+import { getLinkedAccount, getKycStatus } from '../FiatConnectClient'
 import { useFiatConnectConfig } from '../hooks'
 import { providerIdToProviderName } from '../constants'
 import { QueryParams } from '../schema'
 
 interface Props {
   onError: (title: string, message: string) => void
-  onNext: (step: Steps) => void
+  onNext: () => void
+  setKycStatus: (kycStatus: KycStatus | undefined) => void
   setLinkedAccount: (fiatAccount: ObfuscatedFiatAccountData) => void
   params: QueryParams
 }
@@ -58,6 +59,7 @@ export function SignInScreen({
   onError,
   onNext,
   setLinkedAccount,
+  setKycStatus,
   params,
 }: Props) {
   const fiatAmount = parseFloat(params.fiatAmount)
@@ -66,14 +68,14 @@ export function SignInScreen({
 
   let exchangeRateString = ''
   if (params.transferType === TransferType.TransferIn) {
-    const exchangeRate = fiatAmount / cryptoAmount
+    const exchangeRate = cryptoAmount / fiatAmount
     exchangeRateString = `1 ${params.fiatType} = ${exchangeRate.toFixed(2)} ${
       params.cryptoType
     }`
   } else {
-    const exchangeRate = cryptoAmount / fiatAmount
-    exchangeRateString = `1 ${params.fiatType} = ${exchangeRate.toFixed(2)} ${
-      params.cryptoType
+    const exchangeRate = fiatAmount / cryptoAmount
+    exchangeRateString = `1 ${params.cryptoType} = ${exchangeRate.toFixed(2)} ${
+      params.fiatType
     }`
   }
   // TODO: Actually figure this out, and have sensible defaults like we do in the wallet
@@ -93,13 +95,17 @@ export function SignInScreen({
         params.fiatAccountSchema,
         fiatConnectClientConfig,
       )
-
+      if (params.kycSchema) {
+        const kycStatus = await getKycStatus(
+          { kycSchema: params.kycSchema },
+          fiatConnectClientConfig,
+        )
+        setKycStatus(kycStatus)
+      }
       if (linkedAccount) {
         setLinkedAccount(linkedAccount)
-        onNext(Steps.Three)
-      } else {
-        onNext(Steps.Two)
       }
+      onNext()
     } catch {
       const providerName = providerIdToProviderName[params.providerId]
       onError(

@@ -1,85 +1,36 @@
-import React, { useState, useEffect, useMemo } from 'react'
-import {
-  FiatAccountSchema,
-  FiatAccountType,
-} from '@fiatconnect/fiatconnect-types'
-import { PaymentInfoLineItem } from './PaymentInfoLineItem'
-import styled from 'styled-components'
+import { FiatAccountFieldMetadata } from '../../types'
 
-interface Props {
-  country: string
-  fiatAccountDetails: Record<string, string>
-  setFiatAccountDetails: (newDetails: Record<string, string>) => void
-  setSubmitDisabled: (disabled: boolean) => void
-  allowedValues?: Record<string, [string, ...string[]]>
+const accountNumberSchemaMetadata: Record<string, FiatAccountFieldMetadata> = {
+  country: {
+    required: true,
+  },
+  fiatAccountType: {
+    required: true,
+  },
+  institutionName: {
+    required: true,
+    userField: true,
+    displayInfo: {
+      title: 'Institution Name',
+      placeholder: 'Your Institution Name',
+    },
+  },
+  accountName: {
+    required: true,
+    userField: true,
+    displayInfo: {
+      title: 'Account Name',
+      placeholder: 'Your Account Name',
+    },
+  },
+  accountNumber: {
+    required: true,
+    userField: true,
+    displayInfo: {
+      title: 'Account Number',
+      placeholder: '1234567890',
+    },
+  },
 }
 
-const REQUIRED_FIELDS = [
-  'country',
-  'fiatAccountType',
-  'accountName',
-  'institutionName',
-  'accountNumber',
-]
-
-export function AccountNumberSection({
-  country,
-  fiatAccountDetails,
-  setFiatAccountDetails,
-  setSubmitDisabled,
-  allowedValues,
-}: Props) {
-  // TODO: Pass allowedValues through once it's been implemented
-
-  useEffect(() => {
-    setFiatAccountDetails({
-      fiatAccountType: FiatAccountType.BankAccount,
-      country,
-    })
-  }, []) // Empty array required to only run this effect once ever
-
-  // TODO: Can this be re-used among the other fiat account schema implementations?
-  useMemo(() => {
-    const fieldValues = REQUIRED_FIELDS.map(
-      (field) => fiatAccountDetails[field],
-    )
-    if (fieldValues.every((value) => !!value)) {
-      setSubmitDisabled(false)
-    } else {
-      setSubmitDisabled(true)
-    }
-  }, [fiatAccountDetails])
-
-  return (
-    <Container>
-      <PaymentInfoLineItem
-        title={'Institution Name'}
-        placeholder={'Your Institution Name'}
-        onChange={(value) => setFiatAccountDetails({ institutionName: value })}
-        value={fiatAccountDetails.institutionName ?? ''}
-      />
-      <PaymentInfoLineItem
-        title={'Account Name'}
-        placeholder={'Your Account Name'}
-        onChange={(value) => setFiatAccountDetails({ accountName: value })}
-        value={fiatAccountDetails.accountName ?? ''}
-      />
-      <PaymentInfoLineItem
-        title={'Account Number'}
-        placeholder={'1234567890'}
-        onChange={(value) => setFiatAccountDetails({ accountNumber: value })}
-        value={fiatAccountDetails.accountNumber ?? ''}
-      />
-    </Container>
-  )
-}
-
-const Container = styled.div`
-  display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
-  flex-direction: column;
-  gap: 20px;
-  padding-top: 20px;
-  width: 100%;
-`
+export default accountNumberSchemaMetadata

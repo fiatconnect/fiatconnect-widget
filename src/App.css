@@ -125,10 +125,10 @@
 }
 
 #StepsCircle-Divider {
+  flex: 1;
   align-self: center;
   display: flex;
   height: 0px;
-  width: 27%;
   border: 1px solid #cbcbcb;
 }
 
@@ -343,4 +343,21 @@
 #AccountInfoSectionTitle {
   font-weight: bold;
   font-size: 12px;
+}
+
+#KYCBottomSection {
+  font-size: 12px;
+  flex: 1;
+  justify-content: flex-end;
+  align-self: flex-end;
+}
+
+#KYCFormContainer {
+  max-height: 60%;
+  overflow-y: scroll;
+  width: 100%;
+  flex-grow: 1;
+  align-self: center;
+  background: white;
+  border: 0;
 }
