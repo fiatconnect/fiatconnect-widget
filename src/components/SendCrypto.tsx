@@ -102,28 +102,33 @@ export function SendCrypto({
   const appConfig = loadConfig()
   const tokenAddress =
     cryptoTypeToAddress[appConfig.fiatConnectNetwork][cryptoType]!
-  const { config, status: prepareContractWriteStatus } = usePrepareContractWrite({
-    address: getAddress(tokenAddress),
-    abi: [
-      {
-        constant: false,
-        inputs: [
-          { name: '_to', type: 'address' },
-          { name: '_value', type: 'uint256' },
-        ],
-        name: 'transfer',
-        outputs: [{ name: 'success', type: 'bool' }],
-        stateMutability: 'nonpayable',
-        type: 'function',
-      },
-    ],
-    functionName: 'transfer',
-    args: [getAddress(transferAddress), parseEther(cryptoAmount)],
-  })
+  const { config, status: prepareContractWriteStatus } =
+    usePrepareContractWrite({
+      address: getAddress(tokenAddress),
+      abi: [
+        {
+          constant: false,
+          inputs: [
+            { name: '_to', type: 'address' },
+            { name: '_value', type: 'uint256' },
+          ],
+          name: 'transfer',
+          outputs: [{ name: 'success', type: 'bool' }],
+          stateMutability: 'nonpayable',
+          type: 'function',
+        },
+      ],
+      functionName: 'transfer',
+      args: [getAddress(transferAddress), parseEther(cryptoAmount)],
+    })
   const { isLoading, isSuccess, write, isError } = useContractWrite(config)
   useEffect(() => {
     // eslint-disable-next-line no-console
-    console.log(`config: ${JSON.stringify(config)}, config.result: ${config.result}, isSuccess: ${isSuccess}, isError: ${isError}, isLoading: ${isLoading}`)
+    console.log(
+      `config: ${JSON.stringify(config)}, config.result: ${
+        config.result
+      }, isSuccess: ${isSuccess}, isError: ${isError}, isLoading: ${isLoading}`,
+    )
   }, [config, isSuccess, isError])
 
   const onClick = () => {
