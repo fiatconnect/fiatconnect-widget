@@ -122,14 +122,6 @@ export function SendCrypto({
       args: [getAddress(transferAddress), parseEther(cryptoAmount)],
     })
   const { isLoading, isSuccess, write, isError } = useContractWrite(config)
-  useEffect(() => {
-    // eslint-disable-next-line no-console
-    console.log(
-      `config: ${JSON.stringify(config)}, config.result: ${
-        config.result
-      }, isSuccess: ${isSuccess}, isError: ${isError}, isLoading: ${isLoading}`,
-    )
-  }, [config, isSuccess, isError])
 
   const onClick = () => {
     write?.()
