@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/fiatconnect-widget/static/css/main.25adf301.css",
-    "main.js": "/fiatconnect-widget/static/js/main.6cd3be7a.js",
+    "main.js": "/fiatconnect-widget/static/js/main.11e49d38.js",
     "static/js/140.9a1f9bec.chunk.js": "/fiatconnect-widget/static/js/140.9a1f9bec.chunk.js",
     "static/js/572.5a429bec.chunk.js": "/fiatconnect-widget/static/js/572.5a429bec.chunk.js",
     "static/js/403.328726be.chunk.js": "/fiatconnect-widget/static/js/403.328726be.chunk.js",
@@ -60,7 +60,7 @@
     "static/media/inter-vietnamese-400-normal.woff2": "/fiatconnect-widget/static/media/inter-vietnamese-400-normal.789afb71d327988e2fc8.woff2",
     "index.html": "/fiatconnect-widget/index.html",
     "main.25adf301.css.map": "/fiatconnect-widget/static/css/main.25adf301.css.map",
-    "main.6cd3be7a.js.map": "/fiatconnect-widget/static/js/main.6cd3be7a.js.map",
+    "main.11e49d38.js.map": "/fiatconnect-widget/static/js/main.11e49d38.js.map",
     "140.9a1f9bec.chunk.js.map": "/fiatconnect-widget/static/js/140.9a1f9bec.chunk.js.map",
     "572.5a429bec.chunk.js.map": "/fiatconnect-widget/static/js/572.5a429bec.chunk.js.map",
     "403.328726be.chunk.js.map": "/fiatconnect-widget/static/js/403.328726be.chunk.js.map",
@@ -104,6 +104,6 @@
   },
   "entrypoints": [
     "static/css/main.25adf301.css",
-    "static/js/main.6cd3be7a.js"
+    "static/js/main.11e49d38.js"
   ]
 }
