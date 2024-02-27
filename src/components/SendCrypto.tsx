@@ -6,7 +6,7 @@ import {
   SectionTitle,
 } from '../styles'
 import { CryptoType } from '@fiatconnect/fiatconnect-types'
-import { ProviderIds, Steps } from '../types'
+import { ProviderIds } from '../types'
 import { providerIdToProviderName } from '../constants'
 import styled from 'styled-components'
 import { useContractWrite, usePrepareContractWrite } from 'wagmi'
@@ -102,29 +102,39 @@ export function SendCrypto({
   const appConfig = loadConfig()
   const tokenAddress =
     cryptoTypeToAddress[appConfig.fiatConnectNetwork][cryptoType]!
-  const { config } = usePrepareContractWrite({
-    address: getAddress(tokenAddress),
-    abi: [
-      {
-        constant: false,
-        inputs: [
-          { name: '_to', type: 'address' },
-          { name: '_value', type: 'uint256' },
-        ],
-        name: 'transfer',
-        outputs: [{ name: 'success', type: 'bool' }],
-        stateMutability: 'nonpayable',
-        type: 'function',
-      },
-    ],
-    functionName: 'transfer',
-    args: [getAddress(transferAddress), parseEther(cryptoAmount)],
-  })
+  const { config, status: prepareContractWriteStatus } =
+    usePrepareContractWrite({
+      address: getAddress(tokenAddress),
+      abi: [
+        {
+          constant: false,
+          inputs: [
+            { name: '_to', type: 'address' },
+            { name: '_value', type: 'uint256' },
+          ],
+          name: 'transfer',
+          outputs: [{ name: 'success', type: 'bool' }],
+          stateMutability: 'nonpayable',
+          type: 'function',
+        },
+      ],
+      functionName: 'transfer',
+      args: [getAddress(transferAddress), parseEther(cryptoAmount)],
+    })
   const { isLoading, isSuccess, write, isError } = useContractWrite(config)
 
   const onClick = () => {
     write?.()
   }
+
+  useEffect(() => {
+    if (prepareContractWriteStatus === 'error') {
+      onError(
+        'There was an error preparing your transaction.',
+        `This may occur if you have less ${cryptoType} in your wallet than you are trying to send (${cryptoAmount}).`,
+      )
+    }
+  }, [prepareContractWriteStatus])
 
   useEffect(() => {
     if (isSuccess) {
@@ -153,7 +163,7 @@ export function SendCrypto({
       />
       <Button
         onClick={onClick}
-        disabled={isLoading}
+        disabled={isLoading || prepareContractWriteStatus !== 'success'}
         style={{ width: '100%', marginTop: '10px' }}
       >
         {isLoading ? 'Sending Payment...' : 'Send Payment'}
