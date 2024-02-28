@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "lib": ["es2021"],
+    "skipLibCheck": true,
+    "moduleResolution": "node",
+    "module": "commonjs",
+    "resolveJsonModule": true,
+    "noEmit": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true
+  },
+  "include": ["*.ts"]
+}
