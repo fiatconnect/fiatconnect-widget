@@ -1,5 +1,5 @@
 import { getDropdownValues } from './KYCInfoFieldSection'
-import {idTypeReverseFormatter} from "./kycInfo/PersonalDataAndDocumentsDetailed";
+import { idTypeReverseFormatter } from './kycInfo/PersonalDataAndDocumentsDetailed'
 
 describe('KYCInfoFieldSection', () => {
   describe('getDropdownValues', () => {

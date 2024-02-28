@@ -48,7 +48,9 @@ export function getDropdownValues({
   if (!choices) {
     return allowedValues
   }
-  const humanReadableAllowedValues = allowedValues.map(reverseFormatter ?? identity)
+  const humanReadableAllowedValues = allowedValues.map(
+    reverseFormatter ?? identity,
+  )
   const output = choices.filter((choice) =>
     humanReadableAllowedValues.includes(choice),
   )
