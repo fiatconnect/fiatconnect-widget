@@ -20,14 +20,15 @@ For more information on these requirements, you may consult these resources:
 
 ## Usage
 
-Once deployed, the FiatConnect Widget may be used to help users complete FiatConnect transfers. A client 
+Once deployed, the FiatConnect Widget may be used to help users complete FiatConnect transfers. A client
 application is expected to:
-- first query some FiatConnect server(s) directly for quotes, 
-- present the quote(s) information to the end user to choose from, 
-- then direct the user to the FiatConnect Widget to complete the transfer 
 
-The widget requires several query parameters describing the quote, which may be found in the zod schema `queryParamsSchema` 
-located in `src/schema.ts`. For an example of how to use a FiatConnect quote to generate these query parameters, see 
+- first query some FiatConnect server(s) directly for quotes,
+- present the quote(s) information to the end user to choose from,
+- then direct the user to the FiatConnect Widget to complete the transfer
+
+The widget requires several query parameters describing the quote, which may be found in the zod schema `queryParamsSchema`
+located in `src/schema.ts`. For an example of how to use a FiatConnect quote to generate these query parameters, see
 `scripts/generateWidgetUrl.ts` (which may also come in handy for manual testing).
 
 ## Implementation status
