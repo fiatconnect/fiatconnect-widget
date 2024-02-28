@@ -1,7 +1,8 @@
 /* eslint-disable no-console */
 import yargs from 'yargs'
 import { ProviderIds } from '../src/types'
-import { CryptoType, FiatType } from '@fiatconnect/fiatconnect-types'
+import {CryptoType, FiatType, quoteResponseSchema} from '@fiatconnect/fiatconnect-types'
+import fetch from 'node-fetch'
 
 function loadConfig() {
   return yargs
@@ -88,7 +89,7 @@ export async function generateWidgetUrl() {
     quote: { fiatAmount, quoteId, transferType },
     kyc: { kycRequired, kycSchemas },
     fiatAccount: fiatAccountJson,
-  } = quoteJson
+  } = quoteResponseSchema.parse(quoteJson)
   // todo allowed values
   let widgetUrl =
     `${config.widgetBaseUrl}/fiatconnect-widget/#?` +
@@ -104,19 +105,19 @@ export async function generateWidgetUrl() {
   if (kycRequired) {
     widgetUrl += `&kycSchema=${kycSchemas[0]}`
   }
-  const fiatAccountType = Object.keys(fiatAccountJson)[0]
+  const fiatAccountType = Object.keys(fiatAccountJson)[0] as keyof typeof fiatAccountJson
   if (!fiatAccountType) {
     throw new Error('fiat account type not found in quote response')
   }
   widgetUrl += `&fiatAccountType=${fiatAccountType}`
   const fiatAccountSchema =
-    fiatAccountJson[fiatAccountType].fiatAccountSchemas[0].fiatAccountSchema
+    fiatAccountJson[fiatAccountType]?.fiatAccountSchemas[0].fiatAccountSchema
   if (!fiatAccountSchema) {
     throw new Error('fiat account schema not found in quote response')
   }
   widgetUrl += `&fiatAccountSchema=${fiatAccountSchema}`
   const userActionType =
-    fiatAccountJson[fiatAccountType].fiatAccountSchemas[0].userActionType
+    fiatAccountJson[fiatAccountType]?.fiatAccountSchemas[0].userActionType
   if (userActionType) {
     widgetUrl += `&userActionDetailsSchema=${userActionType}`
   }
