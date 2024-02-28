@@ -23,19 +23,15 @@ export const SectionSubtitle = styled.div`
 `
 
 export const Button = styled.button`
-  flex-grow: 1;
   display: flex;
   border: 0px;
   justify-content: center;
   align-items: center;
+  background-color: #5987ff;
   border-radius: 5px;
   font-size: 18px;
   font-weight: bold;
   height: 55px;
-  opacity: 0.8;
-  &:hover {
-    opacity: 1;
-  }
 `
 
 export const StatusContentContainer = styled.div`

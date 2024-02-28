@@ -261,12 +261,32 @@
 #Spacer {
   flex-grow: 1;
 }
-
 #SectionBorder {
   padding: 0px;
   margin-top: 15px;
   width: 100%;
   border: 1px solid #cbcbcb;
+}
+
+#ConnectWalletButton-Connected {
+  flex-grow: 1;
+  display: flex;
+  border: 0px;
+  justify-content: center;
+  align-items: center;
+  background-color: #bacdff;
+  border-radius: 5px;
+  font-size: 18px;
+  font-weight: bold;
+  height: 55px;
+}
+
+#ConnectWalletButton-Connected:hover {
+  background-color: #a2b5e5;
+}
+
+#ConnectWalletButton-Unconnected:hover {
+  background-color: #4871dc;
 }
 
 #SignInStepCircle {
@@ -282,6 +302,11 @@
   justify-content: center;
   font-weight: 100;
   font-size: 11px;
+}
+
+#ConnectWalletButton-Wrapper {
+  display: flex;
+  flex-grow: 1;
 }
 
 #SIWESignInButton {
