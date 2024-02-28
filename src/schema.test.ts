@@ -20,7 +20,7 @@ describe('schema', () => {
         country: ['NG'],
       }),
       kycAllowedValues: JSON.stringify({
-        country: ['NG', 'GH'],
+        isoCountryCode: ['NG', 'GH'],
       }),
     }
     it('accepts valid input', () => {
