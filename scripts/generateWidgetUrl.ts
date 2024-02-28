@@ -39,7 +39,7 @@ function loadConfig() {
       cryptoAmount: {
         type: 'string',
         description: 'Amount of crypto to get a quote for',
-        default: '1.01',
+        default: '2',
       },
       cryptoType: {
         description: 'Type of crypto to get a quote for',
