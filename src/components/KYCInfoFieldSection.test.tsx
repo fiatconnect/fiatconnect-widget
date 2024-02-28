@@ -1,5 +1,4 @@
-import {getDropdownValues} from "./KYCInfoFieldSection";
-
+import { getDropdownValues } from './KYCInfoFieldSection'
 
 describe('KYCInfoFieldSection', () => {
   describe('getDropdownValues', () => {

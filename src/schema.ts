@@ -24,7 +24,7 @@ const stringToJSONSchema = z
 const stringifiedNumberSchema = z.string().regex(/^(\d+|\d*\.\d+)$/)
 const allowedValuesSchema = stringToJSONSchema
   .pipe(z.record(z.array(z.string()).nonempty()))
-  .optional();
+  .optional()
 export const queryParamsSchema = z.object({
   providerId: z.nativeEnum(ProviderIds),
   apiKey: z.string().optional(),
