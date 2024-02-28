@@ -105,7 +105,7 @@ export async function generateWidgetUrl() {
     const kycSchema = kycSchemas[0].kycSchema
     widgetUrl += `&kycSchema=${kycSchema}`
     const kycAllowedValues = kycSchemas[0].allowedValues
-    if (kycAllowedValues) {
+    if (kycAllowedValues && Object.keys(kycAllowedValues).length > 0) {
       widgetUrl += `&kycAllowedValues=${JSON.stringify(kycAllowedValues)}`
     }
   }
@@ -126,7 +126,7 @@ export async function generateWidgetUrl() {
     widgetUrl += `&userActionDetailsSchema=${userActionType}`
   }
   const fiatAccountAllowedValues = fiatAccountJson[fiatAccountType]?.fiatAccountSchemas[0].allowedValues
-  if (fiatAccountAllowedValues) {
+  if (fiatAccountAllowedValues && Object.keys(fiatAccountAllowedValues).length > 0) {
     widgetUrl += `&fiatAccountAllowedValues=${JSON.stringify(fiatAccountAllowedValues)}`
   }
   console.log(widgetUrl)
