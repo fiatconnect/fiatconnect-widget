@@ -55,7 +55,7 @@ export function getDropdownValues({
   )
   if (!isNonemptyStringArray(output)) {
     // eslint-disable-next-line no-console
-    console.error(
+    console.warn(
       `No valid choices for given allowedValues ${allowedValues}. Just showing allowedValues directly`,
     )
     return formattedAllowedValues as [string, ...string[]]
