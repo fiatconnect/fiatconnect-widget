@@ -31,34 +31,33 @@ function identity<T>(x: T): T {
  * user submitted values from an unsupported region.
  * @param choices: a FiatConnect Widget-specific concept that allows us to provide a dropdown when the spec already has a limited
  * space of possible inputs for something like "identity card type"
- * @param formatter: a function that returns a user-friendly representation of some value
+ * @param reverseFormatter: a function that returns a user-friendly representation of some value
  */
 export function getDropdownValues({
   allowedValues,
   choices,
-  formatter,
+  reverseFormatter,
 }: {
   allowedValues: [string, ...string[]] | undefined
   choices: [string, ...string[]] | undefined
-  formatter?: (x: string) => string
+  reverseFormatter?: (x: string) => string
 }): [string, ...string[]] | undefined {
-  // TODO unit tests for this
   if (!allowedValues) {
     return choices
   }
   if (!choices) {
     return allowedValues
   }
-  const formattedAllowedValues = allowedValues.map(formatter ?? identity)
+  const humanReadableAllowedValues = allowedValues.map(reverseFormatter ?? identity)
   const output = choices.filter((choice) =>
-    formattedAllowedValues.includes(choice),
+    humanReadableAllowedValues.includes(choice),
   )
   if (!isNonemptyStringArray(output)) {
     // eslint-disable-next-line no-console
     console.warn(
       `No valid choices for given allowedValues ${allowedValues}. Just showing allowedValues directly`,
     )
-    return formattedAllowedValues as [string, ...string[]]
+    return humanReadableAllowedValues as [string, ...string[]]
   }
   return output
 }
@@ -187,7 +186,7 @@ function KYCInfoFieldSection({
             allowedValues={getDropdownValues({
               allowedValues: allowedValues?.[field],
               choices: fieldMetadata.choices,
-              formatter: fieldMetadata.formatter,
+              reverseFormatter: fieldMetadata.reverseFormatter,
             })}
           />
         )
