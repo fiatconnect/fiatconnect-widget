@@ -45,12 +45,12 @@ export function getDropdownValues({
   if (!allowedValues) {
     return choices
   }
-  if (!choices) {
-    return allowedValues
-  }
   const humanReadableAllowedValues = allowedValues.map(
     reverseFormatter ?? identity,
   )
+  if (!choices) {
+    return isNonemptyStringArray(humanReadableAllowedValues) ? humanReadableAllowedValues : undefined
+  }
   const output = choices.filter((choice) =>
     humanReadableAllowedValues.includes(choice),
   )
