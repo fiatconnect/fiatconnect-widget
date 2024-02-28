@@ -5,12 +5,12 @@ import {
   StatusIconContainer,
   StatusText,
 } from '../../styles'
-import { ProviderIds } from '../../types'
+import ErrorIcon from '../../icons/Error'
 import {
+  ProviderIds,
   providerIdToProviderName,
   providerIdToSupportEmail,
-} from '../../constants'
-import ErrorIcon from '../../icons/Error'
+} from '../../providerConfig'
 
 interface Props {
   providerId: ProviderIds

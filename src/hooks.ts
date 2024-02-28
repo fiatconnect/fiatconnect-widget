@@ -1,9 +1,8 @@
 import { FiatConnectClientConfig } from '@fiatconnect/fiatconnect-sdk'
-import { providerIdToBaseUrl } from './FiatConnectClient'
 import { useAccount, useNetwork } from 'wagmi'
 import { chainIdToFiatConnectNetwork } from './constants'
 import { useSearchParams } from 'react-router-dom'
-import { ProviderIds } from './types'
+import { ProviderIds, providerIdToBaseUrl } from './providerConfig'
 
 export function useFiatConnectConfig(): FiatConnectClientConfig | undefined {
   const account = useAccount()

@@ -6,10 +6,6 @@ import {
 } from '@fiatconnect/fiatconnect-types'
 import React, { useState } from 'react'
 import { ContentContainer, SectionSubtitle, SectionTitle } from '../styles'
-import {
-  providerIdToPrivacyPolicyURL,
-  providerIdToProviderName,
-} from '../constants'
 import KYCInfoFieldSection from './KYCInfoFieldSection'
 import { useFiatConnectConfig } from '../hooks'
 import { addKyc } from '../FiatConnectClient'
@@ -19,6 +15,10 @@ import { KycExpired } from './kycStatusScreens/KycExpired'
 import { KycFieldMetadata } from '../types'
 import { personalDataAndDocumentsSchemaMetadata } from './kycInfo/PersonalDataAndDocuments'
 import { personalDataAndDocumentsDetailedSchemaMetadata } from './kycInfo/PersonalDataAndDocumentsDetailed'
+import {
+  providerIdToPrivacyPolicyURL,
+  providerIdToProviderName,
+} from '../providerConfig'
 
 const kycSchemaToMetadata: Record<
   KycSchema,

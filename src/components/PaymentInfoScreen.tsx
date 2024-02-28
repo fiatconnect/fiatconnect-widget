@@ -11,9 +11,9 @@ import mobileMoneySchemaMetadata from './paymentInfo/MobileMoney'
 import PaymentInfoFieldSection from './PaymentInfoFieldSection'
 import { addFiatAccount, getLinkedAccount } from '../FiatConnectClient'
 import { useFiatConnectConfig } from '../hooks'
-import { providerIdToProviderName } from '../constants'
 import { ContentContainer, SectionSubtitle, SectionTitle } from '../styles'
 import { QueryParams } from '../schema'
+import { providerIdToProviderName } from '../providerConfig'
 
 interface Props {
   onError: (title: string, message: string) => void

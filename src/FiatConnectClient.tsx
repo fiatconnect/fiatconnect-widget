@@ -1,15 +1,15 @@
 import {
   AuthRequestBody,
-  PostFiatAccountRequestBody,
-  GetFiatAccountsResponse,
   FiatAccountSchema,
   FiatAccountType,
-  ObfuscatedFiatAccountData,
-  TransferRequestBody,
+  GetFiatAccountsResponse,
   KycRequestParams,
-  KycStatusResponse,
-  KycStatus,
   KycSchema,
+  KycStatus,
+  KycStatusResponse,
+  ObfuscatedFiatAccountData,
+  PostFiatAccountRequestBody,
+  TransferRequestBody,
 } from '@fiatconnect/fiatconnect-types'
 import { generateNonce, SiweMessage } from 'siwe'
 import { getAddress } from 'ethers'
@@ -19,7 +19,7 @@ import {
 } from '@fiatconnect/fiatconnect-sdk'
 import { createSiweConfig } from '@fiatconnect/fiatconnect-sdk/dist/fiat-connect-client'
 import { fiatConnectNetworkToChainId } from './constants'
-import { ProviderIds, AddKycParams } from './types'
+import { AddKycParams } from './types'
 
 export async function addKyc<T extends KycSchema>(
   params: AddKycParams<T>,
@@ -217,10 +217,4 @@ export async function login(
     headers,
     body: JSON.stringify(body),
   })
-}
-
-export const providerIdToBaseUrl: Record<ProviderIds, string> = {
-  [ProviderIds.Bitmama]: 'https://cico-staging.bitmama.io',
-  [ProviderIds.TestProvider]:
-    'https://mock-fc-provider-dot-celo-mobile-alfajores.appspot.com',
 }

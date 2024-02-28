@@ -10,10 +10,11 @@ import {
   TransferInUserActionDetails,
   UserActionDetails as UserActionDetailsType,
 } from '@fiatconnect/fiatconnect-types'
-import { ProviderIds, Steps } from '../types'
-import { fiatTypeToSymbol, providerIdToProviderName } from '../constants'
+import { Steps } from '../types'
+import { fiatTypeToSymbol } from '../constants'
 import { z } from 'zod'
 import styled from 'styled-components'
+import { ProviderIds, providerIdToProviderName } from '../providerConfig'
 
 interface Props {
   userActionDetails: UserActionDetailsType
