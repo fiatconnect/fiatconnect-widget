@@ -1,7 +1,11 @@
 /* eslint-disable no-console */
 import yargs from 'yargs'
 import { ProviderIds } from '../src/types'
-import {CryptoType, FiatType, quoteResponseSchema} from '@fiatconnect/fiatconnect-types'
+import {
+  CryptoType,
+  FiatType,
+  quoteResponseSchema,
+} from '@fiatconnect/fiatconnect-types'
 
 function loadConfig() {
   return yargs
@@ -35,7 +39,7 @@ function loadConfig() {
       cryptoAmount: {
         type: 'string',
         description: 'Amount of crypto to get a quote for',
-        default: '2',
+        default: '1.01',
       },
       cryptoType: {
         description: 'Type of crypto to get a quote for',
@@ -109,7 +113,9 @@ export async function generateWidgetUrl() {
       widgetUrl += `&kycAllowedValues=${JSON.stringify(kycAllowedValues)}`
     }
   }
-  const fiatAccountType = Object.keys(fiatAccountJson)[0] as keyof typeof fiatAccountJson
+  const fiatAccountType = Object.keys(
+    fiatAccountJson,
+  )[0] as keyof typeof fiatAccountJson
   if (!fiatAccountType) {
     throw new Error('fiat account type not found in quote response')
   }
@@ -125,9 +131,15 @@ export async function generateWidgetUrl() {
   if (userActionType) {
     widgetUrl += `&userActionDetailsSchema=${userActionType}`
   }
-  const fiatAccountAllowedValues = fiatAccountJson[fiatAccountType]?.fiatAccountSchemas[0].allowedValues
-  if (fiatAccountAllowedValues && Object.keys(fiatAccountAllowedValues).length > 0) {
-    widgetUrl += `&fiatAccountAllowedValues=${JSON.stringify(fiatAccountAllowedValues)}`
+  const fiatAccountAllowedValues =
+    fiatAccountJson[fiatAccountType]?.fiatAccountSchemas[0].allowedValues
+  if (
+    fiatAccountAllowedValues &&
+    Object.keys(fiatAccountAllowedValues).length > 0
+  ) {
+    widgetUrl += `&fiatAccountAllowedValues=${JSON.stringify(
+      fiatAccountAllowedValues,
+    )}`
   }
   console.log(widgetUrl)
 }
