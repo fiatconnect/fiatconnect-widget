@@ -35,6 +35,7 @@
     "depcheck": "depcheck",
     "typecheck": "tsc",
     "test:ci": "jest --ci --coverage",
+    "scripts:generateWidgetUrl": "ts-node scripts/generateWidgetUrl.ts",
     "start": "DISABLE_ESLINT_PLUGIN=true react-app-rewired start",
     "build": "react-app-rewired build",
     "predeploy": "yarn build",
