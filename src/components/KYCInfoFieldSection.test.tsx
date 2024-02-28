@@ -31,5 +31,12 @@ describe('KYCInfoFieldSection', () => {
       const result = getDropdownValues({ allowedValues, choices, formatter })
       expect(result).toEqual(allowedValues)
     })
+    it('returns formatted values', () => {
+      const allowedValues: [string, ...string[]] = ['a', 'b']
+      const choices: [string, ...string[]] = ['A', 'B', 'C']
+      const formatter = (x: string) => x.toUpperCase()
+      const result = getDropdownValues({ allowedValues, choices, formatter })
+      expect(result).toEqual(['A', 'B'])
+    })
   })
 })
