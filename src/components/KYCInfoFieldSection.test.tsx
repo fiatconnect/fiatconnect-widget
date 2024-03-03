@@ -60,16 +60,20 @@ describe('KYCInfoFieldSection', () => {
       ]
       const reverseFormatter = (optionId: string) =>
         `Option ${optionId.toUpperCase()}`
-      expect(getDropdownValues({
-        allowedValues,
-        choices,
-        reverseFormatter,
-      })).toEqual(['Option A', 'Option B'])
-      expect(getDropdownValues({
-        allowedValues,
-        choices: undefined,
-        reverseFormatter,
-      })).toEqual(['Option A', 'Option B'])
+      expect(
+        getDropdownValues({
+          allowedValues,
+          choices,
+          reverseFormatter,
+        }),
+      ).toEqual(['Option A', 'Option B'])
+      expect(
+        getDropdownValues({
+          allowedValues,
+          choices: undefined,
+          reverseFormatter,
+        }),
+      ).toEqual(['Option A', 'Option B'])
     })
     it('works for ID type field', () => {
       const allowedValues: [string, ...string[]] = ['IDC', 'PAS']
