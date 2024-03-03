@@ -31,13 +31,13 @@ export const providerIdToProviderName: Record<ProviderIds, string> = {
 }
 
 export const providerIdToPrivacyPolicyURL: Record<ProviderIds, string> = {
-  [ProviderIds.Bitmama]: '', // TODO(M3): add this!
-  [ProviderIds.TestProvider]: '', // TODO(M3): add this!
+  [ProviderIds.Bitmama]: 'https://bitmama.io/privacy',
+  [ProviderIds.TestProvider]: 'https://valoraapp.com/privacy',
 }
 
 export const providerIdToSupportEmail: Record<ProviderIds, string> = {
   [ProviderIds.Bitmama]: 'support@bitmama.io',
-  [ProviderIds.TestProvider]: 'support@example.com',
+  [ProviderIds.TestProvider]: 'support@valoraapp.com',
 }
 
 export const fiatAccountSchemaToPaymentMethod: Record<
