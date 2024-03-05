@@ -1,7 +1,11 @@
 /* eslint-disable no-console */
 import yargs from 'yargs'
 import { ProviderIds } from '../src/types'
-import { CryptoType, FiatType } from '@fiatconnect/fiatconnect-types'
+import {
+  CryptoType,
+  FiatType,
+  quoteResponseSchema,
+} from '@fiatconnect/fiatconnect-types'
 
 function loadConfig() {
   return yargs
@@ -80,10 +84,10 @@ export async function generateWidgetUrl() {
       }),
     },
   )
-  const quoteJson = await response.json()
   if (!response.ok) {
-    throw new Error(`quote response error json: ${JSON.stringify(quoteJson)}`)
+    throw new Error(`quote response error status: ${response.status}`)
   }
+  const quoteJson = quoteResponseSchema.parse(await response.json())
   const {
     quote: { fiatAmount, quoteId, transferType },
     kyc: { kycRequired, kycSchemas },
@@ -102,25 +106,41 @@ export async function generateWidgetUrl() {
     `&quoteId=${quoteId}` +
     `&country=${config.country}`
   if (kycRequired) {
-    widgetUrl += `&kycSchema=${kycSchemas[0]}`
+    const kycSchema = kycSchemas[0].kycSchema
+    widgetUrl += `&kycSchema=${kycSchema}`
+    const kycAllowedValues = kycSchemas[0].allowedValues
+    if (kycAllowedValues && Object.keys(kycAllowedValues).length > 0) {
+      widgetUrl += `&kycAllowedValues=${JSON.stringify(kycAllowedValues)}`
+    }
   }
-  const fiatAccountType = Object.keys(fiatAccountJson)[0]
+  const fiatAccountType = Object.keys(
+    fiatAccountJson,
+  )[0] as keyof typeof fiatAccountJson
   if (!fiatAccountType) {
     throw new Error('fiat account type not found in quote response')
   }
   widgetUrl += `&fiatAccountType=${fiatAccountType}`
   const fiatAccountSchema =
-    fiatAccountJson[fiatAccountType].fiatAccountSchemas[0].fiatAccountSchema
+    fiatAccountJson[fiatAccountType]?.fiatAccountSchemas[0]?.fiatAccountSchema
   if (!fiatAccountSchema) {
     throw new Error('fiat account schema not found in quote response')
   }
   widgetUrl += `&fiatAccountSchema=${fiatAccountSchema}`
   const userActionType =
-    fiatAccountJson[fiatAccountType].fiatAccountSchemas[0].userActionType
+    fiatAccountJson[fiatAccountType]?.fiatAccountSchemas[0].userActionType
   if (userActionType) {
     widgetUrl += `&userActionDetailsSchema=${userActionType}`
   }
-
+  const fiatAccountAllowedValues =
+    fiatAccountJson[fiatAccountType]?.fiatAccountSchemas[0].allowedValues
+  if (
+    fiatAccountAllowedValues &&
+    Object.keys(fiatAccountAllowedValues).length > 0
+  ) {
+    widgetUrl += `&fiatAccountAllowedValues=${JSON.stringify(
+      fiatAccountAllowedValues,
+    )}`
+  }
   console.log(widgetUrl)
 }
 

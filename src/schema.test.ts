@@ -15,6 +15,13 @@ describe('schema', () => {
       fiatAccountSchema: 'AccountNumber',
       userActionDetailsSchema: 'AccountNumberUserAction',
       country: 'NG',
+      fiatAccountAllowedValues: JSON.stringify({
+        institutionName: ['Access Bank', 'Covenant Microfinance Bank'],
+        country: ['NG'],
+      }),
+      kycAllowedValues: JSON.stringify({
+        isoCountryCode: ['NG', 'GH'],
+      }),
     }
     it('accepts valid input', () => {
       expect(queryParamsSchema.safeParse(validQueryParams).success).toEqual(
@@ -26,6 +33,20 @@ describe('schema', () => {
           ...validQueryParams,
           fiatAccountType: 'MobileMoney',
           fiatAccountSchema: 'MobileMoney',
+        }).success,
+      ).toEqual(true)
+
+      expect(
+        queryParamsSchema.safeParse({
+          ...validQueryParams,
+          kycAllowedValues: undefined,
+        }).success,
+      ).toEqual(true)
+
+      expect(
+        queryParamsSchema.safeParse({
+          ...validQueryParams,
+          fiatAccountAllowedValues: undefined,
         }).success,
       ).toEqual(true)
     })
@@ -52,6 +73,14 @@ describe('schema', () => {
         queryParamsSchema.safeParse({
           ...validQueryParams,
           quoteId: undefined,
+        }).success,
+      ).toEqual(false)
+
+      // invalid JSON for allowedValues
+      expect(
+        queryParamsSchema.safeParse({
+          ...validQueryParams,
+          fiatAccountAllowedValues: 'invalid-json',
         }).success,
       ).toEqual(false)
     })
