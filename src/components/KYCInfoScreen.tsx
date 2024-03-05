@@ -124,6 +124,7 @@ export function KYCInfoScreen({
           setKycInfo={setKycInfoWrapper}
           setSubmitDisabled={setSubmitDisabled}
           kycSchemaMetadata={kycSchemaToMetadata[params.kycSchema]}
+          allowedValues={params.kycAllowedValues}
         />
       </div>
       <div id="KYCBottomSection">

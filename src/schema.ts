@@ -22,6 +22,9 @@ const stringToJSONSchema = z
   })
 
 const stringifiedNumberSchema = z.string().regex(/^(\d+|\d*\.\d+)$/)
+const allowedValuesSchema = stringToJSONSchema
+  .pipe(z.record(z.array(z.string()).nonempty()))
+  .optional()
 export const queryParamsSchema = z.object({
   providerId: z.nativeEnum(ProviderIds),
   apiKey: z.string().optional(),
@@ -50,9 +53,8 @@ export const queryParamsSchema = z.object({
   userActionDetailsSchema: z
     .enum([TransferInUserActionDetails.AccountNumberUserAction])
     .optional(),
-  allowedValues: stringToJSONSchema
-    .pipe(z.record(z.array(z.string()).nonempty()))
-    .optional(),
+  fiatAccountAllowedValues: allowedValuesSchema,
+  kycAllowedValues: allowedValuesSchema,
   country: z.string(),
 })
 export type QueryParams = z.infer<typeof queryParamsSchema>
