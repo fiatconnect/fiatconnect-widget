@@ -153,6 +153,7 @@ export function transferIn(
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${clientConfig.apiKey}`,
+      'Idempotency-Key': params.quoteId,
     },
     body: JSON.stringify(params),
   })
@@ -168,6 +169,7 @@ export function transferOut(
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${clientConfig.apiKey}`,
+      'Idempotency-Key': params.quoteId,
     },
     body: JSON.stringify(params),
   })
