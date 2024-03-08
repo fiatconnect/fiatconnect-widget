@@ -18,6 +18,10 @@ For more information on these requirements, you may consult these resources:
 - [SameSite cookies explained](https://web.dev/articles/samesite-cookies-explained)
 - [StackOverflow post on allowing cross-origin requests](https://stackoverflow.com/a/64504149/5807149)
 
+## Adding a FiatConnect Provider to the widget
+
+Update all the constants in `src/providerConfig.ts` with the new provider's information.
+
 ## Usage
 
 Once deployed, the FiatConnect Widget may be used to help users complete FiatConnect transfers. A client

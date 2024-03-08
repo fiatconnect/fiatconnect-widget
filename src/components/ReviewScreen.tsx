@@ -8,8 +8,8 @@ import {
 import { QuoteAmountBox } from './QuoteAmountBox'
 import { transferIn, transferOut } from '../FiatConnectClient'
 import { useFiatConnectConfig } from '../hooks'
-import { providerIdToProviderName } from '../constants'
 import { QueryParams } from '../schema'
+import { providerIdToProviderName } from '../providerConfig'
 
 interface Props {
   onError: (title: string, message: string) => void

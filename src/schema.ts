@@ -8,7 +8,7 @@ import {
   TransferInUserActionDetails,
   KycSchema,
 } from '@fiatconnect/fiatconnect-types'
-import { ProviderIds } from './types'
+import { ProviderIds } from './providerConfig'
 
 const stringToJSONSchema = z
   .string()

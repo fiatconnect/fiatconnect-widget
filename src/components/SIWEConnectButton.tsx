@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useAccount, useSignMessage } from 'wagmi'
 import { login } from '../FiatConnectClient'
 import { useFiatConnectConfig } from '../hooks'
-import { ProviderIds } from '../types'
-import { providerIdToProviderName } from '../constants'
+import { ProviderIds, providerIdToProviderName } from '../providerConfig'
 
 interface Props {
   providerId: ProviderIds

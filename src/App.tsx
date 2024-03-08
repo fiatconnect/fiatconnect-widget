@@ -19,7 +19,6 @@ import { useSearchParams } from 'react-router-dom'
 import '@fontsource/inter'
 import { StepsHeader } from './components/StepsHeader'
 import { ErrorSection } from './components/ErrorSection'
-import { providerIdToProviderName } from './constants'
 import { SignInScreen } from './components/SignInScreen'
 import { PaymentInfoScreen } from './components/PaymentInfoScreen'
 import { UserActionDetails } from './components/UserActionDetails'
@@ -35,6 +34,7 @@ import { queryParamsSchema, QueryParams } from './schema'
 import { DoneSection } from './components/DoneSection'
 import { SendCrypto } from './components/SendCrypto'
 import { KYCInfoScreen } from './components/KYCInfoScreen'
+import { providerIdToProviderName } from './providerConfig'
 
 function useQueryParams() {
   const [searchParams] = useSearchParams()

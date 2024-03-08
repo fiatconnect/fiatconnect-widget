@@ -1,10 +1,5 @@
 import { KycSchema, KycSchemas } from '@fiatconnect/fiatconnect-types'
 
-export enum ProviderIds {
-  Bitmama = 'bitmama',
-  TestProvider = 'test-provider',
-}
-
 export enum Steps {
   One = 1,
   Two = 2,

@@ -1,11 +1,11 @@
 /* eslint-disable no-console */
 import yargs from 'yargs'
-import { ProviderIds } from '../src/types'
 import {
   CryptoType,
   FiatType,
   quoteResponseSchema,
 } from '@fiatconnect/fiatconnect-types'
+import { ProviderIds } from '../src/providerConfig'
 
 function loadConfig() {
   return yargs

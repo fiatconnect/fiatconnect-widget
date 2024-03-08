@@ -9,9 +9,8 @@ import {
 } from '../../styles'
 import { getKycStatus } from '../../FiatConnectClient'
 import { useFiatConnectConfig } from '../../hooks'
-import { ProviderIds } from '../../types'
-import { providerIdToProviderName } from '../../constants'
 import DoneIcon from '../../icons/Done'
+import { ProviderIds, providerIdToProviderName } from '../../providerConfig'
 
 // Adapted from https://stackoverflow.com/questions/46140764/polling-api-every-x-seconds-with-react
 export const useInterval = (callback: () => void, delay: number | null) => {

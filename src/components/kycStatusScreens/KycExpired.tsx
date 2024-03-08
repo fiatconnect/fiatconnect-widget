@@ -9,9 +9,8 @@ import {
 } from '../../styles'
 import { getKycStatus, deleteKyc } from '../../FiatConnectClient'
 import { useFiatConnectConfig } from '../../hooks'
-import { ProviderIds } from '../../types'
-import { providerIdToProviderName } from '../../constants'
 import ExpiredIcon from '../../icons/Expired'
+import { ProviderIds, providerIdToProviderName } from '../../providerConfig'
 
 interface Props {
   kycSchema: KycSchema

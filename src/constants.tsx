@@ -1,15 +1,13 @@
 import React from 'react'
 import {
-  Network,
+  CryptoType,
   FiatAccountSchema,
   FiatType,
-  CryptoType,
+  Network,
 } from '@fiatconnect/fiatconnect-types'
 import { celo, celoAlfajores } from 'viem/chains'
-import { ProviderIds } from './types'
 import USDIcon from './icons/fiat/USDIcon'
 import CELO from './images/crypto/CELO.png'
-import { Chain } from 'viem/chains'
 
 export const fiatConnectNetworkToChainId: Record<Network, number> = {
   [Network.Mainnet]: celo.id,
@@ -24,21 +22,6 @@ export const chainIdToFiatConnectNetwork: Record<number, Network> =
     }),
     {},
   )
-
-export const providerIdToProviderName: Record<ProviderIds, string> = {
-  [ProviderIds.Bitmama]: 'Bitmama',
-  [ProviderIds.TestProvider]: 'Test Provider',
-}
-
-export const providerIdToPrivacyPolicyURL: Record<ProviderIds, string> = {
-  [ProviderIds.Bitmama]: 'https://bitmama.io/privacy',
-  [ProviderIds.TestProvider]: 'https://valoraapp.com/privacy',
-}
-
-export const providerIdToSupportEmail: Record<ProviderIds, string> = {
-  [ProviderIds.Bitmama]: 'support@bitmama.io',
-  [ProviderIds.TestProvider]: 'support@valoraapp.com',
-}
 
 export const fiatAccountSchemaToPaymentMethod: Record<
   FiatAccountSchema,

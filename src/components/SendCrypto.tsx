@@ -6,13 +6,12 @@ import {
   SectionTitle,
 } from '../styles'
 import { CryptoType } from '@fiatconnect/fiatconnect-types'
-import { ProviderIds } from '../types'
-import { providerIdToProviderName } from '../constants'
 import styled from 'styled-components'
 import { useContractWrite, usePrepareContractWrite } from 'wagmi'
 import { loadConfig } from '../config'
 import { cryptoTypeToAddress } from '../constants'
 import { getAddress, parseEther } from 'viem'
+import { ProviderIds, providerIdToProviderName } from '../providerConfig'
 
 interface Props {
   cryptoType: CryptoType
