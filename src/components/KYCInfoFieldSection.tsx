@@ -10,6 +10,60 @@ interface Props {
   ) => void
   setSubmitDisabled: (disabled: boolean) => void
   kycSchemaMetadata: Record<string, KycFieldMetadata>
+  allowedValues?: Record<string, [string, ...string[]]>
+}
+
+function isNonemptyStringArray(
+  strings?: string[],
+): strings is [string, ...string[]] {
+  return !!strings && strings.length > 0
+}
+
+function identity<T>(x: T): T {
+  return x
+}
+
+/**
+ * Merge 'allowedValues' and 'choices' into a single array and formats them for presentation to the end-user.
+ *
+ * @param allowedValues: a concept from the FiatConnect spec that allows the server to constraint the space of allowed values
+ * for some fields. This is useful for fields like "country" or "state" where the server would reject a request if the
+ * user submitted values from an unsupported region.
+ * @param choices: a FiatConnect Widget-specific concept that allows us to provide a dropdown when the spec already has a limited
+ * space of possible inputs for something like "identity card type"
+ * @param reverseFormatter: a function that returns a user-friendly representation of some value
+ */
+export function getDropdownValues({
+  allowedValues,
+  choices,
+  reverseFormatter,
+}: {
+  allowedValues: [string, ...string[]] | undefined
+  choices: [string, ...string[]] | undefined
+  reverseFormatter?: (x: string) => string
+}): [string, ...string[]] | undefined {
+  if (!allowedValues) {
+    return choices
+  }
+  const humanReadableAllowedValues = allowedValues.map(
+    reverseFormatter ?? identity,
+  )
+  if (!choices) {
+    return isNonemptyStringArray(humanReadableAllowedValues)
+      ? humanReadableAllowedValues
+      : undefined
+  }
+  const output = choices.filter((choice) =>
+    humanReadableAllowedValues.includes(choice),
+  )
+  if (!isNonemptyStringArray(output)) {
+    // eslint-disable-next-line no-console
+    console.warn(
+      `No valid choices for given allowedValues ${allowedValues}. Just showing allowedValues directly`,
+    )
+    return humanReadableAllowedValues as [string, ...string[]]
+  }
+  return output
 }
 
 function KYCInfoFieldSection({
@@ -17,6 +71,7 @@ function KYCInfoFieldSection({
   setKycInfo,
   setSubmitDisabled,
   kycSchemaMetadata,
+  allowedValues,
 }: Props) {
   const [errorMessage, setErrorMessage] = useState<string | undefined>(
     undefined,
@@ -132,7 +187,11 @@ function KYCInfoFieldSection({
                 ? fieldMetadata.reverseFormatter(getFieldValue(field))
                 : getFieldValue(field)) ?? ''
             }
-            allowedValues={fieldMetadata.choices ?? undefined}
+            allowedValues={getDropdownValues({
+              allowedValues: allowedValues?.[field],
+              choices: fieldMetadata.choices,
+              reverseFormatter: fieldMetadata.reverseFormatter,
+            })}
           />
         )
       })}

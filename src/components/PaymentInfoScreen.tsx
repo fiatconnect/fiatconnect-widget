@@ -91,7 +91,7 @@ export function PaymentInfoScreen({
             fiatAccountDetails={fiatAccountDetails}
             setFiatAccountDetails={setFiatAccountDetailsWrapper}
             setSubmitDisabled={setSubmitDisabled}
-            allowedValues={params.allowedValues}
+            allowedValues={params.fiatAccountAllowedValues}
             fiatAccountType={FiatAccountType.BankAccount}
             fiatAccountSchemaMetadata={accountNumberSchemaMetadata}
           />
@@ -104,7 +104,7 @@ export function PaymentInfoScreen({
             fiatAccountDetails={fiatAccountDetails}
             setFiatAccountDetails={setFiatAccountDetailsWrapper}
             setSubmitDisabled={setSubmitDisabled}
-            allowedValues={params.allowedValues}
+            allowedValues={params.fiatAccountAllowedValues}
             fiatAccountType={FiatAccountType.MobileMoney}
             fiatAccountSchemaMetadata={mobileMoneySchemaMetadata}
           />

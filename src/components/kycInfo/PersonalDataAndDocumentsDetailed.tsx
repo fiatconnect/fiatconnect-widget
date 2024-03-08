@@ -3,7 +3,7 @@ import { IdentificationDocumentType } from '@fiatconnect/fiatconnect-types'
 import { Buffer } from 'buffer'
 
 enum IdTypeFriendlyName {
-  IDC = 'Statue-issued ID',
+  IDC = 'State-issued ID',
   PAS = 'Passport',
   DL = `Driver's License`,
 }
@@ -24,7 +24,7 @@ function idTypeFormatter(friendlyName: string): string {
   }
 }
 
-function idTypeReverseFormatter(idType: string | undefined): string {
+export function idTypeReverseFormatter(idType: string | undefined): string {
   switch (idType) {
     case IdentificationDocumentType.IDC: {
       return IdTypeFriendlyName.IDC
